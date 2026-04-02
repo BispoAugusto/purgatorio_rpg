@@ -225,7 +225,6 @@
   @media(max-width:600px){.attrs-grid{grid-template-columns:repeat(2,1fr)}.bonus-grid{grid-template-columns:repeat(2,1fr)}.quick-resources{display:none}.sheet-content,.dashboard-content{padding:1rem}.app-header,.sheet-header{padding:.75rem 1rem}}
   ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}::-webkit-scrollbar-thumb:hover{background:var(--gold)}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -241,7 +240,7 @@
       <div class="form-group"><label class="form-label">E-mail</label><input type="email" class="form-input" id="login-email" placeholder="penitente@purgatório.rpg"></div>
       <div class="form-group"><label class="form-label">Senha</label><input type="password" class="form-input" id="login-pass" placeholder="••••••••"></div>
       <button class="btn-primary" onclick="doLogin()">Entrar</button>
-      <button class="btn-primary" onclick="doSignUp()">Criar Nova Conta</button>
+      <button class="btn-primary" onclick="doSignUp()" style="margin-top:8px;background:#8b7355;border-color:#8b7355;">Criar Nova Conta</button>
       <button class="btn-demo" onclick="doDemo()">↓ Entrar em modo demonstração ↓</button>
     </div>
   </div>
@@ -440,12 +439,6 @@
 </div>
 
 <script>
-// ==================== SUPABASE ====================
-const SUPABASE_URL = 'https://SEU-PROJECT-REF.supabase.co';     // ← TROQUE AQUI
-const SUPABASE_ANON_KEY = 'SEU-ANON-KEY-AQUI';                  // ← TROQUE AQUI
-
-const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 // ──────────────────────────────
 // STATE
 // ──────────────────────────────
@@ -463,31 +456,14 @@ const EXH_DEBUFFS = [
   'Inconsciente',
 ];
 
-// ==================== PERSISTENCE COM SUPABASE ====================
-async function saveFicha() {
-  const f = cf();
-  if (!f || !S.user) return;
-  await supabase.from('fichas').upsert({
-    id: f.id,
-    user_email: S.user.email,
-    nome: f.nome,
-    vida_atual: f.vida.atual,
-    foco_atual: f.foco.atual,
-    exaustao: f.exaustao,
-    resources: f.resources,
-    attrs: f.attrs,
-    inventory: f.inventory,
-    memories: f.memories
-  });
+// ──────────────────────────────
+// PERSISTENCE
+// ──────────────────────────────
+function save() {
+  try { sessionStorage.setItem('purg3',JSON.stringify({fichas:S.fichas,mesas:S.mesas,avatars:S.avatars,user:S.user})); } catch(e){}
 }
-
-async function loadUserFichas() {
-  const { data } = await supabase
-    .from('fichas')
-    .select('*')
-    .eq('user_email', S.user.email);
-  S.fichas = {};
-  (data || []).forEach(f => S.fichas[f.id] = f);
+function load() {
+  try { const d=JSON.parse(sessionStorage.getItem('purg3')||'{}'); S.fichas=d.fichas||{}; S.mesas=d.mesas||{}; S.avatars=d.avatars||{}; S.user=d.user||null; return !!S.user; } catch(e){return false;}
 }
 
 // ──────────────────────────────
@@ -511,7 +487,7 @@ function closeM(id){ document.getElementById(id).classList.remove('open'); }
 // ──────────────────────────────
 // AUTH
 // ──────────────────────────────
-// LOGIN REAL COM SUPABASE AUTH
+// ==================== AUTH + SUPABASE ====================
 async function doLogin(){
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pass').value.trim();
@@ -529,14 +505,9 @@ async function doSignUp(){
 
   const { error } = await supabase.auth.signUp({ email, password });
   if(error) alert('Erro ao criar conta: ' + error.message);
-  else alert('Conta criada! Verifique seu e-mail (pode cair na pasta de spam). Depois faça login.');
+  else alert('Conta criada com sucesso!\n\nVerifique seu e-mail (pode cair na pasta de spam) e depois faça login.');
 }
-function afterLogin(){
-  // Carrega fichas do usuário logado
-  loadUserFichas().then(() => {
-    showDash();
-  });
-}
+
 function doDemo(){
   S.user={email:'demo@purgatorio.rpg',nome:'Demo'};
   const f={id:'demo1',nome:'Irmão Corvus',vida:{atual:12},foco:{atual:1},exaustao:7,resources:{eco:12,comida:4,tocha:2},
@@ -555,10 +526,27 @@ function doDemo(){
   S.fichas[f.id]=f;
   const m={id:'mesa1',nome:'As Cinzas do Éden',mestre:'Demo',fichas:[f.id]};
   S.mesas[m.id]=m;
-  save(); afterLogin();
+  save(); 
+  afterLogin();
 }
-function logout(){ S.user=null; sessionStorage.removeItem('purg3'); showScr('login-screen'); }
 
+function afterLogin(){
+  const params=new URLSearchParams(location.search);
+  const jid=params.get('join');
+  if(jid&&S.mesas[jid]){ 
+    pendingJoin=jid; 
+    showDash(); 
+    openJoinModal(jid); 
+  } else {
+    showDash();
+  }
+}
+
+function logout(){ 
+  S.user=null; 
+  sessionStorage.removeItem('purg3'); 
+  showScr('login-screen'); 
+}
 // ──────────────────────────────
 // DASHBOARD
 // ──────────────────────────────
