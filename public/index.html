@@ -241,6 +241,7 @@
       <div class="form-group"><label class="form-label">E-mail</label><input type="email" class="form-input" id="login-email" placeholder="penitente@purgatório.rpg"></div>
       <div class="form-group"><label class="form-label">Senha</label><input type="password" class="form-input" id="login-pass" placeholder="••••••••"></div>
       <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      <button class="btn-primary" onclick="doSignUp()">Criar Nova Conta</button>
       <button class="btn-demo" onclick="doDemo()">↓ Entrar em modo demonstração ↓</button>
     </div>
   </div>
@@ -510,37 +511,31 @@ function closeM(id){ document.getElementById(id).classList.remove('open'); }
 // ──────────────────────────────
 // AUTH
 // ──────────────────────────────
-function doLogin(){
-  const e=document.getElementById('login-email').value.trim();
-  if(!e){alert('Preencha o e-mail.');return;}
-  S.user={email:e,nome:e.split('@')[0]};
-  save(); afterLogin();
+// LOGIN REAL COM SUPABASE AUTH
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-pass').value.trim();
+  if(!email || !password) return alert('Preencha e-mail e senha');
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if(error) alert('Erro ao entrar: ' + error.message);
+  else afterLogin();
 }
-function doDemo(){
-  S.user={email:'demo@purgatorio.rpg',nome:'Demo'};
-  const f={id:'demo1',nome:'Irmão Corvus',vida:{atual:12},foco:{atual:1},exaustao:7,resources:{eco:12,comida:4,tocha:2},
-    attrs:{pot:3,agi:2,res:2,pre:1,int:1,sab:2},
-    inventory:[
-      {id:'i1',nome:'Faca Enferrujada',qty:1,nota:'Encontrada nas catacumbas. Parece amaldiçoada.',showNote:false},
-      {id:'i2',nome:'Pão de Cinzas',qty:3,nota:'',showNote:false},
-      {id:'i3',nome:'Vela de Sebo',qty:2,nota:'',showNote:false},
-    ],
-    memories:[
-      {id:'m1',nome:'O Incêndio do Convento',tipo:'nucleo',desc:'As chamas que consumiram tudo que amava. Ainda sente o calor nos sonhos mais negros.',attr:'pot',corrompida:false,corrupcao:''},
-      {id:'m2',nome:'Promessa à Irmã Morta',tipo:'permanente',desc:'Jurou proteger os inocentes enquanto houvesse sangue nas veias e fogo nos ossos.',attr:'res',corrompida:false,corrupcao:''},
-      {id:'m3',nome:'A Traição do Abade',tipo:'rasa',desc:'Entregou-o aos carrascos por uma bolsa de prata. O rosto não sai da memória.',attr:'pre',corrompida:true,corrupcao:'Ao ver figuras de autoridade religiosa, deve passar em Sabedoria (dificuldade 3) ou agir com hostilidade imediata.'},
-    ]
-  };
-  S.fichas[f.id]=f;
-  const m={id:'mesa1',nome:'As Cinzas do Éden',mestre:'Demo',fichas:[f.id]};
-  S.mesas[m.id]=m;
-  save(); afterLogin();
+
+async function doSignUp(){
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-pass').value.trim();
+  if(!email || !password) return alert('Preencha e-mail e senha');
+
+  const { error } = await supabase.auth.signUp({ email, password });
+  if(error) alert('Erro ao criar conta: ' + error.message);
+  else alert('Conta criada! Verifique seu e-mail (pode cair na pasta de spam). Depois faça login.');
 }
 function afterLogin(){
-  const params=new URLSearchParams(location.search);
-  const jid=params.get('join');
-  if(jid&&S.mesas[jid]){ pendingJoin=jid; showDash(); openJoinModal(jid); }
-  else showDash();
+  // Carrega fichas do usuário logado
+  loadUserFichas().then(() => {
+    showDash();
+  });
 }
 function logout(){ S.user=null; sessionStorage.removeItem('purg3'); showScr('login-screen'); }
 
