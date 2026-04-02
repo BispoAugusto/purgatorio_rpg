@@ -527,17 +527,6 @@ function logout(){
   showScr('login-screen'); 
 }
 
-// ==================== LOAD FICHAS ====================
-async function loadUserFichas() {
-  if (!S.user) return;
-  const { data } = await supabase
-    .from('fichas')
-    .select('*')
-    .eq('user_email', S.user.email);
-  S.fichas = {};
-  (data || []).forEach(f => S.fichas[f.id] = f);
-}
-
 // ──────────────────────────────
 // DASHBOARD
 // ──────────────────────────────
