@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purgatório – Fichas do Penitente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #141414; --card: #1a1a1a; --card2: #1f1f1f;
+    --border: #2a2a2a; --border2: #333; --text: #d4d4d4; --text-dim: #6b6b6b;
+    --text-muted: #444; --accent: #c0392b; --accent2: #e74c3c;
+    --fire: #ff4500; --gold: #8b7355; --gold2: #a0896a;
+    --white: #f0ede8; --shadow: 0 4px 24px rgba(0,0,0,.8);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'EB Garamond',serif; min-height:100vh; font-size:16px; line-height:1.5; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:.6; }
+  .screen { display:none; min-height:100vh; position:relative; z-index:1; }
+  .screen.active { display:flex; flex-direction:column; }
+
+  /* ─── LOGIN ─── */
+  #login-screen { align-items:center; justify-content:center; background:radial-gradient(ellipse at center top,#1a0800 0%,#0a0a0a 60%); }
+  .login-container { width:100%; max-width:420px; padding:2rem; animation:fadeUp .6s ease; }
+  .login-logo { text-align:center; margin-bottom:3rem; }
+  .logo-crosses { display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:.5rem; }
+  .logo-cross { color:var(--gold); font-size:1.5rem; opacity:.8; }
+  .logo-title { font-family:'Cinzel Decorative',serif; font-size:2.2rem; font-weight:700; color:var(--white); letter-spacing:.12em; text-shadow:0 0 40px rgba(255,69,0,.3); }
+  .logo-sub { font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.35em; color:var(--text-dim); text-transform:uppercase; margin-top:.4rem; }
+  .login-divider { width:60px; height:1px; background:linear-gradient(to right,transparent,var(--gold),transparent); margin:2rem auto; }
+  .login-form { display:flex; flex-direction:column; gap:1rem; }
+  .form-group { display:flex; flex-direction:column; gap:.4rem; }
+  .form-label { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.2em; color:var(--text-dim); text-transform:uppercase; }
+  .form-input { background:var(--card); border:1px solid var(--border); color:var(--white); padding:.75rem 1rem; font-family:'EB Garamond',serif; font-size:1rem; outline:none; transition:border-color .2s; width:100%; }
+  .form-input:focus { border-color:var(--gold); }
+  .form-input::placeholder { color:var(--text-muted); }
+  .btn-primary { background:transparent; border:1px solid var(--gold); color:var(--gold2); padding:.85rem 1.5rem; font-family:'Cinzel',serif; font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; transition:all .2s; width:100%; }
+  .btn-primary:hover { background:rgba(139,115,85,.15); color:var(--white); }
+  .btn-demo { background:transparent; border:none; color:var(--text-muted); font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; padding:.5rem; transition:color .2s; text-align:center; width:100%; }
+  .btn-demo:hover { color:var(--text-dim); }
+
+  /* ─── SHARED HEADER ─── */
+  .app-header { background:var(--surface); border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; flex-shrink:0; }
+  .header-logo { display:flex; flex-direction:column; }
+  .header-logo-row { display:flex; align-items:center; gap:.6rem; }
+  .header-logo-title { font-family:'Cinzel Decorative',serif; font-size:1.2rem; font-weight:700; color:var(--white); letter-spacing:.08em; }
+  .header-logo-sub { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.3em; color:var(--text-dim); text-transform:uppercase; margin-top:.15rem; }
+  .header-cross { color:var(--gold); font-size:1rem; opacity:.7; }
+  .header-actions { display:flex; align-items:center; gap:1rem; }
+  .btn-add { background:transparent; border:1px solid var(--border2); color:var(--text); padding:.55rem 1.1rem; font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:.4rem; white-space:nowrap; }
+  .btn-add:hover { border-color:var(--gold); color:var(--gold2); }
+  .btn-back { background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; transition:color .2s; padding:.25rem 0; }
+  .btn-back:hover { color:var(--text); }
+
+  /* ─── DASHBOARD ─── */
+  #dashboard-screen { background:var(--bg); }
+  .dashboard-content { flex:1; padding:2.5rem 2rem; max-width:1200px; margin:0 auto; width:100%; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
+  .section-title { font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.25em; color:var(--text-dim); text-transform:uppercase; }
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin-bottom:3rem; }
+  .ficha-card { background:var(--card); border:1px solid var(--border); padding:1.5rem; cursor:pointer; transition:all .2s; position:relative; overflow:hidden; }
+  .ficha-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right,transparent,var(--gold),transparent); opacity:0; transition:opacity .2s; }
+  .ficha-card:hover { border-color:var(--border2); transform:translateY(-2px); box-shadow:var(--shadow); }
+  .ficha-card:hover::before { opacity:1; }
+  .card-avatar-area { width:44px; height:44px; border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; background:var(--card2); overflow:hidden; flex-shrink:0; cursor:pointer; }
+  .card-avatar-area img { width:100%; height:100%; object-fit:cover; }
+  .ficha-card-name { font-family:'Cinzel',serif; font-size:1rem; color:var(--white); margin-bottom:.3rem; }
+  .ficha-card-sub { font-size:.82rem; color:var(--text-dim); }
+  .ficha-card-new { background:transparent; border:1px dashed var(--border2); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:140px; gap:.5rem; color:var(--text-muted); cursor:pointer; transition:all .2s; padding:1.5rem; }
+  .ficha-card-new:hover { border-color:var(--gold); color:var(--gold2); }
+  .ficha-card-new-label { font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; }
+  .empty-state { text-align:center; padding:3rem; color:var(--text-muted); border:1px dashed var(--border); }
+
+  /* ─── SHEET HEADER ─── */
+  .sheet-header { background:var(--surface); border-bottom:1px solid var(--border); padding:.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; flex-shrink:0; gap:1rem; }
+  .sheet-header-left { display:flex; align-items:center; gap:.85rem; }
+  .sheet-avatar { width:40px; height:40px; border:1px solid var(--border2); overflow:hidden; display:flex; align-items:center; justify-content:center; background:var(--card2); cursor:pointer; flex-shrink:0; }
+  .sheet-avatar img { width:100%; height:100%; object-fit:cover; }
+  .sheet-avatar .av-ph { color:var(--text-muted); font-size:1.1rem; }
+  .sheet-name-input { background:transparent; border:none; border-bottom:1px solid transparent; color:var(--white); font-family:'Cinzel',serif; font-size:1.1rem; outline:none; min-width:80px; transition:border-color .2s; padding:.1rem 0; }
+  .sheet-name-input:focus { border-bottom-color:var(--gold); }
+  .quick-resources { display:flex; align-items:center; gap:.6rem; }
+  .resource-pill { display:flex; align-items:center; gap:.35rem; background:var(--card); border:1px solid var(--border); padding:.28rem .55rem; }
+  .resource-btn { background:transparent; border:none; color:var(--text-dim); cursor:pointer; font-size:.85rem; line-height:1; padding:0; transition:color .2s; }
+  .resource-btn:hover { color:var(--white); }
+  .resource-val { font-family:'Cinzel',serif; font-size:.85rem; color:var(--white); min-width:1.2rem; text-align:center; }
+
+  /* ─── SHEET BODY ─── */
+  .sheet-content { flex:1; padding:1.5rem; max-width:1200px; margin:0 auto; width:100%; display:flex; flex-direction:column; gap:1.5rem; }
+  .section-label { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.25em; color:var(--text-dim); text-transform:uppercase; display:flex; align-items:center; justify-content:space-between; padding-bottom:.75rem; border-bottom:1px solid var(--border); margin-bottom:1rem; }
+
+  /* STATUS */
+  .status-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+  .status-card { background:var(--card); border:1px solid var(--border); padding:1.25rem 1.5rem; }
+  .status-card-title { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.25em; color:var(--text-dim); text-transform:uppercase; margin-bottom:.75rem; }
+  .status-current { font-family:'Cinzel',serif; font-size:2.5rem; font-weight:700; line-height:1; }
+  .status-sep { color:var(--text-muted); font-size:1.2rem; }
+  .status-max-label { font-family:'Cinzel',serif; font-size:.95rem; color:var(--text-dim); }
+  .status-formula { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.1em; color:var(--text-muted); text-transform:uppercase; margin:.35rem 0 .5rem; }
+  .bar-track { height:4px; background:var(--border); overflow:hidden; }
+  .bar-fill { height:100%; transition:width .3s ease; }
+  .bar-fill.vida { background:var(--accent2); }
+  .bar-fill.foco { background:#3d6b8f; }
+  .status-controls { display:flex; gap:.5rem; margin-top:.75rem; }
+  .stat-btn { background:var(--card2); border:1px solid var(--border); color:var(--text-dim); width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1rem; transition:all .15s; }
+  .stat-btn:hover { border-color:var(--border2); color:var(--white); }
+
+  /* EXHAUSTION */
+  .exh-row { display:flex; align-items:flex-start; gap:1.5rem; margin-bottom:.7rem; }
+  .exh-big { font-family:'Cinzel',serif; font-size:2.5rem; font-weight:700; line-height:1; }
+  .exh-lbl { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.15em; color:var(--text-dim); text-transform:uppercase; margin-top:.3rem; }
+  .exh-track { display:flex; gap:3px; margin-bottom:.55rem; }
+  .exh-pip { width:28px; height:10px; background:var(--border); transition:background .2s; }
+  .exh-pip.on { background:var(--accent2); }
+  .exh-debuff { font-size:.88rem; color:var(--text-dim); font-style:italic; line-height:1.65; }
+
+  /* ATTRS */
+  .attrs-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:.75rem; }
+  .attr-card { background:var(--card); border:1px solid var(--border); padding:1rem .75rem; text-align:center; }
+  .attr-name { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.15em; color:var(--text-dim); text-transform:uppercase; margin-bottom:.55rem; }
+  .attr-val { font-family:'Cinzel',serif; font-size:2rem; font-weight:700; color:var(--white); line-height:1; margin-bottom:.35rem; }
+  .attr-mem { font-family:'Cinzel',serif; font-size:.58rem; color:var(--gold2); min-height:.85rem; margin-bottom:.35rem; }
+  .attr-controls { display:flex; justify-content:center; gap:.4rem; }
+
+  /* BONUS */
+  .bonus-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:.75rem; }
+  .bonus-card { background:var(--card); border:1px solid var(--border); padding:.9rem .75rem; display:flex; align-items:center; gap:.65rem; }
+  .bonus-icon { color:var(--text-muted); flex-shrink:0; }
+  .bonus-name { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.12em; color:var(--text-dim); text-transform:uppercase; margin-bottom:.2rem; }
+  .bonus-val { font-family:'Cinzel',serif; font-size:1.05rem; font-weight:600; color:var(--white); }
+
+  /* INVENTORY */
+  .inv-list { display:flex; flex-direction:column; gap:.4rem; margin-bottom:.75rem; }
+  .inv-item { background:var(--card); border:1px solid var(--border); }
+  .inv-item-main { padding:.55rem 1rem; display:flex; align-items:center; gap:.65rem; }
+  .inv-item-name { flex:1; font-size:.95rem; color:var(--white); }
+  .qty-ctrl { display:flex; align-items:center; gap:.35rem; }
+  .qty-val { font-family:'Cinzel',serif; font-size:.88rem; color:var(--white); min-width:1.4rem; text-align:center; }
+  .i-btn { background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:.88rem; padding:.15rem; transition:color .15s; }
+  .i-btn:hover { color:var(--text); }
+  .i-btn-del:hover { color:var(--accent2); }
+  .i-btn-note { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--border); padding:.2rem .45rem; transition:all .2s; }
+  .i-btn-note:hover, .i-btn-note.has { color:var(--gold2); border-color:rgba(139,115,85,.4); }
+  .inv-note-wrap { padding:.45rem 1rem .65rem; border-top:1px solid var(--border); }
+  .inv-note-inp { width:100%; background:transparent; border:none; border-bottom:1px solid var(--border2); color:var(--text-dim); font-family:'EB Garamond',serif; font-size:.9rem; font-style:italic; outline:none; padding:.25rem 0; }
+  .inv-note-inp::placeholder { color:var(--text-muted); }
+  .inv-note-inp:focus { border-bottom-color:var(--gold); color:var(--text); }
+  .inv-note-disp { font-size:.9rem; color:var(--text-dim); font-style:italic; cursor:pointer; }
+  .inv-add { display:flex; gap:.5rem; }
+  .inv-input { flex:1; background:var(--card); border:1px solid var(--border); color:var(--white); padding:.6rem 1rem; font-family:'EB Garamond',serif; font-size:.95rem; outline:none; }
+  .inv-input::placeholder { color:var(--text-muted); }
+  .btn-sm { background:var(--card2); border:1px solid var(--border2); color:var(--text); padding:.6rem 1rem; font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; transition:all .2s; white-space:nowrap; }
+  .btn-sm:hover { border-color:var(--gold); color:var(--gold2); }
+
+  /* MEMORIES */
+  .mem-list { display:flex; flex-direction:column; gap:.75rem; }
+  .mem-card { background:var(--card); border:1px solid var(--border); padding:1.25rem 1.5rem; }
+  .mem-card.crpt { border-color:rgba(199,57,57,.3); background:rgba(199,57,57,.03); }
+  .mem-header { display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem; margin-bottom:.65rem; }
+  .mem-title-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; }
+  .mem-name { font-family:'Cinzel',serif; font-size:.95rem; color:var(--white); }
+  .mem-badge { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.15em; text-transform:uppercase; padding:.18rem .48rem; border:1px solid var(--border2); color:var(--text-dim); }
+  .mem-badge.nucleo { border-color:rgba(139,115,85,.5); color:var(--gold2); }
+  .mem-badge.permanente { border-color:rgba(60,120,180,.4); color:#7aadcc; }
+  .mem-badge.crpt-tag { border-color:rgba(199,57,57,.5); color:#e07070; }
+  .mem-bonus-tag { font-family:'Cinzel',serif; font-size:.72rem; color:var(--gold2); }
+  .mem-desc { font-size:1rem; color:var(--text); font-style:italic; line-height:1.65; margin-bottom:.5rem; }
+  .mem-crpt-txt { font-size:.88rem; color:#e07070; font-style:italic; margin-top:.45rem; padding:.45rem .75rem; border-left:2px solid rgba(199,57,57,.5); line-height:1.6; }
+  .mem-actions { display:flex; gap:.4rem; flex-shrink:0; }
+  .mem-edit-btn { font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--border); color:var(--text-muted); padding:.2rem .5rem; background:transparent; cursor:pointer; transition:all .2s; }
+  .mem-edit-btn:hover { border-color:var(--gold); color:var(--gold2); }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
+  .modal-overlay.open { display:flex; animation:fadeIn .2s ease; }
+  .modal { background:var(--card); border:1px solid var(--border2); padding:2rem; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; animation:scaleIn .2s ease; }
+  .modal-title { font-family:'Cinzel',serif; font-size:.85rem; letter-spacing:.2em; text-transform:uppercase; color:var(--white); margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+  .modal-form { display:flex; flex-direction:column; gap:1rem; }
+  .modal-actions { display:flex; gap:.75rem; margin-top:1.5rem; }
+  .btn-cancel { background:transparent; border:1px solid var(--border); color:var(--text-dim); padding:.65rem 1.2rem; font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; transition:all .2s; }
+  .btn-cancel:hover { border-color:var(--border2); color:var(--text); }
+  .sel-inp { background:var(--card2); border:1px solid var(--border); color:var(--white); padding:.65rem 1rem; font-family:'EB Garamond',serif; font-size:.95rem; outline:none; width:100%; }
+  .sel-inp option { background:var(--card2); }
+  .ta-inp { background:var(--card2); border:1px solid var(--border); color:var(--white); padding:.65rem 1rem; font-family:'EB Garamond',serif; font-size:.95rem; outline:none; width:100%; resize:vertical; min-height:80px; }
+  .ta-inp::placeholder { color:var(--text-muted); }
+  .chk-row { display:flex; align-items:center; gap:.6rem; cursor:pointer; }
+  .chk-row input { accent-color:var(--accent); width:14px; height:14px; }
+  .chk-lbl { font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); cursor:pointer; }
+
+  /* MESA */
+  #mesa-screen { background:var(--bg); }
+  .mesa-content { flex:1; padding:1.5rem; display:flex; flex-direction:column; gap:1.5rem; overflow-y:auto; }
+  .mesa-hero { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:3rem 1rem; border:1px solid var(--border); background:var(--card); position:relative; overflow:hidden; }
+  .mesa-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(255,69,0,.04) 0%,transparent 70%); }
+  .mesa-hero-spiral { color:var(--text-muted); font-size:2.5rem; margin-bottom:1.5rem; opacity:.4; animation:slowRotate 20s linear infinite; display:block; }
+  .mesa-hero-title { font-family:'Cinzel Decorative',serif; font-size:1.8rem; color:var(--white); letter-spacing:.12em; opacity:.7; }
+  .mesa-hero-sub { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.3em; color:var(--text-dim); text-transform:uppercase; margin-top:.5rem; }
+  .mesa-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:1.25rem; }
+  .mesa-ficha-card { background:var(--card); border:1px solid var(--border); overflow:hidden; }
+  .mesa-top { padding:1.25rem; border-bottom:1px solid var(--border); display:flex; gap:1rem; }
+  .mesa-av { width:52px; height:52px; border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; background:var(--card2); flex-shrink:0; overflow:hidden; }
+  .mesa-av img { width:100%; height:100%; object-fit:cover; }
+  .mesa-ficha-name { font-family:'Cinzel',serif; font-size:1rem; color:var(--white); margin-bottom:.2rem; }
+  .mesa-ficha-sub { font-size:.78rem; color:var(--text-dim); }
+  .mini-bar-lbl { display:flex; justify-content:space-between; font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.1em; color:var(--text-muted); text-transform:uppercase; margin-bottom:.22rem; margin-top:.45rem; }
+  .mesa-body { padding:1rem 1.25rem; display:flex; flex-direction:column; gap:.8rem; }
+  .mesa-s-title { font-family:'Cinzel',serif; font-size:.55rem; letter-spacing:.2em; color:var(--text-dim); text-transform:uppercase; margin-bottom:.4rem; padding-bottom:.28rem; border-bottom:1px solid var(--border); }
+  .mesa-attrs-row { display:flex; gap:.35rem; flex-wrap:wrap; }
+  .mesa-chip { background:var(--card2); border:1px solid var(--border); padding:.2rem .45rem; text-align:center; }
+  .mesa-chip-n { font-family:'Cinzel',serif; font-size:.43rem; letter-spacing:.1em; color:var(--text-muted); text-transform:uppercase; }
+  .mesa-chip-v { font-family:'Cinzel',serif; font-size:.88rem; color:var(--white); font-weight:700; }
+  .mesa-item-row { font-size:.85rem; color:var(--text-dim); display:flex; justify-content:space-between; padding:.18rem 0; border-bottom:1px solid rgba(42,42,42,.4); }
+  .mesa-mem-row { padding:.35rem 0; border-bottom:1px solid rgba(42,42,42,.4); }
+  .mesa-mem-name { font-family:'Cinzel',serif; font-size:.78rem; color:var(--text); }
+  .mesa-mem-desc { font-size:.82rem; color:var(--text-dim); font-style:italic; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0}to{opacity:1} }
+  @keyframes scaleIn { from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)} }
+  @keyframes slowRotate { from{transform:rotate(0)}to{transform:rotate(360deg)} }
+
+  @media(max-width:900px){.attrs-grid{grid-template-columns:repeat(3,1fr)}.bonus-grid{grid-template-columns:repeat(3,1fr)}.status-row{grid-template-columns:1fr}}
+  @media(max-width:600px){.attrs-grid{grid-template-columns:repeat(2,1fr)}.bonus-grid{grid-template-columns:repeat(2,1fr)}.quick-resources{display:none}.sheet-content,.dashboard-content{padding:1rem}.app-header,.sheet-header{padding:.75rem 1rem}}
+  ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="screen active">
+  <div class="login-container">
+    <div class="login-logo">
+      <div class="logo-crosses"><span class="logo-cross">✛</span><span class="logo-title">Purgatório</span><span class="logo-cross">✛</span></div>
+      <div class="logo-sub">Fichas do Penitente</div>
+    </div>
+    <div class="login-divider"></div>
+    <div class="login-form">
+      <div class="form-group"><label class="form-label">E-mail</label><input type="email" class="form-input" id="login-email" placeholder="penitente@purgatório.rpg"></div>
+      <div class="form-group"><label class="form-label">Senha</label><input type="password" class="form-input" id="login-pass" placeholder="••••••••"></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      <button class="btn-demo" onclick="doDemo()">↓ Entrar em modo demonstração ↓</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-screen" class="screen">
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="header-logo-row"><span class="header-cross">✛</span><span class="header-logo-title">Purgatório</span><span class="header-cross">✛</span></div>
+      <div class="header-logo-sub">Fichas do Penitente</div>
+    </div>
+    <div class="header-actions"><button class="btn-add" onclick="logout()">⤷ Sair</button></div>
+  </header>
+  <div class="dashboard-content">
+    <div class="section-header"><div class="section-title">✛ Minhas Fichas</div><button class="btn-add" onclick="openNewFichaModal()">+ Novo Penitente</button></div>
+    <div class="cards-grid" id="fichas-grid"></div>
+    <div class="section-header"><div class="section-title">⬡ Minhas Mesas</div><button class="btn-add" onclick="openNewMesaModal()">+ Nova Mesa</button></div>
+    <div class="cards-grid" id="mesas-grid"></div>
+  </div>
+</div>
+
+<!-- SHEET -->
+<div id="sheet-screen" class="screen">
+  <header class="sheet-header">
+    <div class="sheet-header-left">
+      <button class="btn-back" onclick="goToDashboard()">← Voltar</button>
+      <div style="width:1px;height:24px;background:var(--border)"></div>
+      <div class="sheet-avatar" onclick="document.getElementById('av-upload').click()" title="Clique para mudar foto">
+        <img id="sheet-av-img" src="" style="display:none">
+        <span class="av-ph" id="sheet-av-ph">✛</span>
+        <input type="file" id="av-upload" accept="image/*" onchange="handleAvatarUpload(event)" style="display:none">
+      </div>
+      <input type="text" class="sheet-name-input" id="sheet-name" value="Sem Nome" oninput="saveSheet()">
+    </div>
+    <div class="quick-resources">
+      <div class="resource-pill"><span style="font-size:.82rem">🪙</span><div style="display:flex;align-items:center;gap:.3rem"><button class="resource-btn" onclick="changeRes('eco',-1)">−</button><span class="resource-val" id="res-eco">0</span><button class="resource-btn" onclick="changeRes('eco',1)">+</button></div></div>
+      <div class="resource-pill"><span style="font-size:.82rem">🍖</span><div style="display:flex;align-items:center;gap:.3rem"><button class="resource-btn" onclick="changeRes('comida',-1)">−</button><span class="resource-val" id="res-comida">0</span><button class="resource-btn" onclick="changeRes('comida',1)">+</button></div></div>
+      <div class="resource-pill"><span style="font-size:.82rem">🔦</span><div style="display:flex;align-items:center;gap:.3rem"><button class="resource-btn" onclick="changeRes('tocha',-1)">−</button><span class="resource-val" id="res-tocha">0</span><button class="resource-btn" onclick="changeRes('tocha',1)">+</button></div></div>
+    </div>
+  </header>
+  <div class="sheet-content">
+    <!-- STATUS -->
+    <div class="status-row">
+      <div class="status-card">
+        <div class="status-card-title">♥ Vida</div>
+        <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.2rem">
+          <span class="status-current" style="color:#c0392b" id="vida-atual">6</span>
+          <span class="status-sep">/</span>
+          <span class="status-max-label" id="vida-max-lbl">6</span>
+        </div>
+        <div class="status-formula">6 + 2 × Resiliência</div>
+        <div class="bar-track"><div class="bar-fill vida" id="vida-bar" style="width:100%"></div></div>
+        <div class="status-controls"><button class="stat-btn" onclick="changeVida(-1)">−</button><button class="stat-btn" onclick="changeVida(1)">+</button></div>
+      </div>
+      <div class="status-card">
+        <div class="status-card-title">◈ Foco</div>
+        <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.2rem">
+          <span class="status-current" style="color:#3d6b8f" id="foco-atual">0</span>
+          <span class="status-sep">/</span>
+          <span class="status-max-label" id="foco-max-lbl">0</span>
+        </div>
+        <div class="status-formula">2 × Inteligência</div>
+        <div class="bar-track"><div class="bar-fill foco" id="foco-bar" style="width:0%"></div></div>
+        <div class="status-controls"><button class="stat-btn" onclick="changeFoco(-1)">−</button><button class="stat-btn" onclick="changeFoco(1)">+</button></div>
+      </div>
+      <div class="status-card">
+        <div class="status-card-title">⚡ Exaustão</div>
+        <div class="exh-row">
+          <div><div class="exh-big" style="color:#e07040" id="exh-pts">0</div><div class="exh-lbl">pts</div></div>
+          <div><div class="exh-big" id="exh-niv" style="color:var(--text-dim)">0</div><div class="exh-lbl">nível</div></div>
+        </div>
+        <div class="exh-track"><div class="exh-pip" id="ep1"></div><div class="exh-pip" id="ep2"></div><div class="exh-pip" id="ep3"></div><div class="exh-pip" id="ep4"></div><div class="exh-pip" id="ep5"></div></div>
+        <div class="exh-debuff" id="exh-debuff">Sem efeitos de exaustão</div>
+        <div class="status-controls"><button class="stat-btn" onclick="changeExaustao(-1)">−</button><button class="stat-btn" onclick="changeExaustao(1)">+</button></div>
+      </div>
+    </div>
+    <!-- ATTRS -->
+    <div>
+      <div class="section-label"><span>★ Atributos da Alma</span></div>
+      <div class="attrs-grid">
+        <div class="attr-card"><div class="attr-name">Potência</div><div class="attr-val" id="attr-pot">0</div><div class="attr-mem" id="mb-pot"></div><div class="attr-controls"><button class="stat-btn" onclick="changeAttr('pot',-1)">−</button><button class="stat-btn" onclick="changeAttr('pot',1)">+</button></div></div>
+        <div class="attr-card"><div class="attr-name">Agilidade</div><div class="attr-val" id="attr-agi">0</div><div class="attr-mem" id="mb-agi"></div><div class="attr-controls"><button class="stat-btn" onclick="changeAttr('agi',-1)">−</button><button class="stat-btn" onclick="changeAttr('agi',1)">+</button></div></div>
+        <div class="attr-card"><div class="attr-name">Resiliência</div><div class="attr-val" id="attr-res">0</div><div class="attr-mem" id="mb-res"></div><div class="attr-controls"><button class="stat-btn" onclick="changeAttr('res',-1)">−</button><button class="stat-btn" onclick="changeAttr('res',1)">+</button></div></div>
+        <div class="attr-card"><div class="attr-name">Precisão</div><div class="attr-val" id="attr-pre">0</div><div class="attr-mem" id="mb-pre"></div><div class="attr-controls"><button class="stat-btn" onclick="changeAttr('pre',-1)">−</button><button class="stat-btn" onclick="changeAttr('pre',1)">+</button></div></div>
+        <div class="attr-card"><div class="attr-name">Inteligência</div><div class="attr-val" id="attr-int">0</div><div class="attr-mem" id="mb-int"></div><div class="attr-controls"><button class="stat-btn" onclick="changeAttr('int',-1)">−</button><button class="stat-btn" onclick="changeAttr('int',1)">+</button></div></div>
+        <div class="attr-card"><div class="attr-name">Sabedoria</div><div class="attr-val" id="attr-sab">0</div><div class="attr-mem" id="mb-sab"></div><div class="attr-controls"><button class="stat-btn" onclick="changeAttr('sab',-1)">−</button><button class="stat-btn" onclick="changeAttr('sab',1)">+</button></div></div>
+      </div>
+    </div>
+    <!-- BONUS -->
+    <div>
+      <div class="section-label"><span>⊕ Bônus Automáticos</span></div>
+      <div class="bonus-grid">
+        <div class="bonus-card"><span class="bonus-icon">⚔</span><div><div class="bonus-name">Dano Base</div><div class="bonus-val" id="b-dano">+1</div></div></div>
+        <div class="bonus-card"><span class="bonus-icon">🔥</span><div><div class="bonus-name">Bônus Ataque</div><div class="bonus-val" id="b-ataque">+0</div></div></div>
+        <div class="bonus-card"><span class="bonus-icon">≋</span><div><div class="bonus-name">Esquiva</div><div class="bonus-val" id="b-esquiva">+0</div></div></div>
+        <div class="bonus-card"><span class="bonus-icon">🛡</span><div><div class="bonus-name">Defesa</div><div class="bonus-val" id="b-defesa">+0</div></div></div>
+        <div class="bonus-card"><span class="bonus-icon">👁</span><div><div class="bonus-name">Percepção</div><div class="bonus-val" id="b-percepcao">+0</div></div></div>
+      </div>
+    </div>
+    <!-- INVENTORY -->
+    <div>
+      <div class="section-label"><span>⊡ Inventário</span></div>
+      <div class="inv-list" id="inv-list"></div>
+      <div class="inv-add">
+        <input type="text" class="inv-input" id="new-item-inp" placeholder="Novo item...">
+        <button class="btn-sm" onclick="addItem()">Adicionar</button>
+      </div>
+    </div>
+    <!-- MEMORIES -->
+    <div style="margin-bottom:2rem">
+      <div class="section-label"><span>✦ Memórias da Alma</span><button class="btn-sm" onclick="openMemModal()">+ Adicionar Memória</button></div>
+      <div class="mem-list" id="mem-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MESA -->
+<div id="mesa-screen" class="screen">
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="header-logo-row"><button class="btn-back" onclick="goToDashboard()" style="margin-right:.75rem">← Voltar</button><span class="header-cross">✛</span><span class="header-logo-title" id="mesa-nome-h">Mesa</span></div>
+    </div>
+    <div class="header-actions"><button class="btn-add" onclick="showInvite()">🔗 Convidar</button></div>
+  </header>
+  <div class="mesa-content">
+    <div class="mesa-hero">
+      <span class="mesa-hero-spiral">✦</span>
+      <div class="mesa-hero-title">Purgatório</div>
+      <div class="mesa-hero-sub">Mesa de Jogo</div>
+    </div>
+    <div>
+      <div class="section-label"><span>Fichas dos Penitentes</span></div>
+      <div class="mesa-grid" id="mesa-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODALS ══ -->
+<!-- Nova Ficha -->
+<div class="modal-overlay" id="m-nova-ficha">
+  <div class="modal">
+    <div class="modal-title">✛ Novo Penitente</div>
+    <div class="modal-form">
+      <div class="form-group"><label class="form-label">Nome</label><input type="text" class="form-input" id="nf-nome" placeholder="Ex: Irmão Corvus"></div>
+      <div class="modal-actions"><button class="btn-cancel" onclick="closeM('m-nova-ficha')">Cancelar</button><button class="btn-primary" style="flex:1" onclick="createFicha()">Criar Ficha</button></div>
+    </div>
+  </div>
+</div>
+<!-- Nova Mesa -->
+<div class="modal-overlay" id="m-nova-mesa">
+  <div class="modal">
+    <div class="modal-title">✛ Nova Mesa</div>
+    <div class="modal-form">
+      <div class="form-group"><label class="form-label">Nome da Mesa</label><input type="text" class="form-input" id="nm-nome" placeholder="Ex: As Cinzas do Éden"></div>
+      <div class="modal-actions"><button class="btn-cancel" onclick="closeM('m-nova-mesa')">Cancelar</button><button class="btn-primary" style="flex:1" onclick="createMesa()">Criar Mesa</button></div>
+    </div>
+  </div>
+</div>
+<!-- Memória -->
+<div class="modal-overlay" id="m-memoria">
+  <div class="modal">
+    <div class="modal-title" id="mem-modal-title">✛ Registrar Memória</div>
+    <div class="modal-form">
+      <div class="form-group"><label class="form-label">Nome</label><input type="text" class="form-input" id="mm-nome" placeholder="Ex: O Juízo da Fogueira"></div>
+      <div class="form-group"><label class="form-label">Tipo</label><select class="sel-inp" id="mm-tipo"><option value="rasa">Rasa</option><option value="permanente">Permanente</option><option value="nucleo">Núcleo</option></select></div>
+      <div class="form-group"><label class="form-label">Descrição</label><textarea class="ta-inp" id="mm-desc" placeholder="Descreva esta memória..."></textarea></div>
+      <div class="form-group"><label class="form-label">Atributo Bônus</label><select class="sel-inp" id="mm-attr"><option value="">Nenhum</option><option value="pot">+1 Potência</option><option value="agi">+1 Agilidade</option><option value="res">+1 Resiliência</option><option value="pre">+1 Precisão</option><option value="int">+1 Inteligência</option><option value="sab">+1 Sabedoria</option></select></div>
+      <label class="chk-row"><input type="checkbox" id="mm-crpt" onchange="toggleCrptField()"><span class="chk-lbl">Memória Corrompida</span></label>
+      <div id="crpt-field" style="display:none">
+        <div class="form-group"><label class="form-label" style="color:#e07070">Efeito da Corrupção</label><textarea class="ta-inp" id="mm-crpt-txt" placeholder="O que esta corrupção causa ao Penitente..." style="border-color:rgba(199,57,57,.4)"></textarea></div>
+      </div>
+      <div class="modal-actions"><button class="btn-cancel" onclick="closeM('m-memoria')">Cancelar</button><button class="btn-primary" style="flex:1" id="mm-save-btn" onclick="saveMemory()">Registrar</button></div>
+    </div>
+  </div>
+</div>
+<!-- Convite -->
+<div class="modal-overlay" id="m-invite">
+  <div class="modal">
+    <div class="modal-title">🔗 Convidar para Mesa</div>
+    <div style="font-size:.9rem;color:var(--text-dim);margin-bottom:1rem">Ao acessar este link, o jogador poderá escolher qual ficha levar para a mesa:</div>
+    <div style="background:var(--card2);border:1px solid var(--border2);padding:.85rem 1rem;font-family:'EB Garamond',serif;font-size:.88rem;color:var(--gold2);word-break:break-all;cursor:pointer" id="invite-link" onclick="copyLink()" title="Clique para copiar"></div>
+    <div style="margin-top:.4rem;font-size:.72rem;color:var(--text-muted);text-align:center" id="copy-fbk">Clique para copiar</div>
+    <div class="modal-actions" style="margin-top:1rem"><button class="btn-primary" style="flex:1" onclick="closeM('m-invite')">Fechar</button></div>
+  </div>
+</div>
+<!-- Entrar na Mesa -->
+<div class="modal-overlay" id="m-join">
+  <div class="modal">
+    <div class="modal-title">✛ Entrar na Mesa</div>
+    <div style="font-size:.9rem;color:var(--text-dim);margin-bottom:1.25rem">Você foi convidado para <strong id="join-mesa-nm" style="color:var(--white);font-family:'Cinzel',serif"></strong>. Escolha qual ficha levar:</div>
+    <div id="join-fichas" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem"></div>
+    <button class="btn-sm" style="width:100%;text-align:center;padding:.75rem" onclick="joinNewFicha()">+ Criar Nova Ficha</button>
+    <div class="modal-actions" style="margin-top:1rem"><button class="btn-cancel" style="flex:1" onclick="closeM('m-join')">Cancelar</button></div>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────
+// STATE
+// ──────────────────────────────
+const S = { user:null, fichaId:null, mesaId:null, fichas:{}, mesas:{}, avatars:{} };
+let editMemId = null, pendingJoin = null;
+
+const ATTR_LABELS = { pot:'Potência', agi:'Agilidade', res:'Resiliência', pre:'Precisão', int:'Inteligência', sab:'Sabedoria' };
+const TIPO_LABELS = { nucleo:'Núcleo', permanente:'Permanente', rasa:'Rasa' };
+const EXH_DEBUFFS = [
+  'Sem efeitos de exaustão',
+  '−1 em todos os testes',
+  '−1 em todos os testes · −1 de dano',
+  'Desvantagem em 1 teste por rodada · −2 em todos os testes · −1 de dano',
+  'Metade da vida máxima · Desvantagem em 1 teste por rodada · −3 em todos os testes · −2 de dano',
+  'Inconsciente',
+];
+
+// ──────────────────────────────
+// PERSISTENCE
+// ──────────────────────────────
+function save() {
+  try { sessionStorage.setItem('purg3',JSON.stringify({fichas:S.fichas,mesas:S.mesas,avatars:S.avatars,user:S.user})); } catch(e){}
+}
+function load() {
+  try { const d=JSON.parse(sessionStorage.getItem('purg3')||'{}'); S.fichas=d.fichas||{}; S.mesas=d.mesas||{}; S.avatars=d.avatars||{}; S.user=d.user||null; return !!S.user; } catch(e){return false;}
+}
+
+// ──────────────────────────────
+// COMPUTED
+// ──────────────────────────────
+function memBonuses(f){ const b={}; (f.memories||[]).forEach(m=>{ if(m.attr) b[m.attr]=(b[m.attr]||0)+1; }); return b; }
+function totalAttr(f,k){ const b=memBonuses(f); return (f.attrs[k]||0)+(b[k]||0); }
+function vidaMax(f){ return 6+2*totalAttr(f,'res'); }
+function focoMax(f){ return 2*totalAttr(f,'int'); }
+function cf(){ return S.fichas[S.fichaId]; }
+function fmt(v){ return (v>=0?'+':'')+v; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ──────────────────────────────
+// SCREEN
+// ──────────────────────────────
+function showScr(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function openM(id){ document.getElementById(id).classList.add('open'); }
+function closeM(id){ document.getElementById(id).classList.remove('open'); }
+
+// ──────────────────────────────
+// AUTH
+// ──────────────────────────────
+function doLogin(){
+  const e=document.getElementById('login-email').value.trim();
+  if(!e){alert('Preencha o e-mail.');return;}
+  S.user={email:e,nome:e.split('@')[0]};
+  save(); afterLogin();
+}
+function doDemo(){
+  S.user={email:'demo@purgatorio.rpg',nome:'Demo'};
+  const f={id:'demo1',nome:'Irmão Corvus',vida:{atual:12},foco:{atual:1},exaustao:7,resources:{eco:12,comida:4,tocha:2},
+    attrs:{pot:3,agi:2,res:2,pre:1,int:1,sab:2},
+    inventory:[
+      {id:'i1',nome:'Faca Enferrujada',qty:1,nota:'Encontrada nas catacumbas. Parece amaldiçoada.',showNote:false},
+      {id:'i2',nome:'Pão de Cinzas',qty:3,nota:'',showNote:false},
+      {id:'i3',nome:'Vela de Sebo',qty:2,nota:'',showNote:false},
+    ],
+    memories:[
+      {id:'m1',nome:'O Incêndio do Convento',tipo:'nucleo',desc:'As chamas que consumiram tudo que amava. Ainda sente o calor nos sonhos mais negros.',attr:'pot',corrompida:false,corrupcao:''},
+      {id:'m2',nome:'Promessa à Irmã Morta',tipo:'permanente',desc:'Jurou proteger os inocentes enquanto houvesse sangue nas veias e fogo nos ossos.',attr:'res',corrompida:false,corrupcao:''},
+      {id:'m3',nome:'A Traição do Abade',tipo:'rasa',desc:'Entregou-o aos carrascos por uma bolsa de prata. O rosto não sai da memória.',attr:'pre',corrompida:true,corrupcao:'Ao ver figuras de autoridade religiosa, deve passar em Sabedoria (dificuldade 3) ou agir com hostilidade imediata.'},
+    ]
+  };
+  S.fichas[f.id]=f;
+  const m={id:'mesa1',nome:'As Cinzas do Éden',mestre:'Demo',fichas:[f.id]};
+  S.mesas[m.id]=m;
+  save(); afterLogin();
+}
+function afterLogin(){
+  const params=new URLSearchParams(location.search);
+  const jid=params.get('join');
+  if(jid&&S.mesas[jid]){ pendingJoin=jid; showDash(); openJoinModal(jid); }
+  else showDash();
+}
+function logout(){ S.user=null; sessionStorage.removeItem('purg3'); showScr('login-screen'); }
+
+// ──────────────────────────────
+// DASHBOARD
+// ──────────────────────────────
+function showDash(){ renderDash(); showScr('dashboard-screen'); }
+function goToDashboard(){ saveSheet(); showDash(); }
+
+function renderDash(){
+  // fichas
+  const fg=document.getElementById('fichas-grid');
+  fg.innerHTML='';
+  Object.values(S.fichas).forEach(f=>{
+    const vm=vidaMax(f);
+    const av=S.avatars[f.id];
+    const el=document.createElement('div');
+    el.className='ficha-card';
+    el.innerHTML=`<div style="display:flex;align-items:flex-start;gap:.85rem;margin-bottom:.75rem">
+      <div class="card-avatar-area" onclick="event.stopPropagation();document.getElementById('dav-${f.id}').click()">
+        ${av?`<img src="${av}">`:`<span style="color:var(--text-muted);font-size:1.3rem">✛</span>`}
+        <input type="file" id="dav-${f.id}" accept="image/*" onchange="dashAvUp(event,'${f.id}')" style="display:none">
+      </div>
+      <div><div class="ficha-card-name">${esc(f.nome)}</div><div class="ficha-card-sub">Vida ${f.vida.atual}/${vm} · Exaustão ${f.exaustao}</div></div>
+    </div>`;
+    el.addEventListener('click',()=>openSheet(f.id));
+    fg.appendChild(el);
+  });
+  const na=document.createElement('div');
+  na.className='ficha-card-new';
+  na.innerHTML=`<span style="font-size:1.5rem;opacity:.4">+</span><span class="ficha-card-new-label">Novo Penitente</span>`;
+  na.onclick=openNewFichaModal;
+  fg.appendChild(na);
+
+  // mesas
+  const mg=document.getElementById('mesas-grid');
+  mg.innerHTML='';
+  const mids=Object.keys(S.mesas);
+  if(!mids.length){ mg.innerHTML=`<div class="empty-state"><div style="font-size:1.8rem;opacity:.3;margin-bottom:.75rem">⬡</div><div>Nenhuma mesa.</div></div>`; return; }
+  mids.forEach(id=>{
+    const m=S.mesas[id];
+    const el=document.createElement('div');
+    el.className='ficha-card';
+    el.innerHTML=`<div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;color:var(--gold);margin-bottom:.75rem">⬡ Mestre</div><div class="ficha-card-name">${esc(m.nome)}</div><div class="ficha-card-sub">${m.fichas.length} penitente(s)</div>`;
+    el.onclick=()=>openMesa(id);
+    mg.appendChild(el);
+  });
+}
+
+function dashAvUp(e,fid){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader(); r.onload=ev=>{ S.avatars[fid]=ev.target.result; save(); renderDash(); }; r.readAsDataURL(file);
+}
+
+function openNewFichaModal(){ document.getElementById('nf-nome').value=''; openM('m-nova-ficha'); setTimeout(()=>document.getElementById('nf-nome').focus(),80); }
+function createFicha(){
+  const nome=document.getElementById('nf-nome').value.trim()||'Sem Nome';
+  const f={id:Date.now().toString(),nome,vida:{atual:6},foco:{atual:0},exaustao:0,resources:{eco:0,comida:0,tocha:0},attrs:{pot:0,agi:0,res:0,pre:0,int:0,sab:0},inventory:[],memories:[]};
+  S.fichas[f.id]=f; save(); closeM('m-nova-ficha');
+  if(pendingJoin){ joinMesaWith(f.id); }
+  else openSheet(f.id);
+}
+
+function openNewMesaModal(){ document.getElementById('nm-nome').value=''; openM('m-nova-mesa'); setTimeout(()=>document.getElementById('nm-nome').focus(),80); }
+function createMesa(){
+  const nome=document.getElementById('nm-nome').value.trim()||'Mesa Sem Nome';
+  const m={id:Date.now().toString(),nome,mestre:S.user.nome,fichas:[]};
+  S.mesas[m.id]=m; save(); closeM('m-nova-mesa'); renderDash();
+}
+
+// ──────────────────────────────
+// AVATAR SHEET
+// ──────────────────────────────
+function handleAvatarUpload(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader(); r.onload=ev=>{ S.avatars[S.fichaId]=ev.target.result; save(); refreshAvatar(); }; r.readAsDataURL(file);
+}
+function refreshAvatar(){
+  const av=S.avatars[S.fichaId];
+  const img=document.getElementById('sheet-av-img');
+  const ph=document.getElementById('sheet-av-ph');
+  if(av){img.src=av;img.style.display='block';ph.style.display='none';}
+  else{img.style.display='none';ph.style.display='block';}
+}
+
+// ──────────────────────────────
+// SHEET
+// ──────────────────────────────
+function openSheet(id){ S.fichaId=id; renderSheet(S.fichas[id]); showScr('sheet-screen'); }
+function saveSheet(){ const f=cf();if(!f)return; f.nome=document.getElementById('sheet-name').value; save(); }
+
+function renderSheet(f){
+  document.getElementById('sheet-name').value=f.nome;
+  document.getElementById('res-eco').textContent=f.resources.eco;
+  document.getElementById('res-comida').textContent=f.resources.comida;
+  document.getElementById('res-tocha').textContent=f.resources.tocha;
+  refreshAvatar();
+  refreshAttrs(); refreshVida(); refreshFoco(); refreshExh(); refreshBonuses();
+  renderInv(); renderMems();
+}
+
+// VIDA
+function changeVida(d){ const f=cf();if(!f)return; const vm=vidaMax(f); f.vida.atual=Math.max(0,Math.min(vm,f.vida.atual+d)); refreshVida(); save(); }
+function refreshVida(){ const f=cf();if(!f)return; const vm=vidaMax(f); f.vida.atual=Math.min(f.vida.atual,vm); document.getElementById('vida-atual').textContent=f.vida.atual; document.getElementById('vida-max-lbl').textContent=vm; document.getElementById('vida-bar').style.width=(vm>0?f.vida.atual/vm*100:0)+'%'; }
+
+// FOCO
+function changeFoco(d){ const f=cf();if(!f)return; const fm=focoMax(f); f.foco.atual=Math.max(0,Math.min(fm,f.foco.atual+d)); refreshFoco(); save(); }
+function refreshFoco(){ const f=cf();if(!f)return; const fm=focoMax(f); f.foco.atual=Math.min(f.foco.atual,fm); document.getElementById('foco-atual').textContent=f.foco.atual; document.getElementById('foco-max-lbl').textContent=fm; document.getElementById('foco-bar').style.width=(fm>0?f.foco.atual/fm*100:0)+'%'; }
+
+// EXAUSTÃO
+function changeExaustao(d){ const f=cf();if(!f)return; f.exaustao=Math.max(0,Math.min(25,f.exaustao+d)); refreshExh(); save(); }
+function refreshExh(){
+  const f=cf();if(!f)return;
+  const pts=f.exaustao, niv=Math.min(5,Math.floor(pts/5));
+  document.getElementById('exh-pts').textContent=pts;
+  const ne=document.getElementById('exh-niv'); ne.textContent=niv;
+  ne.style.color=niv===0?'var(--text-dim)':niv>=4?'#e04040':'var(--fire)';
+  for(let i=1;i<=5;i++) document.getElementById('ep'+i).classList.toggle('on',i<=niv);
+  document.getElementById('exh-debuff').textContent=EXH_DEBUFFS[niv];
+}
+
+// RESOURCES
+function changeRes(k,d){ const f=cf();if(!f)return; f.resources[k]=Math.max(0,f.resources[k]+d); document.getElementById('res-'+k).textContent=f.resources[k]; save(); }
+
+// ATTRS
+function changeAttr(k,d){ const f=cf();if(!f)return; f.attrs[k]=Math.max(-5,(f.attrs[k]||0)+d); refreshAttrs(); refreshBonuses(); refreshVida(); refreshFoco(); save(); }
+function refreshAttrs(){
+  const f=cf();if(!f)return;
+  const b=memBonuses(f);
+  ['pot','agi','res','pre','int','sab'].forEach(k=>{
+    document.getElementById('attr-'+k).textContent=(f.attrs[k]||0)+(b[k]||0);
+    const mb=document.getElementById('mb-'+k);
+    mb.textContent=(b[k]>0)?`+${b[k]} mem.`:'';
+  });
+}
+function refreshBonuses(){
+  const f=cf();if(!f)return;
+  document.getElementById('b-dano').textContent=fmt(1+totalAttr(f,'pot'));
+  document.getElementById('b-ataque').textContent=fmt(totalAttr(f,'pre'));
+  document.getElementById('b-esquiva').textContent=fmt(totalAttr(f,'agi'));
+  document.getElementById('b-defesa').textContent=fmt(totalAttr(f,'res'));
+  document.getElementById('b-percepcao').textContent=fmt(totalAttr(f,'sab'));
+}
+
+// INVENTORY
+function addItem(){ const f=cf();if(!f)return; const inp=document.getElementById('new-item-inp'); const nm=inp.value.trim(); if(!nm)return; f.inventory.push({id:Date.now().toString(),nome:nm,qty:1,nota:'',showNote:false}); inp.value=''; renderInv(); save(); }
+function chgQty(id,d){ const f=cf();if(!f)return; const it=f.inventory.find(i=>i.id===id);if(!it)return; it.qty=Math.max(0,it.qty+d); renderInv(); save(); }
+function delItem(id){ const f=cf();if(!f)return; f.inventory=f.inventory.filter(i=>i.id!==id); renderInv(); save(); }
+function togNote(id){ const f=cf();if(!f)return; const it=f.inventory.find(i=>i.id===id);if(!it)return; it.showNote=!it.showNote; renderInv(); }
+function updNote(id,v){ const f=cf();if(!f)return; const it=f.inventory.find(i=>i.id===id);if(!it)return; it.nota=v; const b=document.getElementById('nb-'+id);if(b)b.classList.toggle('has',!!v); save(); }
+
+function renderInv(){
+  const f=cf();if(!f)return;
+  const el=document.getElementById('inv-list');
+  if(!f.inventory.length){ el.innerHTML=`<div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:.9rem;background:var(--card);border:1px solid var(--border)">Inventário vazio</div>`; return; }
+  el.innerHTML=f.inventory.map(it=>`
+    <div class="inv-item">
+      <div class="inv-item-main">
+        <div class="inv-item-name">${esc(it.nome)}</div>
+        <div class="qty-ctrl"><button class="i-btn" onclick="chgQty('${it.id}',-1)">−</button><span class="qty-val">${it.qty}</span><button class="i-btn" onclick="chgQty('${it.id}',1)">+</button></div>
+        <button id="nb-${it.id}" class="i-btn i-btn-note ${it.nota?'has':''}" onclick="togNote('${it.id}')">${it.nota?'📝':'+ nota'}</button>
+        <button class="i-btn i-btn-del" onclick="delItem('${it.id}')">✕</button>
+      </div>
+      ${(it.showNote||it.nota)?`<div class="inv-note-wrap">${
+        it.showNote
+          ?`<input class="inv-note-inp" value="${esc(it.nota)}" placeholder="Nota sobre este item..." oninput="updNote('${it.id}',this.value)" onblur="if(!this.value){const f=S.fichas[S.fichaId];const it=f.inventory.find(i=>i.id==='${it.id}');if(it)it.showNote=false;renderInv();}">`
+          :`<div class="inv-note-disp" onclick="togNote('${it.id}')">"${esc(it.nota)}"</div>`
+      }</div>`:''}
+    </div>
+  `).join('');
+}
+
+// MEMORIES
+function openMemModal(editId){
+  editMemId=editId||null;
+  const f=cf();
+  if(editId&&f){
+    const m=f.memories.find(m=>m.id===editId);
+    if(m){
+      document.getElementById('mm-nome').value=m.nome;
+      document.getElementById('mm-tipo').value=m.tipo;
+      document.getElementById('mm-desc').value=m.desc;
+      document.getElementById('mm-attr').value=m.attr||'';
+      document.getElementById('mm-crpt').checked=m.corrompida;
+      document.getElementById('mm-crpt-txt').value=m.corrupcao||'';
+      document.getElementById('crpt-field').style.display=m.corrompida?'block':'none';
+      document.getElementById('mem-modal-title').textContent='✛ Editar Memória';
+      document.getElementById('mm-save-btn').textContent='Salvar';
+    }
+  } else {
+    document.getElementById('mm-nome').value='';
+    document.getElementById('mm-tipo').value='rasa';
+    document.getElementById('mm-desc').value='';
+    document.getElementById('mm-attr').value='';
+    document.getElementById('mm-crpt').checked=false;
+    document.getElementById('mm-crpt-txt').value='';
+    document.getElementById('crpt-field').style.display='none';
+    document.getElementById('mem-modal-title').textContent='✛ Registrar Memória';
+    document.getElementById('mm-save-btn').textContent='Registrar';
+  }
+  openM('m-memoria');
+  // Grey out Núcleo option if limit already reached
+  const f2=cf();
+  const tipoSel=document.getElementById('mm-tipo');
+  const nucleoOpt=tipoSel.querySelector('option[value="nucleo"]');
+  const hasNucleo=f2&&f2.memories.some(m=>m.tipo==='nucleo'&&m.id!==editMemId);
+  if(nucleoOpt){ nucleoOpt.disabled=hasNucleo; nucleoOpt.textContent=hasNucleo?'Núcleo (limite atingido)':'Núcleo'; }
+}
+
+function toggleCrptField(){ document.getElementById('crpt-field').style.display=document.getElementById('mm-crpt').checked?'block':'none'; }
+
+function saveMemory(){
+  const f=cf();if(!f)return;
+  const nome=document.getElementById('mm-nome').value.trim();if(!nome)return;
+  const tipo=document.getElementById('mm-tipo').value;
+  // Enforce: only one Núcleo memory
+  if(tipo==='nucleo'){
+    const existingNucleo=f.memories.find(m=>m.tipo==='nucleo'&&m.id!==editMemId);
+    if(existingNucleo){
+      alert('Cada Penitente só pode ter uma Memória Núcleo. Remova ou edite a existente antes de criar outra.');
+      return;
+    }
+  }
+  const d={nome,tipo,desc:document.getElementById('mm-desc').value.trim(),attr:document.getElementById('mm-attr').value,corrompida:document.getElementById('mm-crpt').checked,corrupcao:document.getElementById('mm-crpt-txt').value.trim()};
+  if(editMemId){ const m=f.memories.find(m=>m.id===editMemId);if(m)Object.assign(m,d); }
+  else f.memories.push({id:Date.now().toString(),...d});
+  closeM('m-memoria'); renderMems(); refreshAttrs(); refreshBonuses(); refreshVida(); refreshFoco(); save();
+}
+
+function delMem(id){ const f=cf();if(!f)return; f.memories=f.memories.filter(m=>m.id!==id); renderMems(); refreshAttrs(); refreshBonuses(); refreshVida(); refreshFoco(); save(); }
+
+function sortedMems(memories){
+  const order={nucleo:0,permanente:1,rasa:2};
+  return [...memories].sort((a,b)=>(order[a.tipo]??2)-(order[b.tipo]??2));
+}
+
+function renderMems(){
+  const f=cf();if(!f)return;
+  const el=document.getElementById('mem-list');
+  if(!f.memories.length){ el.innerHTML=`<div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:.9rem;background:var(--card);border:1px solid var(--border)">Nenhuma memória registrada...</div>`; return; }
+  el.innerHTML=sortedMems(f.memories).map(m=>`
+    <div class="mem-card ${m.corrompida?'crpt':''}">
+      <div class="mem-header">
+        <div class="mem-title-row">
+          <span class="mem-name">${esc(m.nome)}</span>
+          <span class="mem-badge ${m.tipo}">${TIPO_LABELS[m.tipo]}</span>
+          ${m.corrompida?'<span class="mem-badge crpt-tag">Corrompida</span>':''}
+          ${m.attr?`<span class="mem-bonus-tag">+1 ${ATTR_LABELS[m.attr]}</span>`:''}
+        </div>
+        <div class="mem-actions">
+          <button class="mem-edit-btn" onclick="openMemModal('${m.id}')">✎ editar</button>
+          <button class="i-btn i-btn-del" onclick="delMem('${m.id}')">✕</button>
+        </div>
+      </div>
+      ${m.desc?`<div class="mem-desc">"${esc(m.desc)}"</div>`:''}
+      ${m.corrompida&&m.corrupcao?`<div class="mem-crpt-txt">☠ ${esc(m.corrupcao)}</div>`:''}
+    </div>
+  `).join('');
+}
+
+// MESA
+function openMesa(id){ S.mesaId=id; renderMesa(S.mesas[id]); showScr('mesa-screen'); }
+function renderMesa(m){
+  document.getElementById('mesa-nome-h').textContent=m.nome;
+  const g=document.getElementById('mesa-grid'); g.innerHTML='';
+  if(!m.fichas.length){ g.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div style="font-size:1.8rem;opacity:.3;margin-bottom:.75rem">⌬</div><div>Nenhum penitente.</div></div>`; return; }
+  m.fichas.forEach(fid=>{
+    const f=S.fichas[fid];if(!f)return;
+    const vm=vidaMax(f), fm=focoMax(f);
+    const vp=vm>0?f.vida.atual/vm*100:0, fp=fm>0?f.foco.atual/fm*100:0;
+    const niv=Math.min(5,Math.floor(f.exaustao/5));
+    const av=S.avatars[fid];
+    const b=memBonuses(f);
+    const ta=k=>(f.attrs[k]||0)+(b[k]||0);
+    const el=document.createElement('div');
+    el.className='mesa-ficha-card';
+    el.innerHTML=`
+      <div class="mesa-top">
+        <div class="mesa-av">${av?`<img src="${av}">`:`<span style="color:var(--text-muted);font-size:1.2rem">✛</span>`}</div>
+        <div style="flex:1;min-width:0">
+          <div class="mesa-ficha-name">${esc(f.nome)}</div>
+          <div class="mesa-ficha-sub">Exaustão · Nível ${niv}</div>
+          <div class="mini-bar-lbl"><span>Vida</span><span>${f.vida.atual}/${vm}</span></div>
+          <div class="bar-track"><div class="bar-fill vida" style="width:${vp}%"></div></div>
+          <div class="mini-bar-lbl"><span>Foco</span><span>${f.foco.atual}/${fm}</span></div>
+          <div class="bar-track"><div class="bar-fill foco" style="width:${fp}%"></div></div>
+        </div>
+      </div>
+      <div class="mesa-body">
+        <div>
+          <div class="mesa-s-title">Atributos da Alma</div>
+          <div class="mesa-attrs-row">
+            ${['pot','agi','res','pre','int','sab'].map(k=>`<div class="mesa-chip"><div class="mesa-chip-n">${k.toUpperCase()}</div><div class="mesa-chip-v">${ta(k)}</div></div>`).join('')}
+          </div>
+          <div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">
+            <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--text-dim)">Dano ${fmt(1+ta('pot'))}</div>
+            <div style="color:var(--text-muted)">·</div>
+            <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--text-dim)">Ataque ${fmt(ta('pre'))}</div>
+            <div style="color:var(--text-muted)">·</div>
+            <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--text-dim)">Esquiva ${fmt(ta('agi'))}</div>
+            <div style="color:var(--text-muted)">·</div>
+            <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--text-dim)">Defesa ${fmt(ta('res'))}</div>
+          </div>
+        </div>
+        ${f.inventory.length?`<div>
+          <div class="mesa-s-title">Inventário</div>
+          ${f.inventory.slice(0,8).map(it=>`
+            <div class="mesa-item-row"><span>${esc(it.nome)}</span><span style="color:var(--text-muted)">${it.qty}×</span></div>
+            ${it.nota?`<div style="font-size:.78rem;color:var(--text-muted);font-style:italic;padding:.05rem 0 .2rem .4rem">${esc(it.nota)}</div>`:''}
+          `).join('')}
+          ${f.inventory.length>8?`<div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem">+${f.inventory.length-8} outros</div>`:''}
+        </div>`:''}
+        ${f.memories.length?`<div>
+          <div class="mesa-s-title">Memórias da Alma</div>
+          ${sortedMems(f.memories).map(m=>`<div class="mesa-mem-row">
+            <div class="mesa-mem-name">${m.corrompida?'<span style="color:#e07070">☠ </span>':''}<span ${m.corrompida?'style="color:#e07070"':''}>${esc(m.nome)}</span> <span style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase">${TIPO_LABELS[m.tipo]}</span>${m.attr?` <span style="color:var(--gold2);font-size:.7rem">+1 ${ATTR_LABELS[m.attr]}</span>`:''}</div>
+            ${m.desc?`<div class="mesa-mem-desc">"${esc(m.desc)}"</div>`:''}
+            ${m.corrompida&&m.corrupcao?`<div style="font-size:.78rem;color:#e07070;font-style:italic;margin-top:.2rem;padding-left:.5rem;border-left:2px solid rgba(199,57,57,.4)">☠ ${esc(m.corrupcao)}</div>`:''}
+          </div>`).join('')}
+        </div>`:''}
+        <div style="border-top:1px solid var(--border);margin-top:.25rem;padding-top:.75rem">
+          <button onclick="openSheet('${fid}')" style="width:100%;background:transparent;border:1px solid var(--border2);color:var(--gold2);font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:.6rem 1rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.background='rgba(139,115,85,.08)'" onmouseout="this.style.borderColor='var(--border2)';this.style.background='transparent'">
+            ✛ Abrir Ficha Completa
+          </button>
+        </div>
+      </div>
+    `;
+    g.appendChild(el);
+  });
+}
+
+// INVITE
+function showInvite(){
+  const m=S.mesas[S.mesaId];if(!m)return;
+  const link=`${location.origin}${location.pathname}?join=${m.id}`;
+  document.getElementById('invite-link').textContent=link;
+  document.getElementById('copy-fbk').textContent='Clique para copiar';
+  openM('m-invite');
+}
+function copyLink(){
+  navigator.clipboard.writeText(document.getElementById('invite-link').textContent)
+    .then(()=>{ document.getElementById('copy-fbk').textContent='✓ Copiado!'; })
+    .catch(()=>{ document.getElementById('copy-fbk').textContent='Selecione e copie manualmente'; });
+}
+
+function openJoinModal(mid){
+  const m=S.mesas[mid];if(!m)return;
+  pendingJoin=mid;
+  document.getElementById('join-mesa-nm').textContent=m.nome;
+  const list=document.getElementById('join-fichas');
+  const fichas=Object.values(S.fichas);
+  if(!fichas.length){
+    list.innerHTML=`<div style="color:var(--text-muted);font-size:.9rem;text-align:center;padding:1rem">Você não tem fichas criadas ainda.</div>`;
+  } else {
+    list.innerHTML=fichas.map(f=>`
+      <div onclick="joinMesaWith('${f.id}')" style="background:var(--card);border:1px solid var(--border);padding:.85rem 1.1rem;cursor:pointer;transition:border-color .2s;font-family:'Cinzel',serif;font-size:.85rem;color:var(--white)" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        ✛ ${esc(f.nome)}
+      </div>`).join('');
+  }
+  openM('m-join');
+}
+
+function joinMesaWith(fid){
+  const m=S.mesas[pendingJoin];if(!m)return;
+  if(!m.fichas.includes(fid))m.fichas.push(fid);
+  save(); closeM('m-join'); history.replaceState({},'',location.pathname);
+  openMesa(pendingJoin); pendingJoin=null;
+}
+
+function joinNewFicha(){ closeM('m-join'); openNewFichaModal(); }
+
+// ──────────────────────────────
+// INIT
+// ──────────────────────────────
+window.addEventListener('load',()=>{
+  const params=new URLSearchParams(location.search);
+  const jid=params.get('join');
+  const ok=load();
+  if(ok){
+    if(jid&&S.mesas[jid]){ showDash(); openJoinModal(jid); }
+    else showDash();
+  } else {
+    if(jid) pendingJoin=jid;
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o)o.classList.remove('open'); }));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
+    if(e.key==='Enter'){
+      if(document.getElementById('m-nova-ficha').classList.contains('open'))createFicha();
+      if(document.getElementById('m-nova-mesa').classList.contains('open'))createMesa();
+    }
+  });
+  document.getElementById('new-item-inp').addEventListener('keydown',e=>{ if(e.key==='Enter')addItem(); });
+});
+</script>
+</body>
+</html>
