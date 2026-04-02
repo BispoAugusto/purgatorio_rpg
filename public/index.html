@@ -1,3 +1,4 @@
+// Purgatorio2007!
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -440,8 +441,8 @@
 
 <script>
 // ==================== SUPABASE ====================
-const SUPABASE_URL = 'https://ohavuedsczijneajwvfy.supabase.co';     // ← TROQUE AQUI com sua URL
-const SUPABASE_ANON_KEY = 'sb_publishable_V4gGLX1pThyzBVmvYguz8g_9mbTdkSX';                  // ← TROQUE AQUI com sua chave anon
+const SUPABASE_URL = 'https://SEU-PROJECT-REF.supabase.co';     // ← TROQUE AQUI
+const SUPABASE_ANON_KEY = 'SEU-ANON-KEY-AQUI';                  // ← TROQUE AQUI
 
 const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -461,6 +462,7 @@ const EXH_DEBUFFS = [
   'Metade da vida máxima · Desvantagem em 1 teste por rodada · −3 em todos os testes · −2 de dano',
   'Inconsciente',
 ];
+
 // ==================== PERSISTENCE COM SUPABASE ====================
 async function saveFicha() {
   const f = cf();
@@ -598,24 +600,9 @@ function openNewFichaModal(){ document.getElementById('nf-nome').value=''; openM
 function createFicha(){
   const nome=document.getElementById('nf-nome').value.trim()||'Sem Nome';
   const f={id:Date.now().toString(),nome,vida:{atual:6},foco:{atual:0},exaustao:0,resources:{eco:0,comida:0,tocha:0},attrs:{pot:0,agi:0,res:0,pre:0,int:0,sab:0},inventory:[],memories:[]};
-  S.fichas[f.id]=f;
-  
-  supabase.from('fichas').insert({
-    id: f.id,
-    user_email: S.user.email,
-    nome: f.nome,
-    vida_atual: f.vida.atual,
-    foco_atual: f.foco.atual,
-    exaustao: f.exaustao,
-    resources: f.resources,
-    attrs: f.attrs,
-    inventory: f.inventory,
-    memories: f.memories
-  }).then(() => {
-    renderDash();
-    openSheet(f.id);
-  });
-  closeM('m-nova-ficha');
+  S.fichas[f.id]=f; save(); closeM('m-nova-ficha');
+  if(pendingJoin){ joinMesaWith(f.id); }
+  else openSheet(f.id);
 }
 
 function openNewMesaModal(){ document.getElementById('nm-nome').value=''; openM('m-nova-mesa'); setTimeout(()=>document.getElementById('nm-nome').focus(),80); }
