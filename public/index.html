@@ -439,11 +439,12 @@
 </div>
 
 <script>
-  // ==================== SUPABASE ====================
-const SUPABASE_URL = 'https://ohavuedsczijneajwvfy.supabase.co';     // ← TROQUE AQUI
-const SUPABASE_ANON_KEY = 'sb_publishable_V4gGLX1pThyzBVmvYguz8g_9mbTdkSX';                  // ← TROQUE AQUI
+// ==================== SUPABASE ====================
+const SUPABASE_URL = 'https://ohavuedsczijneajwvfy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_V4gGLX1pThyzBVmvYguz8g_9mbTdkSX';
 
 const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // ──────────────────────────────
 // STATE
 // ──────────────────────────────
@@ -461,56 +462,15 @@ const EXH_DEBUFFS = [
   'Inconsciente',
 ];
 
-// ──────────────────────────────
-// PERSISTENCE
-// ──────────────────────────────
-function save() {
-  try { sessionStorage.setItem('purg3',JSON.stringify({fichas:S.fichas,mesas:S.mesas,avatars:S.avatars,user:S.user})); } catch(e){}
-}
-function load() {
-  try { const d=JSON.parse(sessionStorage.getItem('purg3')||'{}'); S.fichas=d.fichas||{}; S.mesas=d.mesas||{}; S.avatars=d.avatars||{}; S.user=d.user||null; return !!S.user; } catch(e){return false;}
-}
-
-// ──────────────────────────────
-// COMPUTED
-// ──────────────────────────────
-function memBonuses(f){ const b={}; (f.memories||[]).forEach(m=>{ if(m.attr) b[m.attr]=(b[m.attr]||0)+1; }); return b; }
-function totalAttr(f,k){ const b=memBonuses(f); return (f.attrs[k]||0)+(b[k]||0); }
-function vidaMax(f){ return 6+2*totalAttr(f,'res'); }
-function focoMax(f){ return 2*totalAttr(f,'int'); }
-function cf(){ return S.fichas[S.fichaId]; }
-function fmt(v){ return (v>=0?'+':'')+v; }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-// ──────────────────────────────
-// SCREEN
-// ──────────────────────────────
-function showScr(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function openM(id){ document.getElementById(id).classList.add('open'); }
-function closeM(id){ document.getElementById(id).classList.remove('open'); }
-
-// ──────────────────────────────
-// AUTH
-// ──────────────────────────────
 // ==================== AUTH + SUPABASE ====================
-// ==================== LOGIN REAL COM SUPABASE AUTH ====================
 async function doLogin(){
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pass').value.trim();
-  
-  if(!email || !password) {
-    alert('Preencha e-mail e senha');
-    return;
-  }
+  if(!email || !password) return alert('Preencha e-mail e senha');
 
-  const { error } = await supabase.auth.signInWithPassword({ 
-    email, 
-    password 
-  });
-
-  if(error) {
-    alert('Erro ao entrar: ' + error.message);
-  } else {
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if(error) alert('Erro ao entrar: ' + error.message);
+  else {
     S.user = { email, nome: email.split('@')[0] };
     await loadUserFichas();
     afterLogin();
@@ -520,22 +480,11 @@ async function doLogin(){
 async function doSignUp(){
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pass').value.trim();
-  
-  if(!email || !password) {
-    alert('Preencha e-mail e senha');
-    return;
-  }
+  if(!email || !password) return alert('Preencha e-mail e senha');
 
-  const { error } = await supabase.auth.signUp({ 
-    email, 
-    password 
-  });
-
-  if(error) {
-    alert('Erro ao criar conta: ' + error.message);
-  } else {
-    alert('Conta criada com sucesso!\n\nVerifique seu e-mail (pode cair na pasta de spam) e depois faça login.');
-  }
+  const { error } = await supabase.auth.signUp({ email, password });
+  if(error) alert('Erro ao criar conta: ' + error.message);
+  else alert('Conta criada com sucesso!\n\nVerifique seu e-mail (pode cair na pasta de spam) e depois faça login.');
 }
 
 function doDemo(){
@@ -577,6 +526,18 @@ function logout(){
   sessionStorage.removeItem('purg3'); 
   showScr('login-screen'); 
 }
+
+// ==================== LOAD FICHAS ====================
+async function loadUserFichas() {
+  if (!S.user) return;
+  const { data } = await supabase
+    .from('fichas')
+    .select('*')
+    .eq('user_email', S.user.email);
+  S.fichas = {};
+  (data || []).forEach(f => S.fichas[f.id] = f);
+}
+
 // ──────────────────────────────
 // DASHBOARD
 // ──────────────────────────────
