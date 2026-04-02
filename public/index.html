@@ -440,12 +440,11 @@
 </div>
 
 <script>
-// ==================== SUPABASE ====================
+// ==================== SUPABASE (versão exorcizada – sem conflito) ====================
 const SUPABASE_URL = 'https://ohavuedsczijneajwvfy.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_V4gGLX1pThyzBVmvYguz8g_9mbTdkSX';
 
-// Forma correta e estável para o CDN (evita duplicate declaration)
-const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = window.Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ──────────────────────────────
 // STATE
