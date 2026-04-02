@@ -488,24 +488,49 @@ function closeM(id){ document.getElementById(id).classList.remove('open'); }
 // AUTH
 // ──────────────────────────────
 // ==================== AUTH + SUPABASE ====================
+// ==================== LOGIN REAL COM SUPABASE AUTH ====================
 async function doLogin(){
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pass').value.trim();
-  if(!email || !password) return alert('Preencha e-mail e senha');
+  
+  if(!email || !password) {
+    alert('Preencha e-mail e senha');
+    return;
+  }
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if(error) alert('Erro ao entrar: ' + error.message);
-  else afterLogin();
+  const { error } = await supabase.auth.signInWithPassword({ 
+    email, 
+    password 
+  });
+
+  if(error) {
+    alert('Erro ao entrar: ' + error.message);
+  } else {
+    S.user = { email, nome: email.split('@')[0] };
+    await loadUserFichas();
+    afterLogin();
+  }
 }
 
 async function doSignUp(){
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-pass').value.trim();
-  if(!email || !password) return alert('Preencha e-mail e senha');
+  
+  if(!email || !password) {
+    alert('Preencha e-mail e senha');
+    return;
+  }
 
-  const { error } = await supabase.auth.signUp({ email, password });
-  if(error) alert('Erro ao criar conta: ' + error.message);
-  else alert('Conta criada com sucesso!\n\nVerifique seu e-mail (pode cair na pasta de spam) e depois faça login.');
+  const { error } = await supabase.auth.signUp({ 
+    email, 
+    password 
+  });
+
+  if(error) {
+    alert('Erro ao criar conta: ' + error.message);
+  } else {
+    alert('Conta criada com sucesso!\n\nVerifique seu e-mail (pode cair na pasta de spam) e depois faça login.');
+  }
 }
 
 function doDemo(){
