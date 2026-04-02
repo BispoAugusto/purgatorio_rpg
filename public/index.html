@@ -444,8 +444,8 @@
 const SUPABASE_URL = 'https://ohavuedsczijneajwvfy.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_V4gGLX1pThyzBVmvYguz8g_9mbTdkSX';
 
-const { createClient } = window.Supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Forma correta e estável para o CDN (evita duplicate declaration)
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ──────────────────────────────
 // STATE
@@ -921,6 +921,18 @@ window.addEventListener('load',()=>{
   });
   document.getElementById('new-item-inp').addEventListener('keydown',e=>{ if(e.key==='Enter')addItem(); });
 });
+
+// ──────────────────────────────
+// EXPOR FUNÇÕES GLOBAIS (para os onclick do HTML)
+// ──────────────────────────────
+window.doLogin = doLogin;
+window.doSignUp = doSignUp;
+window.doDemo = doDemo;
+window.logout = logout;
+window.openNewFichaModal = openNewFichaModal;
+window.openNewMesaModal = openNewMesaModal;
+window.createFicha = createFicha;
+window.createMesa = createMesa;
 </script>
 </body>
 </html>
