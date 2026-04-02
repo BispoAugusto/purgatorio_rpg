@@ -537,6 +537,26 @@ function afterLogin(){
     showDash();
   });
 }
+function doDemo(){
+  S.user={email:'demo@purgatorio.rpg',nome:'Demo'};
+  const f={id:'demo1',nome:'Irmão Corvus',vida:{atual:12},foco:{atual:1},exaustao:7,resources:{eco:12,comida:4,tocha:2},
+    attrs:{pot:3,agi:2,res:2,pre:1,int:1,sab:2},
+    inventory:[
+      {id:'i1',nome:'Faca Enferrujada',qty:1,nota:'Encontrada nas catacumbas. Parece amaldiçoada.',showNote:false},
+      {id:'i2',nome:'Pão de Cinzas',qty:3,nota:'',showNote:false},
+      {id:'i3',nome:'Vela de Sebo',qty:2,nota:'',showNote:false},
+    ],
+    memories:[
+      {id:'m1',nome:'O Incêndio do Convento',tipo:'nucleo',desc:'As chamas que consumiram tudo que amava. Ainda sente o calor nos sonhos mais negros.',attr:'pot',corrompida:false,corrupcao:''},
+      {id:'m2',nome:'Promessa à Irmã Morta',tipo:'permanente',desc:'Jurou proteger os inocentes enquanto houvesse sangue nas veias e fogo nos ossos.',attr:'res',corrompida:false,corrupcao:''},
+      {id:'m3',nome:'A Traição do Abade',tipo:'rasa',desc:'Entregou-o aos carrascos por uma bolsa de prata. O rosto não sai da memória.',attr:'pre',corrompida:true,corrupcao:'Ao ver figuras de autoridade religiosa, deve passar em Sabedoria (dificuldade 3) ou agir com hostilidade imediata.'},
+    ]
+  };
+  S.fichas[f.id]=f;
+  const m={id:'mesa1',nome:'As Cinzas do Éden',mestre:'Demo',fichas:[f.id]};
+  S.mesas[m.id]=m;
+  save(); afterLogin();
+}
 function logout(){ S.user=null; sessionStorage.removeItem('purg3'); showScr('login-screen'); }
 
 // ──────────────────────────────
