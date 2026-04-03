@@ -561,9 +561,10 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 let currentUser = null;
 let currentFichaId = null;
 let currentMesaId = null;
-let fichasCache = {};    // id → ficha obj (dados completos)
-let mesasCache = {};     // id → mesa obj
-let avatarsCache = {};   // fichaId → dataURL (local only for preview)
+let fichasCache = {};     // APENAS minhas fichas (user_id = currentUser.id)
+let fichasExtCache = {};  // Fichas de OUTROS jogadores carregadas via mesa (never shown in dashboard)
+let mesasCache = {};
+let avatarsCache = {};
 let pendingJoin = null;
 let editMemId = null;
 let saveTimer = null;
@@ -651,7 +652,7 @@ async function doRegister(){
 
 async function doLogout(){
   await sb.auth.signOut();
-  currentUser=null; fichasCache={}; mesasCache={}; avatarsCache={};
+  currentUser=null; fichasCache={}; fichasExtCache={}; mesasCache={}; avatarsCache={};
   showScr('login-screen');
 }
 
@@ -693,12 +694,14 @@ async function loadFichas(){
     return;
   }
   fichasCache={};
-  (data||[]).forEach(row=>{fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url};});
+  fichasExtCache={}; // limpa fichas externas ao recarregar
+  (data||[]).forEach(row=>{fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:currentUser.id};});
 }
 
 async function saveFichaToDb(fichaId){
+  // Só salva fichas próprias — nunca sobrescreve ficha de outro jogador
   const f=fichasCache[fichaId]; if(!f) return;
-  const {nome,id,avatar_url,...dados}=f;
+  const {nome,id,avatar_url,_owner,...dados}=f;
   const {error}=await sb.from('fichas').upsert({
     id:fichaId, user_id:currentUser.id, nome:f.nome,
     dados, avatar_url:f.avatar_url||null
@@ -761,13 +764,21 @@ async function addFichaToMesa(mesaId,fichaId){
   return true;
 }
 
-// Load fichas de outros jogadores numa mesa (para o mestre ver)
+// Load fichas de outros jogadores numa mesa — armazena em cache SEPARADO
 async function loadMesaFichasExternas(mesaId){
   const m=mesasCache[mesaId];if(!m)return;
-  const externas=m.fichas.filter(fid=>!fichasCache[fid]);
+  // Só carrega fichas que não são minhas
+  const externas=m.fichas.filter(fid=>!fichasCache[fid]&&!fichasExtCache[fid]);
   if(!externas.length)return;
   const {data}=await sb.from('fichas').select('*').in('id',externas);
-  (data||[]).forEach(row=>{fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url};});
+  (data||[]).forEach(row=>{
+    // Se por algum motivo for minha, vai pro cache principal
+    if(row.user_id===currentUser.id){
+      fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:currentUser.id};
+    } else {
+      fichasExtCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:row.user_id};
+    }
+  });
 }
 
 // ════════════════════════════════════════
@@ -810,7 +821,8 @@ function memBonuses(f){const b={};(f.memories||[]).forEach(m=>{if(m.attr)b[m.att
 function totalAttr(f,k){const b=memBonuses(f);return (f.attrs[k]||0)+(b[k]||0);}
 function vidaMax(f){return 6+2*totalAttr(f,'res')+(f.bonus_vida||0);}
 function focoMax(f){return 2*totalAttr(f,'int')+(f.bonus_foco||0);}
-function cf(){return fichasCache[currentFichaId];}
+function cf(){return fichasCache[currentFichaId]||fichasExtCache[currentFichaId];}
+function isMyFicha(fichaId){return !!fichasCache[fichaId];}
 function sortedMems(mems){const o={nucleo:0,permanente:1,rasa:2};return [...mems].sort((a,b)=>(o[a.tipo]??2)-(o[b.tipo]??2));}
 
 // ════════════════════════════════════════
@@ -907,7 +919,8 @@ async function goToDashboard(){
 
 async function deleteFicha(fichaId, e){
   e.stopPropagation();
-  const f=fichasCache[fichaId]; if(!f)return;
+  const f=fichasCache[fichaId]; // só permite deletar do cache próprio
+  if(!f)return;
   if(!confirm(`Excluir "${f.nome}" permanentemente?\n\nEsta ação não pode ser desfeita.`))return;
   showLoading('Excluindo ficha...');
   const {error}=await sb.from('fichas').delete().eq('id',fichaId);
@@ -921,6 +934,7 @@ async function deleteFicha(fichaId, e){
 function renderDash(){
   const fg=document.getElementById('fichas-grid');
   fg.innerHTML='';
+  // Só mostra minhas fichas (fichasCache) — nunca fichas de outros
   Object.values(fichasCache).forEach(f=>{
     const vm=vidaMax(f);
     const el=document.createElement('div');
@@ -998,8 +1012,42 @@ async function createMesa(){
 // ════════════════════════════════════════
 function openSheet(id){
   currentFichaId=id;
-  const f=fichasCache[id]; if(!f)return;
+  const f=fichasCache[id]||fichasExtCache[id]; if(!f)return;
+  const isMine=isMyFicha(id);
   renderSheet(f);
+  // Mostra indicador de somente leitura para fichas de outros
+  const nameInput=document.getElementById('sheet-name');
+  const avBtn=document.querySelector('.sheet-avatar');
+  if(!isMine){
+    nameInput.readOnly=true;
+    nameInput.style.opacity='.6';
+    nameInput.style.cursor='default';
+    if(avBtn){avBtn.style.pointerEvents='none';avBtn.title='Somente leitura';}
+    // Mostra banner
+    let banner=document.getElementById('readonly-banner');
+    if(!banner){
+      banner=document.createElement('div');
+      banner.id='readonly-banner';
+      banner.style.cssText='background:rgba(139,115,85,.12);border-bottom:1px solid rgba(139,115,85,.3);padding:.5rem 1.5rem;font-family:\'Cinzel\',serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold2);text-align:center;flex-shrink:0';
+      banner.textContent='✛ Ficha de outro jogador — somente leitura ✛';
+      document.getElementById('sheet-screen').insertBefore(banner,document.querySelector('.sheet-content'));
+    }
+    banner.style.display='block';
+    // Desabilita todos os stat-btns e inputs da ficha
+    document.querySelectorAll('.sheet-content .stat-btn,.sheet-content .resource-btn,.sheet-content .i-btn,.sheet-content .i-btn-del,.sheet-content .i-btn-note,.sheet-content .mem-edit-btn,.sheet-content .btn-sm,.sheet-content .inv-input').forEach(el=>{
+      el.disabled=true; el.style.opacity='.35'; el.style.pointerEvents='none';
+    });
+  } else {
+    nameInput.readOnly=false;
+    nameInput.style.opacity='';
+    nameInput.style.cursor='';
+    if(avBtn){avBtn.style.pointerEvents='';avBtn.title='Clique para trocar foto';}
+    const banner=document.getElementById('readonly-banner');
+    if(banner)banner.style.display='none';
+    document.querySelectorAll('.sheet-content .stat-btn,.sheet-content .resource-btn,.sheet-content .i-btn,.sheet-content .i-btn-del,.sheet-content .i-btn-note,.sheet-content .mem-edit-btn,.sheet-content .btn-sm,.sheet-content .inv-input').forEach(el=>{
+      el.disabled=false; el.style.opacity=''; el.style.pointerEvents='';
+    });
+  }
   showScr('sheet-screen');
 }
 
@@ -1213,7 +1261,7 @@ function renderMesa(m){
   const g=document.getElementById('mesa-grid');g.innerHTML='';
   if(!m.fichas.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div style="font-size:1.8rem;opacity:.3;margin-bottom:.75rem">⌬</div><div>Nenhum penitente ainda.</div></div>`;return;}
   m.fichas.forEach(fid=>{
-    const f=fichasCache[fid];if(!f)return;
+    const f=fichasCache[fid]||fichasExtCache[fid];if(!f)return;
     const vm=vidaMax(f),fm=focoMax(f);
     const vp=vm>0?f.vida.atual/vm*100:0,fp=fm>0?f.foco.atual/fm*100:0;
     const niv=Math.min(5,Math.floor(f.exaustao/5));
