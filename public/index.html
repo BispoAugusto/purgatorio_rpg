@@ -562,12 +562,13 @@ let currentUser = null;
 let currentFichaId = null;
 let currentMesaId = null;
 let fichasCache = {};     // APENAS minhas fichas (user_id = currentUser.id)
-let fichasExtCache = {};  // Fichas de OUTROS jogadores carregadas via mesa (never shown in dashboard)
+let fichasExtCache = {};  // Fichas de OUTROS jogadores carregadas via mesa
 let mesasCache = {};
 let avatarsCache = {};
 let pendingJoin = null;
 let editMemId = null;
 let saveTimer = null;
+let realtimeChannel = null; // canal de tempo real ativo
 
 const ATTR_LABELS = {pot:'Potência',agi:'Agilidade',res:'Resiliência',pre:'Precisão',int:'Inteligência',sab:'Sabedoria'};
 const TIPO_LABELS = {nucleo:'Núcleo',permanente:'Permanente',rasa:'Rasa'};
@@ -651,6 +652,7 @@ async function doRegister(){
 }
 
 async function doLogout(){
+  stopRealtime();
   await sb.auth.signOut();
   currentUser=null; fichasCache={}; fichasExtCache={}; mesasCache={}; avatarsCache={};
   showScr('login-screen');
@@ -681,6 +683,8 @@ async function afterLogin(){
   } else {
     showDash();
   }
+  // Inicia atualizações em tempo real
+  startRealtime();
 }
 
 // ════════════════════════════════════════
@@ -1377,6 +1381,95 @@ async function joinMesaWith(fid){
 }
 
 function joinNewFicha(){closeM('m-join');openNewFichaModal();}
+
+// ════════════════════════════════════════
+// REALTIME — atualizações ao vivo
+// ════════════════════════════════════════
+function startRealtime(){
+  // Para canal anterior se existir
+  if(realtimeChannel){sb.removeChannel(realtimeChannel);realtimeChannel=null;}
+
+  realtimeChannel=sb.channel('purgatorio-realtime')
+    // Escuta mudanças em QUALQUER ficha visível para o usuário
+    .on('postgres_changes',{
+      event:'UPDATE',
+      schema:'public',
+      table:'fichas',
+    }, payload=>{
+      handleFichaUpdate(payload.new);
+    })
+    // Escuta novas fichas entrando em mesas
+    .on('postgres_changes',{
+      event:'INSERT',
+      schema:'public',
+      table:'mesa_fichas',
+    }, payload=>{
+      handleMesaFichaInsert(payload.new);
+    })
+    .subscribe(status=>{
+      if(status==='SUBSCRIBED'){
+        console.log('Realtime conectado');
+      }
+    });
+}
+
+function stopRealtime(){
+  if(realtimeChannel){sb.removeChannel(realtimeChannel);realtimeChannel=null;}
+}
+
+async function handleFichaUpdate(row){
+  const fid=row.id;
+  // Atualiza cache correto
+  if(fichasCache[fid]){
+    // É minha ficha — só atualiza se não estou editando ela agora
+    if(currentFichaId!==fid){
+      fichasCache[fid]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:currentUser.id};
+      // Atualiza dashboard se estiver visível
+      const dash=document.getElementById('dashboard-screen');
+      if(dash.classList.contains('active')) renderDash();
+    }
+  } else if(fichasExtCache[fid]){
+    // Ficha de outro jogador — sempre atualiza
+    const oldOwner=fichasExtCache[fid]._owner;
+    fichasExtCache[fid]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:oldOwner};
+    // Se estou na mesa ou vendo essa ficha, atualiza a UI
+    const mesaScr=document.getElementById('mesa-screen');
+    const sheetScr=document.getElementById('sheet-screen');
+    if(mesaScr.classList.contains('active')&&currentMesaId){
+      renderMesa(mesasCache[currentMesaId]);
+    }
+    if(sheetScr.classList.contains('active')&&currentFichaId===fid){
+      renderSheet(fichasExtCache[fid]);
+      toast('Ficha atualizada pelo jogador','');
+    }
+  }
+}
+
+async function handleMesaFichaInsert(row){
+  // Um novo jogador entrou em uma das nossas mesas
+  const m=mesasCache[row.mesa_id];
+  if(!m)return;
+  if(!m.fichas.includes(row.ficha_id)){
+    m.fichas.push(row.ficha_id);
+  }
+  // Carrega a ficha nova se não tiver em cache
+  if(!fichasCache[row.ficha_id]&&!fichasExtCache[row.ficha_id]){
+    const {data}=await sb.from('fichas').select('*').eq('id',row.ficha_id).single();
+    if(data){
+      if(data.user_id===currentUser.id){
+        fichasCache[data.id]={...data.dados,id:data.id,nome:data.nome,avatar_url:data.avatar_url,_owner:currentUser.id};
+      } else {
+        fichasExtCache[data.id]={...data.dados,id:data.id,nome:data.nome,avatar_url:data.avatar_url,_owner:data.user_id};
+      }
+    }
+  }
+  // Atualiza tela da mesa se estiver aberta
+  const mesaScr=document.getElementById('mesa-screen');
+  if(mesaScr.classList.contains('active')&&currentMesaId===row.mesa_id){
+    renderMesa(mesasCache[currentMesaId]);
+    toast('Novo penitente entrou na mesa','success');
+  }
+}
 
 // ════════════════════════════════════════
 // INIT
