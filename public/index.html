@@ -6,7 +6,7 @@
 <title>Purgatório – Fichas do Penitente</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
   :root {
     --bg:#0a0a0a; --surface:#141414; --card:#1a1a1a; --card2:#1f1f1f;
@@ -343,16 +343,28 @@
       <div class="status-card">
         <div class="status-card-title">♥ Vida</div>
         <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.2rem"><span class="status-current" style="color:#c0392b" id="vida-atual">6</span><span class="status-sep">/</span><span class="status-max-label" id="vida-max-lbl">6</span></div>
-        <div class="status-formula">6 + 2 × Resiliência</div>
+        <div class="status-formula">6 + 2×Res <span id="bv-label" style="color:var(--gold2)"></span></div>
         <div class="bar-track"><div class="bar-fill vida" id="vida-bar" style="width:100%"></div></div>
         <div class="status-controls"><button class="stat-btn" onclick="changeVida(-1)">−</button><button class="stat-btn" onclick="changeVida(1)">+</button></div>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)">
+          <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;flex:1">Bônus Melhoria</span>
+          <button class="stat-btn" onclick="changeBonus('bonus_vida',-1)">−</button>
+          <span id="bv-val" style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold2);min-width:1.5rem;text-align:center">+0</span>
+          <button class="stat-btn" onclick="changeBonus('bonus_vida',1)">+</button>
+        </div>
       </div>
       <div class="status-card">
         <div class="status-card-title">◈ Foco</div>
         <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.2rem"><span class="status-current" style="color:#3d6b8f" id="foco-atual">0</span><span class="status-sep">/</span><span class="status-max-label" id="foco-max-lbl">0</span></div>
-        <div class="status-formula">2 × Inteligência</div>
+        <div class="status-formula">2×Int <span id="bf-label" style="color:var(--gold2)"></span></div>
         <div class="bar-track"><div class="bar-fill foco" id="foco-bar" style="width:0%"></div></div>
         <div class="status-controls"><button class="stat-btn" onclick="changeFoco(-1)">−</button><button class="stat-btn" onclick="changeFoco(1)">+</button></div>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)">
+          <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;flex:1">Bônus Melhoria</span>
+          <button class="stat-btn" onclick="changeBonus('bonus_foco',-1)">−</button>
+          <span id="bf-val" style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold2);min-width:1.5rem;text-align:center">+0</span>
+          <button class="stat-btn" onclick="changeBonus('bonus_foco',1)">+</button>
+        </div>
       </div>
       <div class="status-card">
         <div class="status-card-title">⚡ Exaustão</div>
@@ -381,8 +393,30 @@
     <div>
       <div class="section-label"><span>⊕ Bônus Automáticos</span></div>
       <div class="bonus-grid">
-        <div class="bonus-card"><span class="bonus-icon">⚔</span><div><div class="bonus-name">Dano Base</div><div class="bonus-val" id="b-dano">+1</div></div></div>
-        <div class="bonus-card"><span class="bonus-icon">🔥</span><div><div class="bonus-name">Bônus Ataque</div><div class="bonus-val" id="b-ataque">+0</div></div></div>
+        <div class="bonus-card" style="flex-direction:column;align-items:flex-start;gap:.4rem">
+          <div style="display:flex;align-items:center;gap:.65rem;width:100%">
+            <span class="bonus-icon">⚔</span>
+            <div style="flex:1"><div class="bonus-name">Dano Base</div><div class="bonus-val" id="b-dano">+1</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;width:100%;padding-top:.35rem;border-top:1px solid var(--border)">
+            <span style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;flex:1">melhoria</span>
+            <button class="stat-btn" style="width:22px;height:22px;font-size:.8rem" onclick="changeBonus('bonus_dano',-1)">−</button>
+            <span id="bd-val" style="font-family:'Cinzel',serif;font-size:.8rem;color:var(--gold2);min-width:1.2rem;text-align:center">+0</span>
+            <button class="stat-btn" style="width:22px;height:22px;font-size:.8rem" onclick="changeBonus('bonus_dano',1)">+</button>
+          </div>
+        </div>
+        <div class="bonus-card" style="flex-direction:column;align-items:flex-start;gap:.4rem">
+          <div style="display:flex;align-items:center;gap:.65rem;width:100%">
+            <span class="bonus-icon">🔥</span>
+            <div style="flex:1"><div class="bonus-name">Bônus Ataque</div><div class="bonus-val" id="b-ataque">+0</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem;width:100%;padding-top:.35rem;border-top:1px solid var(--border)">
+            <span style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;flex:1">melhoria</span>
+            <button class="stat-btn" style="width:22px;height:22px;font-size:.8rem" onclick="changeBonus('bonus_ataque',-1)">−</button>
+            <span id="ba-val" style="font-family:'Cinzel',serif;font-size:.8rem;color:var(--gold2);min-width:1.2rem;text-align:center">+0</span>
+            <button class="stat-btn" style="width:22px;height:22px;font-size:.8rem" onclick="changeBonus('bonus_ataque',1)">+</button>
+          </div>
+        </div>
         <div class="bonus-card"><span class="bonus-icon">≋</span><div><div class="bonus-name">Esquiva</div><div class="bonus-val" id="b-esquiva">+0</div></div></div>
         <div class="bonus-card"><span class="bonus-icon">🛡</span><div><div class="bonus-name">Defesa</div><div class="bonus-val" id="b-defesa">+0</div></div></div>
         <div class="bonus-card"><span class="bonus-icon">👁</span><div><div class="bonus-name">Percepção</div><div class="bonus-val" id="b-percepcao">+0</div></div></div>
@@ -488,7 +522,38 @@
 const SUPABASE_URL = 'https://aialvmorpgctxtuthdwt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpYWx2bW9ycGdjdHh0dXRoZHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxOTA4MzMsImV4cCI6MjA5MDc2NjgzM30.QTE8Rf0cWy5Zg94xMraffRNCoi7VX_WnfC4YzUimpp8';
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Validação imediata de credenciais
+if(SUPABASE_URL==='COLE_SUA_URL_AQUI'||SUPABASE_ANON_KEY==='COLE_SUA_ANON_KEY_AQUI'){
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('loading-overlay').innerHTML=`
+      <div style="text-align:center;padding:2rem;max-width:480px">
+        <div style="font-family:'Cinzel Decorative',serif;font-size:1.5rem;color:#f0ede8;margin-bottom:1.5rem;text-shadow:0 0 30px rgba(255,69,0,.4)">✛ Purgatório ✛</div>
+        <div style="background:#1a1a1a;border:1px solid rgba(199,57,57,.4);padding:1.5rem;margin-bottom:1rem">
+          <div style="font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;color:#e07070;text-transform:uppercase;margin-bottom:.75rem">⚠ Configuração necessária</div>
+          <div style="font-family:'EB Garamond',serif;font-size:.95rem;color:#d4d4d4;line-height:1.7">
+            As credenciais do Supabase não foram configuradas.<br><br>
+            Abra o arquivo <code style="background:#2a2a2a;padding:.1rem .4rem;color:#a0896a">index.html</code> e substitua:<br><br>
+            <code style="background:#2a2a2a;padding:.25rem .5rem;color:#e07070;display:block;margin:.5rem 0">COLE_SUA_URL_AQUI</code>
+            <code style="background:#2a2a2a;padding:.25rem .5rem;color:#e07070;display:block;margin:.5rem 0">COLE_SUA_ANON_KEY_AQUI</code>
+            <div style="margin-top:.75rem;font-size:.85rem;color:#6b6b6b">
+              Encontre esses valores em:<br>
+              Supabase → Settings → API
+            </div>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('loading-overlay').classList.remove('hidden');
+  });
+  throw new Error('Supabase não configurado. Substitua SUPABASE_URL e SUPABASE_ANON_KEY no index.html');
+}
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+  }
+});
 
 // ════════════════════════════════════════
 // STATE
@@ -622,7 +687,11 @@ async function afterLogin(){
 // ════════════════════════════════════════
 async function loadFichas(){
   const {data,error}=await sb.from('fichas').select('*').eq('user_id',currentUser.id);
-  if(error){toast('Erro ao carregar fichas','error');return;}
+  if(error){
+    console.error('loadFichas error:',error);
+    toast(`Erro ao carregar fichas: ${error.message}`,'error');
+    return;
+  }
   fichasCache={};
   (data||[]).forEach(row=>{fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url};});
 }
@@ -634,13 +703,17 @@ async function saveFichaToDb(fichaId){
     id:fichaId, user_id:currentUser.id, nome:f.nome,
     dados, avatar_url:f.avatar_url||null
   });
-  if(error) toast('Erro ao salvar ficha','error');
+  if(error){console.error('saveFicha error:',error);toast('Erro ao salvar ficha','error');}
 }
 
 async function createFichaInDb(nome){
-  const dados={vida:{atual:6},foco:{atual:0},exaustao:0,resources:{eco:0,comida:0,tocha:0},attrs:{pot:0,agi:0,res:0,pre:0,int:0,sab:0},inventory:[],memories:[]};
+  const dados={vida:{atual:6},foco:{atual:0},exaustao:0,resources:{eco:0,comida:0,tocha:0},attrs:{pot:0,agi:0,res:0,pre:0,int:0,sab:0},bonus_vida:0,bonus_foco:0,bonus_dano:0,bonus_ataque:0,inventory:[],memories:[]};
   const {data,error}=await sb.from('fichas').insert({user_id:currentUser.id,nome,dados}).select().single();
-  if(error){toast('Erro ao criar ficha','error');return null;}
+  if(error){
+    console.error('createFicha error:',error);
+    toast(`Erro ao criar ficha: ${error.message}`,'error');
+    return null;
+  }
   const f={...dados,id:data.id,nome:data.nome,avatar_url:null};
   fichasCache[data.id]=f;
   return data.id;
@@ -735,8 +808,8 @@ function refreshAvatar(){
 // ════════════════════════════════════════
 function memBonuses(f){const b={};(f.memories||[]).forEach(m=>{if(m.attr)b[m.attr]=(b[m.attr]||0)+1;});return b;}
 function totalAttr(f,k){const b=memBonuses(f);return (f.attrs[k]||0)+(b[k]||0);}
-function vidaMax(f){return 6+2*totalAttr(f,'res');}
-function focoMax(f){return 2*totalAttr(f,'int');}
+function vidaMax(f){return 6+2*totalAttr(f,'res')+(f.bonus_vida||0);}
+function focoMax(f){return 2*totalAttr(f,'int')+(f.bonus_foco||0);}
 function cf(){return fichasCache[currentFichaId];}
 function sortedMems(mems){const o={nucleo:0,permanente:1,rasa:2};return [...mems].sort((a,b)=>(o[a.tipo]??2)-(o[b.tipo]??2));}
 
@@ -936,7 +1009,7 @@ function renderSheet(f){
   document.getElementById('res-comida').textContent=f.resources.comida;
   document.getElementById('res-tocha').textContent=f.resources.tocha;
   refreshAvatar();
-  refreshAttrs(); refreshVida(); refreshFoco(); refreshExh(); refreshBonuses();
+  refreshAttrs(); refreshVida(); refreshFoco(); refreshExh(); refreshBonuses(); refreshBonusLabels();
   renderInv(); renderMems();
 }
 
@@ -951,6 +1024,27 @@ function schedSave(){
 function immediateSave(){
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{await saveFichaToDb(currentFichaId);},300);
+}
+
+// BÔNUS MELHORIA — aumenta vida/foco/dano/ataque sem mudar atributos
+function changeBonus(key,d){
+  const f=cf();if(!f)return;
+  f[key]=Math.max(0,(f[key]||0)+d);
+  refreshBonusLabels();
+  refreshVida();refreshFoco();refreshBonuses();
+  immediateSave();
+}
+
+function refreshBonusLabels(){
+  const f=cf();if(!f)return;
+  const bv=f.bonus_vida||0,bf=f.bonus_foco||0,bd=f.bonus_dano||0,ba=f.bonus_ataque||0;
+  const s=v=>(v>=0?'+':'')+v;
+  if(document.getElementById('bv-val'))document.getElementById('bv-val').textContent=s(bv);
+  if(document.getElementById('bf-val'))document.getElementById('bf-val').textContent=s(bf);
+  if(document.getElementById('bd-val'))document.getElementById('bd-val').textContent=s(bd);
+  if(document.getElementById('ba-val'))document.getElementById('ba-val').textContent=s(ba);
+  if(document.getElementById('bv-label'))document.getElementById('bv-label').textContent=bv>0?`+${bv} melhoria`:'';
+  if(document.getElementById('bf-label'))document.getElementById('bf-label').textContent=bf>0?`+${bf} melhoria`:'';
 }
 
 // VIDA
@@ -988,8 +1082,8 @@ function refreshAttrs(){
 }
 function refreshBonuses(){
   const f=cf();if(!f)return;
-  document.getElementById('b-dano').textContent=fmt(1+totalAttr(f,'pot'));
-  document.getElementById('b-ataque').textContent=fmt(totalAttr(f,'pre'));
+  document.getElementById('b-dano').textContent=fmt(1+totalAttr(f,'pot')+(f.bonus_dano||0));
+  document.getElementById('b-ataque').textContent=fmt(totalAttr(f,'pre')+(f.bonus_ataque||0));
   document.getElementById('b-esquiva').textContent=fmt(totalAttr(f,'agi'));
   document.getElementById('b-defesa').textContent=fmt(totalAttr(f,'res'));
   document.getElementById('b-percepcao').textContent=fmt(totalAttr(f,'sab'));
