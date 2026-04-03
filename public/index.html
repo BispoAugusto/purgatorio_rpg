@@ -85,14 +85,24 @@
   .ficha-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0;transition:opacity .2s;}
   .ficha-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow);}
   .ficha-card:hover::before{opacity:1;}
-  .card-avatar-area{width:44px;height:44px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;background:var(--card2);overflow:hidden;flex-shrink:0;cursor:pointer;}
-  .card-avatar-area img{width:100%;height:100%;object-fit:cover;}
-  .ficha-card-name{font-family:'Cinzel',serif;font-size:1rem;color:var(--white);margin-bottom:.3rem;}
-  .ficha-card-sub{font-size:.82rem;color:var(--text-dim);}
-  .ficha-card-new{background:transparent;border:1px dashed var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;gap:.5rem;color:var(--text-muted);cursor:pointer;transition:all .2s;padding:1.5rem;}
+  /* avatar gerado — card do dashboard */
+  .ficha-card{padding:0;overflow:hidden;}
+  .ficha-card-avatar{width:100%;height:120px;position:relative;overflow:hidden;cursor:pointer;flex-shrink:0;}
+  .ficha-card-avatar svg,.ficha-card-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+  .ficha-card-avatar .av-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);opacity:0;transition:opacity .2s;font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.15em;color:var(--gold2);text-transform:uppercase;}
+  .ficha-card-avatar:hover .av-hint{opacity:1;}
+  .ficha-card-body{padding:1rem 1.25rem 1.1rem;}
+  .ficha-card-name{font-family:'Cinzel',serif;font-size:.95rem;color:var(--white);margin-bottom:.2rem;}
+  .ficha-card-sub{font-size:.8rem;color:var(--text-dim);}
+  .ficha-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:.75rem;}
+  .ficha-card-del{background:transparent;border:1px solid transparent;color:var(--text-muted);cursor:pointer;font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .5rem;transition:all .15s;}
+  .ficha-card-del:hover{color:#e07070;border-color:rgba(199,57,57,.3);}
+  .ficha-card-new{background:transparent;border:1px dashed var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:.5rem;color:var(--text-muted);cursor:pointer;transition:all .2s;padding:1.5rem;}
   .ficha-card-new:hover{border-color:var(--gold);color:var(--gold2);}
   .ficha-card-new-label{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;}
   .empty-state{text-align:center;padding:3rem;color:var(--text-muted);border:1px dashed var(--border);}
+  /* sheet avatar — maior */
+  .sheet-avatar{width:48px;height:48px;}
 
   /* ── SHEET HEADER ── */
   .sheet-header{background:var(--surface);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-shrink:0;gap:1rem;}
@@ -709,8 +719,15 @@ function refreshAvatar(){
   const f=fichasCache[currentFichaId]; if(!f) return;
   const img=document.getElementById('sheet-av-img');
   const ph=document.getElementById('sheet-av-ph');
-  if(f.avatar_url){img.src=f.avatar_url;img.style.display='block';ph.style.display='none';}
-  else{img.style.display='none';ph.style.display='block';}
+  if(f.avatar_url){
+    img.src=f.avatar_url;img.style.display='block';ph.style.display='none';
+  } else {
+    img.style.display='none';
+    // Show generated mini SVG
+    ph.innerHTML=generateAvatarSVG(f.nome);
+    ph.style.display='block';
+    ph.style.width='100%';ph.style.height='100%';
+  }
 }
 
 // ════════════════════════════════════════
@@ -724,6 +741,88 @@ function cf(){return fichasCache[currentFichaId];}
 function sortedMems(mems){const o={nucleo:0,permanente:1,rasa:2};return [...mems].sort((a,b)=>(o[a.tipo]??2)-(o[b.tipo]??2));}
 
 // ════════════════════════════════════════
+// AVATAR SVG GENERATOR
+// Gera um SVG único e atmosférico baseado no nome do personagem
+// ════════════════════════════════════════
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++)h=Math.imul(31,h)+s.charCodeAt(i)|0;return Math.abs(h);}
+
+function generateAvatarSVG(nome){
+  const h=hashStr(nome||'?');
+  // Paleta sombria com toque de fogo/ouro
+  const palettes=[
+    {bg:'#0d0806',c1:'#8b4513',c2:'#3d1a00',acc:'#c0392b'},
+    {bg:'#070a0d',c1:'#1a3a5c',c2:'#0a1f35',acc:'#4a7fa5'},
+    {bg:'#0a0a08',c1:'#4a3c1a',c2:'#1f1900',acc:'#8b7355'},
+    {bg:'#0d080a',c1:'#5c1a2a',c2:'#2a0a12',acc:'#a0394a'},
+    {bg:'#080a08',c1:'#1a3a1a',c2:'#091509',acc:'#3a6b3a'},
+    {bg:'#0a0608',c1:'#3a1a4a',c2:'#180a22',acc:'#6b3a8b'},
+  ];
+  const pal=palettes[h%palettes.length];
+  const initial=(nome||'?').trim()[0].toUpperCase();
+
+  // Deterministic "random" helpers
+  const rng=(seed,max,min=0)=>min+((hashStr(seed+nome)>>2)%(max-min));
+
+  // Geometric shapes for atmosphere
+  const shapeCount=3+rng('sc',4);
+  let shapes='';
+  for(let i=0;i<shapeCount;i++){
+    const x=rng('sx'+i,110,-10);
+    const y=rng('sy'+i,110,-10);
+    const r=rng('sr'+i,60,15);
+    const op=(rng('so'+i,35,5)/100).toFixed(2);
+    shapes+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${i%2===0?pal.c1:pal.c2}" opacity="${op}"/>`;
+  }
+
+  // Cross / sigil symbol based on hash
+  const sigils=['✛','✝','☩','⸸','†','✠','⚔','☽','⚝','⊕'];
+  const sigil=sigils[h%sigils.length];
+
+  // Crack/line details
+  const lineCount=2+rng('lc',3);
+  let lines='';
+  for(let i=0;i<lineCount;i++){
+    const x1=rng('lx1'+i,100);
+    const y1=rng('ly1'+i,100);
+    const x2=x1+rng('lx2'+i,40,-20);
+    const y2=y1+rng('ly2'+i,40,-20);
+    lines+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${pal.acc}" stroke-width=".5" opacity="0.25"/>`;
+  }
+
+  // Fire glow at bottom
+  const glowY=70+rng('gy',20);
+
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="bg${h}" cx="50%" cy="60%" r="70%">
+      <stop offset="0%" stop-color="${pal.c1}" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="${pal.bg}"/>
+    </radialGradient>
+    <radialGradient id="glow${h}" cx="50%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="${pal.acc}" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="${pal.acc}" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur${h}"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+  <rect width="100" height="100" fill="${pal.bg}"/>
+  <rect width="100" height="100" fill="url(#bg${h})"/>
+  ${shapes}
+  ${lines}
+  <ellipse cx="50" cy="${glowY}" rx="35" ry="25" fill="url(#glow${h})" filter="url(#blur${h})"/>
+  <text x="50" y="52" text-anchor="middle" dominant-baseline="middle"
+    font-family="serif" font-size="38" fill="${pal.acc}" opacity="0.12"
+    font-weight="bold">${initial}</text>
+  <text x="50" y="48" text-anchor="middle" dominant-baseline="middle"
+    font-size="14" fill="${pal.acc}" opacity="0.55">${sigil}</text>
+  <text x="50" y="68" text-anchor="middle" dominant-baseline="middle"
+    font-family="'Cinzel',serif" font-size="9" fill="${pal.c1}" opacity="0.9"
+    letter-spacing="2">${esc(initial)}</text>
+  <rect x="20" y="78" width="60" height=".5" fill="${pal.acc}" opacity="0.2"/>
+  <rect width="100" height="100" fill="none" stroke="${pal.acc}" stroke-width=".5" opacity="0.15"/>
+</svg>`;
+}
+
+// ════════════════════════════════════════
 // DASHBOARD
 // ════════════════════════════════════════
 function showDash(){renderDash();showScr('dashboard-screen');}
@@ -733,6 +832,19 @@ async function goToDashboard(){
   showDash();
 }
 
+async function deleteFicha(fichaId, e){
+  e.stopPropagation();
+  const f=fichasCache[fichaId]; if(!f)return;
+  if(!confirm(`Excluir "${f.nome}" permanentemente?\n\nEsta ação não pode ser desfeita.`))return;
+  showLoading('Excluindo ficha...');
+  const {error}=await sb.from('fichas').delete().eq('id',fichaId);
+  if(error){hideLoading();toast('Erro ao excluir ficha','error');return;}
+  delete fichasCache[fichaId];
+  hideLoading();
+  toast('Ficha excluída','success');
+  renderDash();
+}
+
 function renderDash(){
   const fg=document.getElementById('fichas-grid');
   fg.innerHTML='';
@@ -740,11 +852,27 @@ function renderDash(){
     const vm=vidaMax(f);
     const el=document.createElement('div');
     el.className='ficha-card';
-    el.innerHTML=`<div style="display:flex;align-items:flex-start;gap:.85rem;margin-bottom:.75rem">
-      <div class="card-avatar-area">${f.avatar_url?`<img src="${f.avatar_url}">`:`<span style="color:var(--text-muted);font-size:1.3rem">✛</span>`}</div>
-      <div><div class="ficha-card-name">${esc(f.nome)}</div><div class="ficha-card-sub">Vida ${f.vida.atual}/${vm} · Exaustão ${f.exaustao}</div></div>
-    </div>`;
-    el.addEventListener('click',()=>openSheet(f.id));
+    const avatarContent=f.avatar_url
+      ?`<img src="${f.avatar_url}" style="width:100%;height:100%;object-fit:cover;display:block">`
+      :generateAvatarSVG(f.nome);
+    el.innerHTML=`
+      <div class="ficha-card-avatar" onclick="document.getElementById('dav-${f.id}').click()">
+        ${avatarContent}
+        <div class="av-hint">trocar imagem</div>
+        <input type="file" id="dav-${f.id}" accept="image/*" onchange="dashAvUp(event,'${f.id}')" style="display:none">
+      </div>
+      <div class="ficha-card-body">
+        <div class="ficha-card-name">${esc(f.nome)}</div>
+        <div class="ficha-card-sub">Vida ${f.vida.atual}/${vm} · Exaustão ${f.exaustao}</div>
+        <div class="ficha-card-footer">
+          <span style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.1em;color:var(--text-muted)">✛ penitente</span>
+          <button class="ficha-card-del" onclick="deleteFicha('${f.id}',event)">✕ excluir</button>
+        </div>
+      </div>`;
+    el.addEventListener('click',(e)=>{
+      if(e.target.closest('.ficha-card-avatar')||e.target.closest('.ficha-card-del'))return;
+      openSheet(f.id);
+    });
     fg.appendChild(el);
   });
   const na=document.createElement('div');
@@ -762,6 +890,7 @@ function renderDash(){
     const isMestre=m.mestre_id===currentUser.id;
     const el=document.createElement('div');
     el.className='ficha-card';
+    el.style.padding='1.5rem';
     el.innerHTML=`<div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;color:var(--gold);margin-bottom:.75rem">${isMestre?'⬡ Mestre':'⬡ Jogador'}</div><div class="ficha-card-name">${esc(m.nome)}</div><div class="ficha-card-sub">${m.fichas.length} penitente(s)</div>`;
     el.onclick=()=>openMesa(id);
     mg.appendChild(el);
@@ -1000,7 +1129,7 @@ function renderMesa(m){
     el.className='mesa-ficha-card';
     el.innerHTML=`
       <div class="mesa-top">
-        <div class="mesa-av">${f.avatar_url?`<img src="${f.avatar_url}">`:`<span style="color:var(--text-muted);font-size:1.2rem">✛</span>`}</div>
+        <div class="mesa-av">${f.avatar_url?`<img src="${f.avatar_url}">`:`<div style="width:100%;height:100%">${generateAvatarSVG(f.nome)}</div>`}</div>
         <div style="flex:1;min-width:0">
           <div class="mesa-ficha-name">${esc(f.nome)}</div>
           <div class="mesa-ficha-sub">Exaustão · Nível ${niv}</div>
