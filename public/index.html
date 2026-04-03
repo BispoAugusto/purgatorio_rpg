@@ -555,6 +555,13 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   }
 });
 
+// Limpa estado antigo se a versão do app mudou
+const APP_VERSION = 'v5';
+if(sessionStorage.getItem('app_version')!==APP_VERSION){
+  sessionStorage.clear();
+  sessionStorage.setItem('app_version',APP_VERSION);
+}
+
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
@@ -697,9 +704,15 @@ async function loadFichas(){
     toast(`Erro ao carregar fichas: ${error.message}`,'error');
     return;
   }
+  // Reset AMBOS os caches — garante que fichas de outros não aparecem no dashboard
   fichasCache={};
-  fichasExtCache={}; // limpa fichas externas ao recarregar
-  (data||[]).forEach(row=>{fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:currentUser.id};});
+  fichasExtCache={};
+  (data||[]).forEach(row=>{
+    // Dupla verificação: só entra no fichasCache se user_id == eu
+    if(row.user_id===currentUser.id){
+      fichasCache[row.id]={...row.dados,id:row.id,nome:row.nome,avatar_url:row.avatar_url,_owner:currentUser.id};
+    }
+  });
 }
 
 async function saveFichaToDb(fichaId){
@@ -981,11 +994,41 @@ function renderDash(){
     const isMestre=m.mestre_id===currentUser.id;
     const el=document.createElement('div');
     el.className='ficha-card';
-    el.style.padding='1.5rem';
-    el.innerHTML=`<div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;color:var(--gold);margin-bottom:.75rem">${isMestre?'⬡ Mestre':'⬡ Jogador'}</div><div class="ficha-card-name">${esc(m.nome)}</div><div class="ficha-card-sub">${m.fichas.length} penitente(s)</div>`;
-    el.onclick=()=>openMesa(id);
+    el.style.padding='0';
+    el.innerHTML=`
+      <div style="padding:1.25rem 1.5rem 0">
+        <div style="font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.12em;color:var(--gold);margin-bottom:.6rem">${isMestre?'⬡ Mestre':'⬡ Jogador'}</div>
+        <div class="ficha-card-name">${esc(m.nome)}</div>
+        <div class="ficha-card-sub" style="margin-top:.2rem">${m.fichas.length} penitente(s)</div>
+      </div>
+      <div style="padding:.75rem 1.5rem 1rem;display:flex;align-items:center;justify-content:space-between;margin-top:.5rem">
+        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;color:var(--text-muted)">✛ mesa</span>
+        ${isMestre?`<button class="ficha-card-del" onclick="deleteMesa('${id}',event)">✕ excluir</button>`:'<span></span>'}
+      </div>`;
+    el.addEventListener('click',(e)=>{
+      if(e.target.closest('.ficha-card-del'))return;
+      openMesa(id);
+    });
     mg.appendChild(el);
   });
+}
+
+async function deleteMesa(mesaId, e){
+  e.stopPropagation();
+  const m=mesasCache[mesaId]; if(!m)return;
+  if(m.mestre_id!==currentUser.id){toast('Só o mestre pode excluir a mesa','error');return;}
+  if(!confirm(`Excluir a mesa "${m.nome}" permanentemente?\n\nTodos os jogadores perderão acesso. As fichas NÃO serão excluídas.`))return;
+  showLoading('Excluindo mesa...');
+  // mesa_fichas é deletado em cascade pelo banco
+  const {error}=await sb.from('mesas').delete().eq('id',mesaId);
+  if(error){hideLoading();toast('Erro ao excluir mesa','error');return;}
+  delete mesasCache[mesaId];
+  // Limpa fichas externas que só existiam nessa mesa
+  await loadFichas(); // recarrega para ter certeza do estado
+  fichasExtCache={};
+  hideLoading();
+  toast('Mesa excluída','success');
+  renderDash();
 }
 
 function openNewFichaModal(){document.getElementById('nf-nome').value='';openM('m-nova-ficha');setTimeout(()=>document.getElementById('nf-nome').focus(),80);}
