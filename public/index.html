@@ -203,6 +203,24 @@
   .mem-edit-btn{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);color:var(--text-muted);padding:.2rem .5rem;background:transparent;cursor:pointer;transition:all .2s;}
   .mem-edit-btn:hover{border-color:var(--gold);color:var(--gold2);}
 
+  /* HABILIDADES DE MEMÓRIA */
+  .mem-abilities{display:flex;flex-direction:column;gap:.6rem;margin-top:.6rem;}
+  .mem-ability{background:var(--card2);border:1px solid var(--border);padding:.7rem .9rem;}
+  .mem-ability-title{font-family:'Cinzel',serif;font-size:.85rem;font-weight:700;color:var(--white);margin-bottom:.3rem;line-height:1.3;}
+  .mem-ability-desc{font-size:.9rem;color:var(--text-dim);font-style:italic;line-height:1.6;}
+  /* Campo de habilidade no modal */
+  .ability-field{background:var(--card2);border:1px solid var(--border);padding:.75rem;}
+  .ability-field-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+  .ability-field-label{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase;}
+  .ability-del-btn{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:.8rem;padding:.1rem .3rem;transition:color .15s;}
+  .ability-del-btn:hover{color:#e07070;}
+  .ability-title-inp{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--white);font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;outline:none;padding:.2rem 0 .35rem;margin-bottom:.5rem;transition:border-color .2s;}
+  .ability-title-inp:focus{border-bottom-color:var(--gold);}
+  .ability-title-inp::placeholder{color:var(--text-muted);font-weight:400;}
+  .ability-desc-inp{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text-dim);font-family:'EB Garamond',serif;font-size:.9rem;font-style:italic;outline:none;padding:.2rem 0 .25rem;resize:none;min-height:48px;transition:border-color .2s;}
+  .ability-desc-inp:focus{border-bottom-color:var(--gold);color:var(--text);}
+  .ability-desc-inp::placeholder{color:var(--text-muted);}
+
   /* MODAL */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;padding:1rem;}
   .modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
@@ -554,13 +572,23 @@
 </div>
 
 <div class="modal-overlay" id="m-memoria">
-  <div class="modal">
+  <div class="modal" style="max-width:560px">
     <div class="modal-title" id="mem-modal-title">✛ Registrar Memória</div>
     <div class="modal-form">
-      <div class="form-group"><label class="form-label">Nome</label><input type="text" class="form-input" id="mm-nome" placeholder="Ex: O Juízo da Fogueira"></div>
+      <div class="form-group"><label class="form-label">Nome</label><input type="text" class="form-input" id="mm-nome" placeholder="Ex: Pingente da Recordação"></div>
       <div class="form-group"><label class="form-label">Tipo</label><select class="sel-inp" id="mm-tipo"><option value="rasa">Rasa</option><option value="permanente">Permanente</option><option value="nucleo">Núcleo</option></select></div>
-      <div class="form-group"><label class="form-label">Descrição</label><textarea class="ta-inp" id="mm-desc" placeholder="Descreva esta memória..."></textarea></div>
+      <div class="form-group"><label class="form-label">Descrição</label><textarea class="ta-inp" id="mm-desc" placeholder="Descrição da memória e seu significado..." style="min-height:70px"></textarea></div>
       <div class="form-group"><label class="form-label">Atributo Bônus</label><select class="sel-inp" id="mm-attr"><option value="">Nenhum</option><option value="pot">+1 Potência</option><option value="agi">+1 Agilidade</option><option value="res">+1 Resiliência</option><option value="pre">+1 Precisão</option><option value="int">+1 Inteligência</option><option value="sab">+1 Sabedoria</option></select></div>
+
+      <!-- HABILIDADES -->
+      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:.25rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+          <label class="form-label" style="margin:0">Habilidades</label>
+          <button type="button" onclick="addAbilityField()" style="background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold2)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">+ Adicionar Habilidade</button>
+        </div>
+        <div id="mm-abilities" style="display:flex;flex-direction:column;gap:.75rem"></div>
+      </div>
+
       <label class="chk-row"><input type="checkbox" id="mm-crpt" onchange="toggleCrptField()"><span class="chk-lbl">Memória Corrompida</span></label>
       <div id="crpt-field" style="display:none">
         <div class="form-group"><label class="form-label" style="color:#e07070">Efeito da Corrupção</label><textarea class="ta-inp" id="mm-crpt-txt" placeholder="O que esta corrupção causa..." style="border-color:rgba(199,57,57,.4)"></textarea></div>
@@ -1293,6 +1321,7 @@ function renderInv(){
 function openMemModal(editId){
   editMemId=editId||null;
   const f=cf();
+  clearAbilityFields();
   if(editId&&f){
     const m=f.memories.find(m=>m.id===editId);
     if(m){
@@ -1305,6 +1334,8 @@ function openMemModal(editId){
       document.getElementById('crpt-field').style.display=m.corrompida?'block':'none';
       document.getElementById('mem-modal-title').textContent='✛ Editar Memória';
       document.getElementById('mm-save-btn').textContent='Salvar';
+      // Carrega habilidades existentes
+      (m.abilities||[]).forEach(a=>addAbilityField(a));
     }
   } else {
     document.getElementById('mm-nome').value='';
@@ -1327,6 +1358,45 @@ function openMemModal(editId){
 
 function toggleCrptField(){document.getElementById('crpt-field').style.display=document.getElementById('mm-crpt').checked?'block':'none';}
 
+// ── Habilidades no modal ──
+let abilityCount=0;
+function clearAbilityFields(){
+  abilityCount=0;
+  document.getElementById('mm-abilities').innerHTML='';
+}
+
+function addAbilityField(data){
+  const id=++abilityCount;
+  const container=document.getElementById('mm-abilities');
+  const div=document.createElement('div');
+  div.className='ability-field';
+  div.id=`ability-field-${id}`;
+  div.innerHTML=`
+    <div class="ability-field-header">
+      <span class="ability-field-label">Habilidade ${id}</span>
+      <button type="button" class="ability-del-btn" onclick="removeAbilityField(${id})" title="Remover">✕</button>
+    </div>
+    <input type="text" class="ability-title-inp" id="ab-title-${id}" placeholder="Nome da habilidade (ex: Ascensão Arcana)" value="${esc(data?.title||'')}">
+    <textarea class="ability-desc-inp" id="ab-desc-${id}" placeholder="Descrição, custo, cooldown..." rows="2">${esc(data?.desc||'')}</textarea>`;
+  container.appendChild(div);
+}
+
+function removeAbilityField(id){
+  const el=document.getElementById(`ability-field-${id}`);
+  if(el)el.remove();
+}
+
+function collectAbilities(){
+  const abilities=[];
+  document.querySelectorAll('[id^="ability-field-"]').forEach(el=>{
+    const id=el.id.replace('ability-field-','');
+    const title=(document.getElementById(`ab-title-${id}`)?.value||'').trim();
+    const desc=(document.getElementById(`ab-desc-${id}`)?.value||'').trim();
+    if(title||desc) abilities.push({title,desc});
+  });
+  return abilities;
+}
+
 function saveMemory(){
   const f=cf();if(!f)return;
   const nome=document.getElementById('mm-nome').value.trim();if(!nome)return;
@@ -1335,7 +1405,14 @@ function saveMemory(){
     const existingNucleo=f.memories.find(m=>m.tipo==='nucleo'&&m.id!==editMemId);
     if(existingNucleo){toast('Apenas uma Memória Núcleo é permitida.','error');return;}
   }
-  const d={nome,tipo,desc:document.getElementById('mm-desc').value.trim(),attr:document.getElementById('mm-attr').value,corrompida:document.getElementById('mm-crpt').checked,corrupcao:document.getElementById('mm-crpt-txt').value.trim()};
+  const d={
+    nome,tipo,
+    desc:document.getElementById('mm-desc').value.trim(),
+    attr:document.getElementById('mm-attr').value,
+    corrompida:document.getElementById('mm-crpt').checked,
+    corrupcao:document.getElementById('mm-crpt-txt').value.trim(),
+    abilities:collectAbilities(),
+  };
   if(editMemId){const m=f.memories.find(m=>m.id===editMemId);if(m)Object.assign(m,d);}
   else f.memories.push({id:Date.now().toString(),...d});
   closeM('m-memoria');renderMems();refreshAttrs();refreshBonuses();refreshVida();refreshFoco();immediateSave();
@@ -1362,6 +1439,16 @@ function renderMems(){
         </div>
       </div>
       ${m.desc?`<div class="mem-desc">"${esc(m.desc)}"</div>`:''}
+      ${(m.abilities&&m.abilities.length)?`
+        <div class="mem-abilities">
+          ${m.abilities.map(a=>`
+            <div class="mem-ability">
+              ${a.title?`<div class="mem-ability-title">${esc(a.title)}</div>`:''}
+              ${a.desc?`<div class="mem-ability-desc">${esc(a.desc)}</div>`:''}
+            </div>
+          `).join('')}
+        </div>
+      `:''}
       ${m.corrompida&&m.corrupcao?`<div class="mem-crpt-txt">☠ ${esc(m.corrupcao)}</div>`:''}
     </div>
   `).join('');
@@ -1436,6 +1523,11 @@ function renderMesa(m){
           ${sortedMems(f.memories).map(mm=>`<div class="mesa-mem-row">
             <div class="mesa-mem-name">${mm.corrompida?'<span style="color:#e07070">☠ </span>':''}<span ${mm.corrompida?'style="color:#e07070"':''}>${esc(mm.nome)}</span> <span style="font-family:\'Cinzel\',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase">${TIPO_LABELS[mm.tipo]}</span>${mm.attr?` <span style="color:var(--gold2);font-size:.7rem">+1 ${ATTR_LABELS[mm.attr]}</span>`:''}</div>
             ${mm.desc?`<div class="mesa-mem-desc">"${esc(mm.desc)}"</div>`:''}
+            ${(mm.abilities&&mm.abilities.length)?mm.abilities.map(a=>`
+              <div style="margin-top:.3rem;padding:.3rem .5rem;background:rgba(255,255,255,.02);border-left:1px solid var(--border2)">
+                ${a.title?`<div style="font-family:'Cinzel',serif;font-size:.72rem;color:var(--white);font-weight:600">${esc(a.title)}</div>`:''}
+                ${a.desc?`<div style="font-size:.78rem;color:var(--text-dim);font-style:italic">${esc(a.desc)}</div>`:''}
+              </div>`).join(''):''}
             ${mm.corrompida&&mm.corrupcao?`<div style="font-size:.78rem;color:#e07070;font-style:italic;margin-top:.2rem;padding-left:.5rem;border-left:2px solid rgba(199,57,57,.4)">☠ ${esc(mm.corrupcao)}</div>`:''}
           </div>`).join('')}
         </div>`:''}
