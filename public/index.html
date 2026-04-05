@@ -783,19 +783,18 @@
         </div>
       </div>
 
-      <div class="mesa-hero">
-        <span class="mesa-hero-spiral">✦</span>
-        <div class="mesa-hero-title">Purgatório</div>
-        <div class="mesa-hero-sub">Mesa de Jogo</div>
+      <!-- ENEMIES IN THE MESA (replaces hero when revealed) -->
+      <div id="mesa-hero-area">
+        <div class="mesa-hero" id="hero-placeholder">
+          <span class="mesa-hero-spiral">✦</span>
+          <div class="mesa-hero-title">Purgatório</div>
+          <div class="mesa-hero-sub">Mesa de Jogo</div>
+        </div>
+        <div id="mesa-enemies-grid" style="display:none;"></div>
       </div>
       <div>
         <div class="section-label"><span>Fichas dos Penitentes</span></div>
         <div class="mesa-grid" id="mesa-grid"></div>
-      </div>
-      <!-- PUBLIC ENEMY CARDS (visible to all) -->
-      <div class="enemy-public" id="enemy-public" style="display:none;">
-        <div class="enemy-public-title">⚔ Inimigos na Mesa</div>
-        <div class="enemy-public-grid" id="enemy-public-grid"></div>
       </div>
     </div>
     <!-- RIGHT: recompensas + chat simples -->
@@ -2015,7 +2014,7 @@ function renderEncCards(){
 // ── DANO / CURA ──
 function encGetCard(cid){return encCards.find(c=>c.cid===cid);}
 
-function encApplyDmg(cid){
+async function encApplyDmg(cid){
   const c=encGetCard(cid);if(!c)return;
   const inp=document.getElementById(`edi-${cid}`);
   const v=parseInt(inp?.value);
@@ -2026,15 +2025,17 @@ function encApplyDmg(cid){
   renderPublicEnemies();
   buildCombatParticipants();
   renderCombat();
+  await broadcastEncState('update');
 }
 
-function encHeal(cid){
+async function encHeal(cid){
   const c=encGetCard(cid);if(!c)return;
   c.vida=c.ini.vida;
   encUpdVida(cid);
   buildCombatParticipants();
   renderCombat();
   renderPublicEnemies();
+  await broadcastEncState('update');
 }
 
 function encRevive(cid){encHeal(cid);}
@@ -2053,8 +2054,28 @@ function encUpdVida(cid){
   else{card.classList.remove('dead');if(pct<=25)bar.classList.add('crit');else if(pct<=50)bar.classList.add('low');}
 }
 
+// ── BROADCAST ENEMY HP TO ALL PLAYERS ──
+async function broadcastEncState(kind){
+  const author=currentUser?.user_metadata?.nome||currentUser?.email?.split('@')[0]||'Mestre';
+  // Send just enemy names + HP (no stats)
+  const enemies=encCards.map(c=>({cid:c.cid,nome:c.ini.nome,tipo:c.ini.tipo,nd:c.ini.nd,vida:c.vida,vidaMax:c.ini.vida,dead:c.vida===0}));
+  const payload={
+    type:'enc-state',
+    subType:kind, // 'reveal'|'update'|'hide'|'clear'
+    author,
+    ts:new Date().toISOString(),
+    enemies
+  };
+  const {error}=await sb.from('chat_msgs').insert({
+    mesa_id:currentMesaId,
+    user_id:currentUser.id,
+    payload
+  });
+  if(error)console.error('broadcastEncState error:',error);
+}
+
 // ── REVEAL ──
-function toggleReveal(){
+async function toggleReveal(){
   encRevealed=!encRevealed;
   renderPublicEnemies();
   if(encRevealed){
@@ -2071,18 +2092,23 @@ function toggleReveal(){
     btn.textContent=encRevealed?'Ocultar da Mesa':'Revelar na Mesa';
     btn.classList.toggle('revealed',encRevealed);
   }
+  await broadcastEncState(encRevealed?'reveal':'hide');
 }
 
-// ── PUBLIC ENEMY CARDS ──
+// ── PUBLIC ENEMY CARDS (replaces mesa hero) ──
 function renderPublicEnemies(){
-  const wrap=document.getElementById('enemy-public');
-  const grid=document.getElementById('enemy-public-grid');
+  const hero=document.getElementById('hero-placeholder');
+  const grid=document.getElementById('mesa-enemies-grid');
+  if(!grid||!hero)return;
   if(!encRevealed||!encCards.length){
-    if(wrap)wrap.style.display='none';
+    hero.style.display='flex';
+    grid.style.display='none';
     return;
   }
-  if(wrap)wrap.style.display='block';
-  if(!grid)return;
+  hero.style.display='none';
+  grid.style.display='grid';
+  grid.style.gridTemplateColumns='repeat(auto-fill,minmax(180px,1fr))';
+  grid.style.gap='.75rem';
   grid.innerHTML=encCards.map(c=>{
     const tc=c.ini.tipo==='mini-boss'?'boss':c.ini.tipo;
     const tl=c.ini.tipo==='mini-boss'?'Mini-Boss':c.ini.tipo==='elite'?'Elite':'Minion';
@@ -2115,7 +2141,7 @@ function updateEncBtns(){
 }
 
 // ── CLEAR ──
-function clearEncounter(){
+async function clearEncounter(){
   encCards=[];
   encRevealed=false;
   combatActive=false;
@@ -2126,6 +2152,7 @@ function clearEncounter(){
   updateEncBtns();
   const cp=document.getElementById('combat-panel');
   if(cp)cp.style.display='none';
+  await broadcastEncState('clear');
 }
 
 // ── PANEL TOGGLE ──
@@ -2148,18 +2175,64 @@ function setupEncounterPanel(){
   if(panel){
     panel.style.display=isMestre?'block':'none';
     panel.classList.toggle('collapsed',encPanelCollapsed);
+    if(isMestre){
+      renderEncList();
+      renderEncCards();
+      updateEncBtns();
+    }
   }
-  // Reset encounter state when entering a new mesa
-  encCards=[];
-  encRevealed=false;
-  combatRound=1;
-  combatActions={};
-  combatActive=false;
-  renderEncCards();
-  renderPublicEnemies();
-  updateEncBtns();
-  const cp=document.getElementById('combat-panel');
-  if(cp)cp.style.display='none';
+}
+
+// Recebe atualização de encounter do mestre (para jogadores)
+function handleIncomingEncState(msg){
+  if(msg.subType==='reveal'||msg.subType==='update'){
+    // Players only: show enemies in mesa-hero area
+    const heroPlaceholder=document.getElementById('hero-placeholder');
+    const enemiesGrid=document.getElementById('mesa-enemies-grid');
+    if(!enemiesGrid||!heroPlaceholder)return;
+
+    if(msg.enemies&&msg.enemies.length>0){
+      heroPlaceholder.style.display='none';
+      enemiesGrid.style.display='grid';
+      enemiesGrid.style.gridTemplateColumns='repeat(auto-fill,minmax(180px,1fr))';
+      enemiesGrid.style.gap='.75rem';
+
+      // Update local encCards mirrors (for HP bar syncing)
+      msg.enemies.forEach(e=>{
+        const existing=encCards.find(c=>c.cid===e.cid);
+        if(!existing){
+          encCards.push({ini:{nome:e.nome,tipo:e.tipo,nd:e.nd,vida:e.vidaMax},vida:e.vida,cid:e.cid});
+        }else{
+          existing.vida=e.vida;
+        }
+      });
+
+      const grid=enemiesGrid;
+      grid.innerHTML=msg.enemies.map(e=>{
+        const tc=e.tipo==='mini-boss'?'boss':e.tipo;
+        const tl=e.tipo==='mini-boss'?'Mini-Boss':e.tipo==='elite'?'Elite':'Minion';
+        const pct=e.vidaMax>0?(e.vida/e.vidaMax)*100:0;
+        let barExtra='';
+        if(e.dead)barExtra=' zero';
+        else if(pct<=25)barExtra=' crit';
+        else if(pct<=50)barExtra=' low';
+        return `<div class="enemy-pub-card ${tc}${e.dead?' dead':''}">
+          <div class="enemy-pub-stripe"></div>
+          <div class="enemy-pub-head">
+            <div class="enemy-pub-nome">${esc(e.nome)}</div>
+            <div class="enemy-pub-meta">${tl} · ND ${e.nd}</div>
+            <div class="enemy-pub-track"><div class="enemy-pub-fill${barExtra}" style="width:${pct}%"></div></div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }else if(msg.subType==='hide'||msg.subType==='clear'){
+    const heroPlaceholder=document.getElementById('hero-placeholder');
+    const enemiesGrid=document.getElementById('mesa-enemies-grid');
+    if(heroPlaceholder)heroPlaceholder.style.display='flex';
+    if(enemiesGrid)enemiesGrid.style.display='none';
+    if(msg.subType==='clear')encCards=[];
+  }
 }
 
 // ── COMBAT TRACKER ──
@@ -2714,6 +2787,9 @@ async function initChat(mesaId){
             ? Object.values(msg.rewards||{}).length>0 && myFichas.length>0
             : myFichas.some(fid=>msg.rewards&&msg.rewards[fid]);
           if(hasMyReward) openM('m-reward');
+        }
+        if(msg.type==='enc-state'){
+          handleIncomingEncState(msg);
         }
         renderChat();
       }
