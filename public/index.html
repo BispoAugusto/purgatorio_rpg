@@ -238,6 +238,132 @@
   .chk-row input{accent-color:var(--accent);width:14px;height:14px;}
   .chk-lbl{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;}
 
+  /* ── ENCONTRO / COMBATE ── */
+  .encounter-panel{transition:max-height .35s ease,opacity .25s ease;overflow:hidden;}
+  .encounter-panel.collapsed{max-height:0!important;opacity:0;pointer-events:none;}
+  .enc-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:var(--card);border:1px solid var(--border);cursor:pointer;transition:background .15s;flex-shrink:0;}
+  .enc-header:hover{background:var(--card2);}
+  .enc-title{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase;}
+  .enc-toggle{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;border:1px solid var(--border);padding:.25rem .55rem;background:transparent;cursor:pointer;transition:all .15s;}
+  .enc-toggle:hover{border-color:var(--border2);color:var(--text);}
+  .enc-body{background:var(--surface);border:1px solid var(--border);border-top:none;padding:.75rem 1rem;overflow:auto;}
+  /* sidebar do gerador */
+  .enc-sidebar{display:grid;grid-template-columns:220px 1fr;gap:.75rem;}
+  .enc-side-col{display:flex;flex-direction:column;gap:.6rem;}
+  .enc-sec{display:flex;flex-direction:column;gap:.4rem;}
+  .enc-sec-title{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.22em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.25rem;}
+  .enc-nd-row{display:flex;align-items:center;gap:.4rem;}
+  .enc-nd-box{width:48px;background:var(--card);border:1px solid var(--border);color:var(--white);font-family:'Cinzel',serif;font-size:.95rem;text-align:center;padding:.28rem;outline:none;border-radius:2px;-moz-appearance:textfield;}
+  .enc-nd-box::-webkit-inner-spin-button,.enc-nd-box::-webkit-outer-spin-button{-webkit-appearance:none;}
+  .enc-nd-box:focus{border-color:var(--accent2);}
+  .enc-nd-hint{font-size:.72rem;color:var(--text-muted);}
+  .enc-ftags{display:flex;gap:.25rem;flex-wrap:wrap;}
+  .enc-ftag{padding:.18rem .5rem;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .14s;}
+  .enc-ftag.on{border-color:var(--border2);color:var(--text-hi);background:var(--card2);}
+  .enc-ftag:hover:not(.on){color:var(--text);}
+  .enc-btn-main{width:100%;padding:.48rem;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .15s;}
+  .enc-btn-main:hover:not(:disabled){border-color:var(--accent2);color:var(--accent2);}
+  .enc-btn-main:disabled{opacity:.35;cursor:not-allowed;}
+  .enc-search{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);font-family:'EB Garamond',serif;font-size:.82rem;padding:.28rem .48rem;border-radius:2px;outline:none;}
+  .enc-search:focus{border-color:var(--accent2);}
+  .enc-search::placeholder{color:var(--text-muted);}
+  .enc-ini-list{max-height:160px;overflow-y:auto;border:1px solid var(--border);background:var(--bg);border-radius:2px;}
+  .enc-ini-item{padding:.35rem .55rem;border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.35rem;transition:background .1s;}
+  .enc-ini-item:last-child{border-bottom:none;}
+  .enc-ini-item:hover{background:var(--card);}
+  .enc-ini-item.sel{background:var(--card2);}
+  .enc-ini-name{font-size:.82rem;color:var(--white);line-height:1.2;}
+  .enc-ini-meta{font-family:'Cinzel',serif;font-size:.48rem;color:var(--text-muted);letter-spacing:.1em;white-space:nowrap;}
+  .enc-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:3px;vertical-align:middle;}
+  .enc-dot.dm{background:#3a5228;}.enc-dot.de{background:#285270;}.enc-dot.db{background:#522828;}
+  /* cards de inimigo */
+  .enc-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem;margin-top:.6rem;}
+  .enc-card{background:var(--card);border:1px solid var(--border);border-radius:3px;position:relative;transition:opacity .3s;}
+  .enc-card.dead{opacity:.35;filter:saturate(0);}
+  .enc-card-stripe{height:2px;}
+  .enc-card.minion .enc-card-stripe{background:#3a5228;}
+  .enc-card.elite  .enc-card-stripe{background:#285270;}
+  .enc-card.boss   .enc-card-stripe{background:#522828;}
+  .enc-card-head{padding:.6rem .7rem .4rem;border-bottom:1px solid var(--border);position:relative;}
+  .enc-card-nome{font-family:'Cinzel',serif;font-size:.76rem;color:var(--white);line-height:1.2;margin-bottom:.15rem;padding-right:.9rem;}
+  .enc-card-meta{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;}
+  .enc-card-rm{position:absolute;top:6px;right:5px;background:none;border:none;color:var(--border2);font-size:.78rem;cursor:pointer;padding:1px 3px;transition:color .12s;}
+  .enc-card-rm:hover{color:var(--text-dim);}
+  .enc-card-body{padding:.55rem .7rem;}
+  .enc-card-tags{display:flex;flex-wrap:wrap;gap:.18rem;margin-bottom:.45rem;}
+  .enc-card-tag{font-family:'Cinzel',serif;font-size:.44rem;letter-spacing:.06em;padding:.08rem .32rem;border-radius:2px;border:1px solid var(--border);color:var(--text-dim);}
+  .enc-card-tag.h{border-color:#5a4010;color:#7a5828;}
+  .enc-card-tag.r{border-color:#3a1818;color:#6a3030;}
+  .enc-vwrap{margin-bottom:.4rem;}
+  .enc-vtop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.2rem;}
+  .enc-vlbl{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;}
+  .enc-vnums{font-family:'Cinzel',serif;font-size:.72rem;color:var(--text-dim);}
+  .enc-vtrack{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .enc-vfill{height:100%;border-radius:2px;transition:width .28s,background .28s;}
+  .enc-card.minion .enc-vfill{background:#3a5228;}
+  .enc-card.elite  .enc-vfill{background:#285270;}
+  .enc-card.boss   .enc-vfill{background:#522828;}
+  .enc-vfill.low{background:#5a3e10!important;}
+  .enc-vfill.crit{background:#4a1818!important;}
+  .enc-vfill.zero{background:var(--border)!important;}
+  .enc-ctrl-row{display:flex;gap:.25rem;margin-bottom:.25rem;}
+  .enc-inp-d{flex:1;background:var(--card2);border:1px solid var(--border);color:var(--white);font-family:'Cinzel',serif;font-size:.72rem;padding:.2rem;text-align:center;border-radius:2px;outline:none;-moz-appearance:textfield;}
+  .enc-inp-d::-webkit-inner-spin-button,.enc-inp-d::-webkit-outer-spin-button{-webkit-appearance:none;}
+  .enc-inp-d:focus{border-color:var(--accent2);}
+  .enc-bsm{padding:.2rem .4rem;font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.06em;cursor:pointer;border-radius:2px;border:1px solid var(--border);background:transparent;color:var(--text-dim);transition:all .12s;}
+  .enc-bsm.bdmg{border-color:#3a1818;color:#6a3030;}
+  .enc-bsm.bdmg:hover{background:#1a0808;border-color:#4a1a1a;color:#8a4040;}
+  .enc-bsm.bheal{border-color:#1a3018;color:#3a5228;}
+  .enc-bsm.bheal:hover{background:#081a08;border-color:#284828;color:#4a6a38;}
+  .enc-rev{display:none;width:100%;padding:.22rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .12s;margin-top:.3rem;}
+  .enc-card.dead .enc-rev{display:block;}
+  .enc-rev:hover{border-color:var(--text-dim);color:var(--text);}
+  .enc-nota{padding:.4rem .7rem;border-top:1px solid var(--border);font-size:.72rem;font-style:italic;color:var(--text-dim);line-height:1.35;}
+  /* reveal btn */
+  .enc-reveal-btn{margin-top:.6rem;width:100%;padding:.55rem;background:transparent;border:1px solid var(--accent);color:var(--accent2);font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .15s;}
+  .enc-reveal-btn:hover{background:rgba(139,0,0,.1);border-color:var(--accent2);}
+  .enc-reveal-btn.revealed{border-color:var(--accent2);background:rgba(139,0,0,.15);color:var(--accent2);}
+  /* CLEAR */
+  .enc-clear-btn{width:100%;padding:.4rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .12s;margin-top:.3rem;}
+  .enc-clear-btn:hover{border-color:#e07070;color:#e07070;}
+  /* ── COMBAT TRACKER ── */
+  .combat-panel{margin-top:.75rem;border:1px solid var(--border);background:var(--surface);}
+  .combat-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;background:var(--card);border-bottom:1px solid var(--border);cursor:default;}
+  .combat-round{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);}
+  .combat-next-btn{padding:.28rem .65rem;background:transparent;border:1px solid var(--accent);color:var(--accent2);font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .13s;}
+  .combat-next-btn:hover:not(:disabled){background:rgba(139,0,0,.12);border-color:var(--accent2);}
+  .combat-next-btn:disabled{opacity:.3;cursor:not-allowed;}
+  .combat-body{padding:.6rem .75rem;display:flex;flex-direction:column;gap:.35rem;}
+  .combat-participant{display:flex;align-items:center;justify-content:space-between;padding:.2rem .5rem;background:var(--card);border-radius:2px;}
+  .combat-p-name{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase;}
+  .combat-p-name.dead{opacity:.3;text-decoration:line-through;}
+  .combat-p-name.player{color:var(--gold2);}
+  .combat-p-status{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .45rem;border-radius:2px;border:1px solid var(--border);cursor:pointer;transition:all .12s;user-select:none;}
+  .combat-p-status.acted{border-color:var(--accent);color:var(--accent2);background:rgba(139,0,0,.08);}
+  .combat-p-status.not-acted{border-color:var(--border);color:var(--text-muted);}
+  .combat-all-done{margin-top:.35rem;font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:#7acd7a;text-align:center;}
+  /* ── ENEMY CARDS (revealed to players) ── */
+  .enemy-public{margin-top:.75rem;}
+  .enemy-public-title{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:var(--accent2);text-transform:uppercase;margin-bottom:.5rem;}
+  .enemy-public-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;}
+  .enemy-pub-card{background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:opacity .3s;}
+  .enemy-pub-card.dead{opacity:.35;filter:saturate(0);}
+  .enemy-pub-stripe{height:2px;}
+  .enemy-pub-card.minion .enemy-pub-stripe{background:#3a5228;}
+  .enemy-pub-card.elite  .enemy-pub-stripe{background:#285270;}
+  .enemy-pub-card.boss   .enemy-pub-stripe{background:#522828;}
+  .enemy-pub-head{padding:.55rem .65rem;}
+  .enemy-pub-nome{font-family:'Cinzel',serif;font-size:.7rem;color:var(--white);margin-bottom:.12rem;}
+  .enemy-pub-meta{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.35rem;}
+  .enemy-pub-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .enemy-pub-fill{height:100%;border-radius:2px;transition:width .3s;}
+  .enemy-pub-card.minion .enemy-pub-fill{background:#3a5228;}
+  .enemy-pub-card.elite  .enemy-pub-fill{background:#285270;}
+  .enemy-pub-card.boss   .enemy-pub-fill{background:#522828;}
+  .enemy-pub-fill.low{background:#5a3e10!important;}
+  .enemy-pub-fill.crit{background:#4a1818!important;}
+  .enemy-pub-fill.zero{background:var(--border)!important;}
+
   /* MESA */
   #mesa-screen{background:var(--bg);}
   .mesa-layout{flex:1;display:flex;gap:0;overflow:hidden;min-height:0;}
@@ -605,6 +731,58 @@
   <div class="mesa-layout">
     <!-- LEFT: fichas -->
     <div class="mesa-left">
+      <!-- ENCONTRO PANEL (mestre only) -->
+      <div class="encounter-panel" id="encounter-panel" style="display:none;">
+        <div class="enc-header" onclick="toggleEncPanel()">
+          <span class="enc-title">⚔ Encontro</span>
+          <button class="enc-toggle" id="enc-toggle-label">▲</button>
+        </div>
+        <div class="enc-body" id="enc-body">
+          <!-- SIDEBAR: gerar + adicionar -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.7rem;">
+            <!-- GERAR -->
+            <div style="display:flex;flex-direction:column;gap:.4rem">
+              <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase">Gerar Aleatório</div>
+              <div class="enc-nd-row">
+                <input type="number" id="enc-nd" class="enc-nd-box" min="1" value="3" placeholder="ND">
+                <span class="enc-nd-hint">ND</span>
+              </div>
+              <div class="enc-ftags" id="enc-filtros-gerar">
+                <button class="enc-ftag on" data-tipo="minion">Minion</button>
+                <button class="enc-ftag on" data-tipo="elite">Elite</button>
+                <button class="enc-ftag on" data-tipo="mini-boss">Boss</button>
+              </div>
+              <button class="enc-btn-main" id="enc-btn-gerar">Gerar Encontro</button>
+            </div>
+            <!-- MANUAL -->
+            <div style="display:flex;flex-direction:column;gap:.4rem">
+              <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase">Adicionar Manual</div>
+              <input type="text" class="enc-search" id="enc-search" placeholder="Buscar inimigo...">
+              <div class="enc-ftags" id="enc-filtros-lista" style="margin-bottom:.3rem;">
+                <button class="enc-ftag on" data-tipo="minion">Minion</button>
+                <button class="enc-ftag on" data-tipo="elite">Elite</button>
+                <button class="enc-ftag on" data-tipo="mini-boss">Boss</button>
+              </div>
+              <div class="enc-ini-list" id="enc-ini-list"></div>
+              <button class="enc-btn-main" id="enc-btn-add" disabled>+ Adicionar</button>
+            </div>
+          </div>
+          <!-- INIMIGOS DO ENCONTRO -->
+          <div id="enc-cards-area"></div>
+          <!-- REVEAL BTN -->
+          <button class="enc-reveal-btn" id="enc-reveal-btn" style="display:none" onclick="toggleReveal()">Revelar na Mesa</button>
+          <button class="enc-clear-btn" id="enc-clear-btn" style="display:none" onclick="clearEncounter()">Limpar Encontro</button>
+          <!-- COMBAT TRACKER -->
+          <div class="combat-panel" id="combat-panel" style="display:none;">
+            <div class="combat-header">
+              <span class="combat-round" id="combat-round-label">Rodada 1</span>
+              <button class="combat-next-btn" id="combat-next-btn" disabled onclick="nextCombatRound()">Próxima Rodada</button>
+            </div>
+            <div class="combat-body" id="combat-body"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="mesa-hero">
         <span class="mesa-hero-spiral">✦</span>
         <div class="mesa-hero-title">Purgatório</div>
@@ -613,6 +791,11 @@
       <div>
         <div class="section-label"><span>Fichas dos Penitentes</span></div>
         <div class="mesa-grid" id="mesa-grid"></div>
+      </div>
+      <!-- PUBLIC ENEMY CARDS (visible to all) -->
+      <div class="enemy-public" id="enemy-public" style="display:none;">
+        <div class="enemy-public-title">⚔ Inimigos na Mesa</div>
+        <div class="enemy-public-grid" id="enemy-public-grid"></div>
       </div>
     </div>
     <!-- RIGHT: recompensas + chat simples -->
@@ -1232,6 +1415,7 @@ function showDash(){renderDash();showScr('dashboard-screen');}
 async function goToDashboard(){
   if(saveTimer){clearTimeout(saveTimer);await saveFichaToDb(currentFichaId);}
   stopChat();
+  encCards=[];encRevealed=false;combatRound=1;combatActions={};combatActive=false;
   showDash();
 }
 
@@ -1649,6 +1833,405 @@ function renderMems(){
 }
 
 // ════════════════════════════════════════
+// ENCONTROS / COMBATE
+// ════════════════════════════════════════
+let encTodos = [];
+let encSelId = null;
+let encCards = [];
+let encSeq = 0;
+let encRevealed = false;
+let encPanelCollapsed = false;
+let combatRound = 1;
+let combatActions = {}; // {id: {name, type, acted, alive}}
+let combatActive = false;
+
+async function loadEncInimigos(){
+  try{
+    const r = await fetch('./inimigos.json');
+    const d = await r.json();
+    encTodos = d.inimigos;
+  }catch(e){
+    console.warn('inimigos.json não encontrado — encontros indisponíveis');
+    encTodos = [];
+  }
+  renderEncList();
+}
+
+// ── FILTROS ──
+function encTiposAtivos(containerId){
+  return new Set([...document.querySelectorAll(`#${containerId} .enc-ftag.on`)].map(b=>b.dataset.tipo));
+}
+
+function setupEncFiltros(containerId, cb){
+  document.querySelectorAll(`#${containerId} .enc-ftag`).forEach(b=>{
+    b.addEventListener('click',()=>{
+      const ativos = document.querySelectorAll(`#${containerId} .enc-ftag.on`);
+      if(b.classList.contains('on') && ativos.length<=1) return;
+      b.classList.toggle('on');
+      cb();
+    });
+  });
+}
+
+function renderEncList(){
+  const q = (document.getElementById('enc-search')?.value||'').toLowerCase();
+  const tp = encTiposAtivos('enc-filtros-lista');
+  const lista = document.getElementById('enc-ini-list');
+  if(!lista) return;
+  const fil = encTodos.filter(i=>tp.has(i.tipo)&&(i.nome.toLowerCase().includes(q)||String(i.nd).includes(q)));
+  if(!fil.length){
+    lista.innerHTML='<div style="padding:.6rem;text-align:center;color:var(--text-muted);font-size:.75rem;font-style:italic;">Nenhum resultado</div>';
+    return;
+  }
+  lista.innerHTML=fil.map(i=>{
+    const dc=i.tipo==='mini-boss'?'db':i.tipo==='elite'?'de':'dm';
+    const tl=i.tipo==='mini-boss'?'Boss':i.tipo==='elite'?'Elite':'Minion';
+    const sel=encSelId===i.id?' sel':'';
+    return `<div class="enc-ini-item${sel}" onclick="encSelIni(${i.id})">
+      <div class="enc-ini-name"><span class="enc-dot ${dc}"></span>${i.nome}</div>
+      <div class="enc-ini-meta">${tl} · ND${i.nd}</div>
+    </div>`;
+  }).join('');
+}
+
+function encSelIni(id){
+  encSelId=id;
+  renderEncList();
+  const btn=document.getElementById('enc-btn-add');
+  if(btn) btn.disabled=false;
+}
+
+// ── ADICIONAR MANUAL ──
+function encAddManual(){
+  if(!encSelId) return;
+  const ini=encTodos.find(i=>i.id===encSelId);
+  if(!ini) return;
+  if(encCards.length>=12){toast('Máximo de 12 inimigos.','error');return;}
+  encCards.push({ini:{...ini},vida:ini.vida,cid:++encSeq});
+  encSelId=null;
+  renderEncList();
+  const btn=document.getElementById('enc-btn-add');
+  if(btn) btn.disabled=true;
+  renderEncCards();
+  updateEncBtns();
+}
+
+// ── GERAR ALEATÓRIO ──
+let encModalConfirm=false;
+function encGerar(){
+  const nd=parseInt(document.getElementById('enc-nd')?.value);
+  if(!nd||nd<1){toast('Informe um ND válido.','error');return;}
+  const tp=encTiposAtivos('enc-filtros-gerar');
+  const pool=encTodos.filter(i=>tp.has(i.tipo)&&i.nd<=nd);
+  const M=pool.filter(i=>i.tipo==='minion');
+  const E=pool.filter(i=>i.tipo==='elite');
+  const B=pool.filter(i=>i.tipo==='mini-boss');
+  function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+  function somaND(g){return g.reduce((s,i)=>s+i.nd,0);}
+  function candidatos(){
+    const lista=[];
+    B.forEach(b=>lista.push([b]));
+    B.forEach(b=>E.forEach(e=>lista.push([b,e])));
+    B.forEach(b=>M.forEach(m=>{for(let n=1;n<=3;n++)lista.push([b,...Array(n).fill(m)]);}));
+    E.forEach(e=>lista.push([e]));
+    E.forEach(e=>lista.push([e,{...e}]));
+    E.forEach(e=>M.forEach(m=>{for(let n=1;n<=3;n++)lista.push([e,...Array(n).fill(m)]);}));
+    M.forEach(m=>{for(let n=2;n<=4;n++)lista.push(Array(n).fill(m));});
+    return lista;
+  }
+  const cands=candidatos();
+  const validos=cands.filter(g=>{const s=somaND(g);return s>=nd-1&&s<=nd&&g.length<=4;});
+  const pool2=validos.length?validos:cands.filter(g=>{const s=somaND(g);return s>=nd-1&&s<=nd+1&&g.length<=4;});
+  if(!pool2.length){toast('Não foi possível montar encontro com ND '+nd+'.','error');return;}
+  const grupo=pick(pool2);
+  encCards=[];
+  grupo.forEach(i=>encCards.push({ini:{...i},vida:i.vida,cid:++encSeq}));
+  encRevealed=false;
+  renderEncCards();
+  updateEncBtns();
+  renderPublicEnemies();
+  resetCombat();
+}
+
+// ── RM CARD ──
+function encRmCard(cid){
+  encCards=encCards.filter(c=>c.cid!==cid);
+  document.getElementById(`ec-${cid}`)?.remove();
+  document.getElementById(`epc-${cid}`)?.remove();
+  buildCombatParticipants();
+  renderCombat();
+  renderEncCards();
+  updateEncBtns();
+  renderPublicEnemies();
+}
+
+// ── RENDER CARDS ──
+function renderEncCards(){
+  const area=document.getElementById('enc-cards-area');
+  if(!area) return;
+  if(!encCards.length){
+    area.innerHTML='<div style="text-align:center;padding:.8rem;color:var(--text-muted);font-size:.75rem;font-style:italic;border:1px solid var(--border);background:var(--card);">Nenhum inimigo no encontro</div>';
+    return;
+  }
+  area.innerHTML='<div class="enc-cards-grid">'+encCards.map(c=>{
+    const tc=c.ini.tipo==='mini-boss'?'boss':c.ini.tipo;
+    const tl=c.ini.tipo==='mini-boss'?'Mini-Boss':c.ini.tipo==='elite'?'Elite':'Minion';
+    const hbs=c.ini.habilidade?c.ini.habilidade.split(',').map(h=>`<span class="enc-card-tag h">${h.trim()}</span>`).join(''):'';
+    const rss=c.ini.resistencia?c.ini.resistencia.split(',').map(r=>`<span class="enc-card-tag r">${r.trim()}</span>`).join(''):'';
+    const pct=c.ini.vida>0?c.vida/c.ini.vida*100:0;
+    const deadClass=c.vida===0?' dead':'';
+    let barExtra='';
+    if(c.vida===0) barExtra=' zero';
+    else if(pct<=25) barExtra=' crit';
+    else if(pct<=50) barExtra=' low';
+    return `<div class="enc-card ${tc}${deadClass}" id="ec-${c.cid}">
+      <div class="enc-card-stripe"></div>
+      <div class="enc-card-head">
+        <div class="enc-card-nome">${esc(c.ini.nome)}</div>
+        <div class="enc-card-meta">${tl} · ND ${c.ini.nd}</div>
+        <button class="enc-card-rm" onclick="encRmCard(${c.cid})">×</button>
+      </div>
+      <div class="enc-card-body">
+        ${hbs||rss?`<div class="enc-card-tags">${hbs}${rss}</div>`:''}
+        <div class="enc-vwrap">
+          <div class="enc-vtop">
+            <span class="enc-vlbl">Vida</span>
+            <span class="enc-vnums" id="evc-${c.cid}">${c.vida}</span>
+          </div>
+          <div class="enc-vtrack"><div class="enc-vfill${barExtra}" id="evf-${c.cid}" style="width:${pct}%"></div></div>
+        </div>
+        <div class="enc-ctrl-row">
+          <input type="number" class="enc-inp-d" id="edi-${c.cid}" min="0" placeholder="dano" onkeydown="if(event.key==='Enter')encApplyDmg(${c.cid})">
+          <button class="enc-bsm bdmg" onclick="encApplyDmg(${c.cid})">Aplicar</button>
+          <button class="enc-bsm bheal" onclick="encHeal(${c.cid})">↺</button>
+        </div>
+        <button class="enc-rev" onclick="encRevive(${c.cid})">Reviver</button>
+      </div>
+      ${c.ini.nota?`<div class="enc-nota">${esc(c.ini.nota)}</div>`:''}
+    </div>`;
+  }).join('')+'</div>';
+}
+
+// ── DANO / CURA ──
+function encGetCard(cid){return encCards.find(c=>c.cid===cid);}
+
+function encApplyDmg(cid){
+  const c=encGetCard(cid);if(!c)return;
+  const inp=document.getElementById(`edi-${cid}`);
+  const v=parseInt(inp?.value);
+  if(isNaN(v)||v<=0)return;
+  c.vida=Math.max(0,c.vida-v);
+  if(inp)inp.value='';
+  encUpdVida(cid);
+  renderPublicEnemies();
+  buildCombatParticipants();
+  renderCombat();
+}
+
+function encHeal(cid){
+  const c=encGetCard(cid);if(!c)return;
+  c.vida=c.ini.vida;
+  encUpdVida(cid);
+  buildCombatParticipants();
+  renderCombat();
+  renderPublicEnemies();
+}
+
+function encRevive(cid){encHeal(cid);}
+
+function encUpdVida(cid){
+  const c=encGetCard(cid);if(!c)return;
+  const cur=document.getElementById(`evc-${cid}`);
+  const bar=document.getElementById(`evf-${cid}`);
+  const card=document.getElementById(`ec-${cid}`);
+  if(!cur||!bar||!card)return;
+  cur.textContent=c.vida;
+  const pct=c.ini.vida>0?c.vida/c.ini.vida*100:0;
+  bar.style.width=pct+'%';
+  bar.className='enc-vfill';
+  if(c.vida===0){bar.classList.add('zero');card.classList.add('dead');}
+  else{card.classList.remove('dead');if(pct<=25)bar.classList.add('crit');else if(pct<=50)bar.classList.add('low');}
+}
+
+// ── REVEAL ──
+function toggleReveal(){
+  encRevealed=!encRevealed;
+  renderPublicEnemies();
+  if(encRevealed){
+    if(!combatActive){resetCombat();}
+    document.getElementById('combat-panel').style.display='block';
+    buildCombatParticipants();
+    renderCombat();
+  }else{
+    document.getElementById('combat-panel').style.display='none';
+    combatActive=false;
+  }
+  const btn=document.getElementById('enc-reveal-btn');
+  if(btn){
+    btn.textContent=encRevealed?'Ocultar da Mesa':'Revelar na Mesa';
+    btn.classList.toggle('revealed',encRevealed);
+  }
+}
+
+// ── PUBLIC ENEMY CARDS ──
+function renderPublicEnemies(){
+  const wrap=document.getElementById('enemy-public');
+  const grid=document.getElementById('enemy-public-grid');
+  if(!encRevealed||!encCards.length){
+    if(wrap)wrap.style.display='none';
+    return;
+  }
+  if(wrap)wrap.style.display='block';
+  if(!grid)return;
+  grid.innerHTML=encCards.map(c=>{
+    const tc=c.ini.tipo==='mini-boss'?'boss':c.ini.tipo;
+    const tl=c.ini.tipo==='mini-boss'?'Mini-Boss':c.ini.tipo==='elite'?'Elite':'Minion';
+    const pct=c.ini.vida>0?c.vida/c.ini.vida*100:0;
+    let barExtra='';
+    if(c.vida===0)barExtra=' zero';
+    else if(pct<=25)barExtra=' crit';
+    else if(pct<=50)barExtra=' low';
+    return `<div class="enemy-pub-card ${tc}${c.vida===0?' dead':''}" id="epc-${c.cid}">
+      <div class="enemy-pub-stripe"></div>
+      <div class="enemy-pub-head">
+        <div class="enemy-pub-nome">${esc(c.ini.nome)}</div>
+        <div class="enemy-pub-meta">${tl} · ND ${c.ini.nd}</div>
+        <div class="enemy-pub-track"><div class="enemy-pub-fill${barExtra}" id="epf-${c.cid}" style="width:${pct}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── UPDATE BUTTONS ──
+function updateEncBtns(){
+  const revealBtn=document.getElementById('enc-reveal-btn');
+  const clearBtn=document.getElementById('enc-clear-btn');
+  if(revealBtn){
+    revealBtn.style.display=encCards.length?'block':'none';
+    revealBtn.textContent=encRevealed?'Ocultar da Mesa':'Revelar na Mesa';
+    revealBtn.classList.toggle('revealed',encRevealed);
+  }
+  if(clearBtn)clearBtn.style.display=encCards.length?'block':'none';
+}
+
+// ── CLEAR ──
+function clearEncounter(){
+  encCards=[];
+  encRevealed=false;
+  combatActive=false;
+  combatRound=1;
+  combatActions={};
+  renderEncCards();
+  renderPublicEnemies();
+  updateEncBtns();
+  const cp=document.getElementById('combat-panel');
+  if(cp)cp.style.display='none';
+}
+
+// ── PANEL TOGGLE ──
+function toggleEncPanel(){
+  encPanelCollapsed=!encPanelCollapsed;
+  const panel=document.getElementById('encounter-panel');
+  const lbl=document.getElementById('enc-toggle-label');
+  if(panel){
+    panel.classList.toggle('collapsed',encPanelCollapsed);
+    if(!encPanelCollapsed) panel.style.maxHeight='none';
+    else panel.style.maxHeight='48px';
+  }
+  if(lbl)lbl.textContent=encPanelCollapsed?'▼':'▲';
+}
+
+// ── SETUP PANEL FOR MESTRE ──
+function setupEncounterPanel(){
+  const panel=document.getElementById('encounter-panel');
+  const isMestre=currentMesaId&&isMesaMestre(currentMesaId);
+  if(panel){
+    panel.style.display=isMestre?'block':'none';
+    panel.classList.toggle('collapsed',encPanelCollapsed);
+  }
+  // Reset encounter state when entering a new mesa
+  encCards=[];
+  encRevealed=false;
+  combatRound=1;
+  combatActions={};
+  combatActive=false;
+  renderEncCards();
+  renderPublicEnemies();
+  updateEncBtns();
+  const cp=document.getElementById('combat-panel');
+  if(cp)cp.style.display='none';
+}
+
+// ── COMBAT TRACKER ──
+function resetCombat(){
+  combatRound=1;
+  combatActive=true;
+  buildCombatParticipants();
+  renderCombat();
+  const cp=document.getElementById('combat-panel');
+  if(cp)cp.style.display=encRevealed?'block':'none';
+}
+
+function buildCombatParticipants(){
+  combatActions={};
+  // Add living enemies
+  encCards.filter(c=>c.vida>0).forEach(c=>{
+    combatActions['e-'+c.cid]={name:c.ini.nome,type:'enemy',acted:false,alive:true};
+  });
+  // Add players from mesa
+  if(currentMesaId){
+    const m=mesasCache[currentMesaId];
+    if(m){
+      m.fichas.forEach(fid=>{
+        const f=fichasCache[fid]||fichasExtCache[fid];
+        if(f){
+          combatActions['p-'+fid]={name:f.nome,type:'player',acted:false,alive:true};
+        }
+      });
+    }
+  }
+}
+
+function toggleCombatAction(id){
+  const a=combatActions[id];
+  if(!a||!a.alive)return;
+  a.acted=!a.acted;
+  renderCombat();
+}
+
+function nextCombatRound(){
+  const allActed=Object.values(combatActions).filter(a=>a.alive).every(a=>a.acted);
+  if(!allActed)return;
+  combatRound++;
+  Object.values(combatActions).forEach(a=>a.acted=false);
+  renderCombat();
+}
+
+function renderCombat(){
+  const body=document.getElementById('combat-body');
+  const roundLabel=document.getElementById('combat-round-label');
+  const nextBtn=document.getElementById('combat-next-btn');
+  if(!body)return;
+  if(roundLabel)roundLabel.textContent='Rodada '+combatRound;
+  const alive=Object.entries(combatActions).filter(([,a])=>a.alive);
+  const notActed=alive.filter(([,a])=>!a.acted);
+  if(nextBtn)nextBtn.disabled=notActed.length>0;
+  body.innerHTML=alive.map(([id,a])=>{
+    const cls=a.type==='player'?'player':'';
+    const deadCls=!a.alive?'dead':'';
+    const actedCls=a.acted?'acted':'not-acted';
+    const label=a.acted?'Ag ✓':'—';
+    return `<div class="combat-participant">
+      <span class="combat-p-name ${cls} ${deadCls}">${esc(a.name)}</span>
+      <span class="combat-p-status ${actedCls}" onclick="toggleCombatAction('${id}')">${label}</span>
+    </div>`;
+  }).join('');
+  if(notActed.length===0&&alive.length>0){
+    body.innerHTML+=`<div class="combat-all-done">✓ Todos agiram — Próxima rodada disponível</div>`;
+  }
+}
+
+// ════════════════════════════════════════
 // MESA
 // ════════════════════════════════════════
 async function openMesa(id){
@@ -1658,6 +2241,7 @@ async function openMesa(id){
   hideLoading();
   renderMesa(mesasCache[id]);
   renderRewardPanel();
+  setupEncounterPanel();
   showScr('mesa-screen');
   await initChat(id);
 }
@@ -2591,6 +3175,16 @@ window.addEventListener('load',async()=>{
 
   // Carrega banco de memórias
   await loadMemoriasDB();
+
+  // Carrega inimigos para encontros
+  await loadEncInimigos();
+
+  // Encontro event listeners
+  setupEncFiltros('enc-filtros-gerar',()=>{});
+  setupEncFiltros('enc-filtros-lista',renderEncList);
+  document.getElementById('enc-search')?.addEventListener('input',renderEncList);
+  document.getElementById('enc-btn-gerar')?.addEventListener('click',encGerar);
+  document.getElementById('enc-btn-add')?.addEventListener('click',encAddManual);
 
   // Save on page leave
   window.addEventListener('beforeunload',()=>{
