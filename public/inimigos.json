@@ -1,0 +1,37 @@
+{
+  "inimigos": [
+    {"id":1,  "nome":"Goblin das Sombras",      "tipo":"minion",     "nd":1, "vida":4,  "dano":1, "dt":6,  "habilidade":"",                  "resistencia":"",       "nota":"Pequenas criaturas deformadas que habitam as fendas escuras. Atacam sempre em bando, movidos pela fome."},
+    {"id":2,  "nome":"Rato Corrompido",         "tipo":"minion",     "nd":1, "vida":3,  "dano":1, "dt":5,  "habilidade":"",                  "resistencia":"",       "nota":"Ratos inchados pela corrupção do Abismo. Fracos individualmente, mas carregam doenças."},
+
+    {"id":3,  "nome":"Espectro Errante",        "tipo":"minion",     "nd":2, "vida":6,  "dano":2, "dt":6,  "habilidade":"Drenar Vida",       "resistencia":"",       "nota":"Almas perdidas que se alimentam da vitalidade dos vivos. Seu toque gélido suga a força."},
+    {"id":4,  "nome":"Cão das Trevas",          "tipo":"minion",     "nd":2, "vida":8,  "dano":2, "dt":6,  "habilidade":"",                  "resistencia":"",       "nota":"Cães abandonados que vagam pelas trevas. Seus olhos brilham com fome eterna."},
+
+    {"id":5,  "nome":"Ladrão das Cinzas",       "tipo":"minion",     "nd":3, "vida":7,  "dano":3, "dt":7,  "habilidade":"Ataque Furtivo",    "resistencia":"",       "nota":"Ladrões que morreram esquecidos e agora roubam não apenas bens, mas pedaços da alma."},
+    {"id":6,  "nome":"Zumbi Esquecido",         "tipo":"minion",     "nd":3, "vida":12, "dano":2, "dt":6,  "habilidade":"",                  "resistencia":"",       "nota":"Corpos que se recusam a apodrecer completamente. Caminham devagar, mas são difíceis de derrubar."},
+    {"id":7,  "nome":"Cultista do Abismo",      "tipo":"elite",      "nd":3, "vida":11, "dano":3, "dt":7,  "habilidade":"Invocar Minion",    "resistencia":"stun",   "nota":"Fanáticos que ainda sussurram preces para o vazio. Podem chamar outros para o combate."},
+
+    {"id":8,  "nome":"Aranha das Sombras",      "tipo":"minion",     "nd":4, "vida":9,  "dano":3, "dt":7,  "habilidade":"Veneno",            "resistencia":"",       "nota":"Aranhas gigantes tecidas de escuridão pura. Sua picada causa paralisia e dor intensa."},
+    {"id":9,  "nome":"Abominação Sem Olhos",    "tipo":"minion",     "nd":4, "vida":13, "dano":3, "dt":8,  "habilidade":"Grito Paralisante", "resistencia":"",       "nota":"Criaturas disformes sem olhos que emitem um grito capaz de congelar a alma."},
+    {"id":10, "nome":"Cavaleiro Esquecido",     "tipo":"elite",      "nd":4, "vida":15, "dano":4, "dt":8,  "habilidade":"Ataque em Área",    "resistencia":"knockback", "nota":"Antigos cavaleiros que ainda carregam armaduras enferrujadas e um ódio sem fim."},
+
+    {"id":11, "nome":"Morcego Vampírico",       "tipo":"minion",     "nd":5, "vida":10, "dano":4, "dt":8,  "habilidade":"Drenar Vida",       "resistencia":"",       "nota":"Enormes morcegos que se alimentam da essência vital dos penitentes."},
+    {"id":12, "nome":"Esqueleto Armado",        "tipo":"minion",     "nd":5, "vida":14, "dano":3, "dt":7,  "habilidade":"",                  "resistencia":"",       "nota":"Restos de soldados que ainda empunham suas armas enferrujadas."},
+    {"id":13, "nome":"Acólito da Pira Negra",   "tipo":"elite",      "nd":5, "vida":18, "dano":4, "dt":8,  "habilidade":"Magia das Trevas",  "resistencia":"stun",   "nota":"Servos que aprenderam a manipular as sombras do Abismo."},
+    {"id":14, "nome":"Devorador de Memórias",   "tipo":"mini-boss",  "nd":5, "vida":25, "dano":5, "dt":9,  "habilidade":"Roubar Memória Rasa","resistencia":"fear",   "nota":"Criatura que se alimenta das memórias dos penitentes, enfraquecendo sua essência."},
+
+    {"id":15, "nome":"Assassino das Trevas",    "tipo":"minion",     "nd":6, "vida":12, "dano":5, "dt":8,  "habilidade":"Ataque Furtivo",    "resistencia":"",       "nota":"Assassinos que morreram em traição e agora caçam nas sombras."},
+    {"id":16, "nome":"Gárgula Corrompida",      "tipo":"minion",     "nd":6, "vida":16, "dano":4, "dt":9,  "habilidade":"",                  "resistencia":"knockback", "nota":"Estátuas que ganharam vida através da corrupção do Abismo."},
+    {"id":17, "nome":"Guardião das Trevas",     "tipo":"elite",      "nd":6, "vida":22, "dano":5, "dt":9,  "habilidade":"Invocar Sombras",   "resistencia":"stun",   "nota":"Antigos protetores que agora servem à escuridão."},
+    {"id":18, "nome":"Horror Sem Face",         "tipo":"mini-boss",  "nd":6, "vida":28, "dano":6, "dt":9,  "habilidade":"Grito Paralisante", "resistencia":"stun,fear", "nota":"Uma massa disforme que causa terror apenas por existir."},
+
+    {"id":19, "nome":"Carniceiro do Abismo",    "tipo":"minion",     "nd":7, "vida":15, "dano":5, "dt":9,  "habilidade":"",                  "resistencia":"",       "nota":"Criaturas brutais que destroçam tudo em seu caminho."},
+    {"id":20, "nome":"Fantasma Vingativo",      "tipo":"minion",     "nd":7, "vida":13, "dano":4, "dt":8,  "habilidade":"Drenar Foco",       "resistencia":"",       "nota":"Almas cheias de ódio que sugam a concentração dos penitentes."},
+    {"id":21, "nome":"Profeta do Abismo",       "tipo":"mini-boss",  "nd":7, "vida":30, "dano":6, "dt":10, "habilidade":"Palavra de Desespero","resistencia":"fear",   "nota":"Pregadores loucos que espalham loucura com suas palavras."},
+
+    {"id":22, "nome":"Cavaleiro do Vazio",      "tipo":"elite",      "nd":8, "vida":26, "dano":6, "dt":10, "habilidade":"Carga das Trevas",   "resistencia":"knockback", "nota":"Cavaleiros que se entregaram completamente ao Abismo."},
+    {"id":23, "nome":"Arauto das Sombras",      "tipo":"mini-boss",  "nd":8, "vida":35, "dano":7, "dt":10, "habilidade":"Explosão de Trevas", "resistencia":"stun,fear", "nota":"Ser que anuncia a chegada de algo muito pior."},
+
+    {"id":24, "nome":"Titã das Cinzas",         "tipo":"mini-boss",  "nd":9, "vida":40, "dano":7, "dt":11, "habilidade":"Esmagamento",       "resistencia":"knockback,stun", "nota":"Gigante feito de cinzas e ódio, quase impossível de derrubar."},
+    {"id":25, "nome":"Senhor das Sombras",      "tipo":"mini-boss",  "nd":10,"vida":48, "dano":8, "dt":12, "habilidade":"Domínio do Abismo",  "resistencia":"stun,fear,knockback", "nota":"Uma das criaturas mais perigosas que pode surgir nas profundezas."}
+  ]
+}
