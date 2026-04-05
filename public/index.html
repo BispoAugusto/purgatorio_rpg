@@ -242,7 +242,7 @@
   #mesa-screen{background:var(--bg);}
   .mesa-layout{flex:1;display:flex;gap:0;overflow:hidden;min-height:0;}
   .mesa-left{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem;overflow-y:auto;}
-  .mesa-right{width:340px;flex-shrink:0;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);}
+  .mesa-right{width:340px;flex-shrink:0;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);overflow:hidden;max-height:100%;}
   .mesa-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;border:1px solid var(--border);background:var(--card);position:relative;overflow:hidden;}
   .mesa-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,69,0,.04) 0%,transparent 70%);}
   .mesa-hero-spiral{color:var(--text-muted);font-size:2rem;margin-bottom:1rem;opacity:.4;animation:slowRotate 20s linear infinite;display:block;}
@@ -270,9 +270,36 @@
   /* CHAT */
   .chat-header{padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
   .chat-title{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;}
-  .chat-help-btn{display:none;}
-  .chat-hint{display:none;}
-  .chat-msgs{flex:1;overflow-y:auto;padding:.75rem;display:flex;flex-direction:column;gap:.5rem;}
+  .chat-msg-del{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:.7rem;padding:.1rem .3rem;opacity:0;transition:opacity .15s;}
+  .chat-msg:hover .chat-msg-del{opacity:1;}
+  .chat-msg-del:hover{color:#e07070;}
+
+  /* FILTER TAGS */
+  .filter-tag{background:transparent;border:1px solid var(--border2);color:var(--text-muted);font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .5rem;cursor:pointer;transition:all .15s;}
+  .filter-tag.on{background:rgba(139,115,85,.18);border-color:var(--gold);color:var(--gold2);}
+  .filter-tag.on.rarity-Comum{border-color:#888;color:#aaa;background:rgba(136,136,136,.12);}
+  .filter-tag.on.rarity-Incomum{border-color:#7aadcc;color:#7aadcc;background:rgba(122,173,204,.1);}
+  .filter-tag.on.rarity-Raro{border-color:#a070cc;color:#a070cc;background:rgba(160,112,204,.1);}
+  .filter-tag.on.rarity-Épico{border-color:#e07040;color:#e07040;background:rgba(224,112,64,.1);}
+  .filter-tag.on.rarity-Lendário{border-color:#e0c040;color:#e0c040;background:rgba(224,192,64,.1);}
+
+  /* LIBRARY SCREEN */
+  #library-screen{background:var(--bg);}
+  .lib-content{flex:1;padding:1.5rem;max-width:1400px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:1.25rem;}
+  .lib-spoiler{background:rgba(199,57,57,.08);border:1px solid rgba(199,57,57,.4);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+  .lib-spoiler-icon{font-size:1.5rem;flex-shrink:0;}
+  .lib-spoiler-text{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.15em;color:#e07070;text-transform:uppercase;line-height:1.7;}
+  .lib-filters{display:flex;flex-wrap:wrap;gap:.4rem;padding:.75rem;background:var(--card);border:1px solid var(--border);}
+  .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.75rem;}
+  .lib-card{background:var(--card);border:1px solid var(--border);padding:1rem 1.1rem;position:relative;}
+  .lib-card-actions{position:absolute;top:.6rem;right:.6rem;display:flex;gap:.3rem;}
+  .lib-card-btn{background:transparent;border:1px solid var(--border);color:var(--text-muted);font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .45rem;cursor:pointer;transition:all .15s;}
+  .lib-card-btn:hover{border-color:var(--gold);color:var(--gold2);}
+  .lib-card-btn.del:hover{border-color:rgba(199,57,57,.5);color:#e07070;}
+  .lib-search{background:var(--card);border:1px solid var(--border);color:var(--white);padding:.6rem 1rem;font-family:'EB Garamond',serif;font-size:.95rem;outline:none;width:100%;}
+  .lib-search::placeholder{color:var(--text-muted);}
+  .lib-search:focus{border-color:var(--border2);}
+  .chat-msgs{flex:1;overflow-y:auto;padding:.75rem;display:flex;flex-direction:column;gap:.5rem;min-height:0;max-height:100%;}
   .chat-msgs::-webkit-scrollbar{width:3px;}
   .chat-msg{padding:.6rem .75rem;border-left:2px solid var(--border2);background:rgba(255,255,255,.02);}
   .chat-msg.roll{border-left-color:var(--gold);background:rgba(139,115,85,.06);}
@@ -373,6 +400,7 @@
     </div>
     <div class="header-actions">
       <span id="header-user" style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase;"></span>
+      <button class="btn-add" onclick="showLibrary()" title="Biblioteca de Memórias">📖 Memórias</button>
       <button class="btn-add" onclick="doLogout()">⤷ Sair</button>
     </div>
   </header>
@@ -381,6 +409,58 @@
     <div class="cards-grid" id="fichas-grid"></div>
     <div class="section-header"><div class="section-title">⬡ Minhas Mesas</div><button class="btn-add" onclick="openNewMesaModal()">+ Nova Mesa</button></div>
     <div class="cards-grid" id="mesas-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ LIBRARY ═══ -->
+<div id="library-screen" class="screen">
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="header-logo-row">
+        <button class="btn-back" onclick="showDash()" style="margin-right:.75rem">← Voltar</button>
+        <span class="header-cross">✛</span>
+        <span class="header-logo-title">Biblioteca de Memórias</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-add" onclick="openLibNewModal()">+ Nova Memória</button>
+    </div>
+  </header>
+  <div class="lib-content">
+    <!-- Spoiler warning -->
+    <div class="lib-spoiler">
+      <div class="lib-spoiler-icon">⚠</div>
+      <div class="lib-spoiler-text">
+        ÁREA DO MESTRE — Esta seção contém todas as memórias do jogo incluindo raridades altas.<br>
+        Jogadores podem encontrar spoilers de recompensas. Prossiga com cautela.
+      </div>
+    </div>
+    <!-- Search + Filters -->
+    <div style="display:flex;flex-direction:column;gap:.6rem">
+      <input type="text" class="lib-search" id="lib-search" placeholder="Buscar memória..." oninput="renderLibrary()">
+      <div class="lib-filters" id="lib-filters">
+        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-right:.25rem">Raridade:</span>
+        <button class="filter-tag rarity-Comum on" data-filter="r:Comum" onclick="toggleLibFilter(this)">Comum</button>
+        <button class="filter-tag rarity-Incomum on" data-filter="r:Incomum" onclick="toggleLibFilter(this)">Incomum</button>
+        <button class="filter-tag rarity-Raro on" data-filter="r:Raro" onclick="toggleLibFilter(this)">Raro</button>
+        <button class="filter-tag rarity-Épico on" data-filter="r:Épico" onclick="toggleLibFilter(this)">Épico</button>
+        <button class="filter-tag rarity-Lendário on" data-filter="r:Lendário" onclick="toggleLibFilter(this)">Lendário</button>
+        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-left:.5rem;margin-right:.25rem">Categoria:</span>
+        <button class="filter-tag on" data-filter="c:Arma" onclick="toggleLibFilter(this)">Arma</button>
+        <button class="filter-tag on" data-filter="c:Magia" onclick="toggleLibFilter(this)">Magia</button>
+        <button class="filter-tag on" data-filter="c:Habilidade" onclick="toggleLibFilter(this)">Habilidade</button>
+        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-left:.5rem;margin-right:.25rem">Tipo:</span>
+        <button class="filter-tag on" data-filter="t:ativa" onclick="toggleLibFilter(this)">Ativa</button>
+        <button class="filter-tag on" data-filter="t:passiva" onclick="toggleLibFilter(this)">Passiva</button>
+        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-left:.5rem;margin-right:.25rem">Custo:</span>
+        <button class="filter-tag on" data-filter="cost:foco" onclick="toggleLibFilter(this)">Foco</button>
+        <button class="filter-tag on" data-filter="cost:descanso" onclick="toggleLibFilter(this)">Descanso</button>
+        <button class="filter-tag on" data-filter="cost:sem" onclick="toggleLibFilter(this)">Sem custo</button>
+        <button class="filter-tag on" data-filter="cost:pe" onclick="toggleLibFilter(this)">PE</button>
+      </div>
+      <div style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase" id="lib-count"></div>
+    </div>
+    <div class="lib-grid" id="lib-grid"></div>
   </div>
 </div>
 
@@ -541,51 +621,55 @@
         <span class="chat-title">✦ Mesa do Mestre</span>
       </div>
       <!-- REWARD PANEL (mestre only) -->
-      <div id="reward-panel" style="display:none;padding:.85rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:.6rem">
+      <div id="reward-panel" style="display:none;padding:.85rem;border-bottom:1px solid var(--border);flex-direction:column;gap:.6rem">
         <div style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.18em;color:var(--gold2);text-transform:uppercase;margin-bottom:.2rem">⚘ Recompensa de Memória</div>
-        <!-- Jogadores a receber -->
+        <!-- Jogadores -->
         <div>
           <div style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase;margin-bottom:.35rem">Jogadores que recebem</div>
           <div id="reward-players" style="display:flex;flex-direction:column;gap:.3rem"></div>
         </div>
-        <!-- Filtros -->
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
-          <div style="flex:1;min-width:100px">
-            <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.25rem">Qtd de cartas</div>
-            <div style="display:flex;align-items:center;gap:.35rem">
-              <button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('count',-1)">−</button>
-              <span id="reward-count" style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--white);min-width:1.2rem;text-align:center">3</span>
-              <button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('count',1)">+</button>
-            </div>
+        <!-- Qtd + Sorte -->
+        <div style="display:flex;gap:.5rem">
+          <div style="flex:1">
+            <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.25rem">Qtd cartas</div>
+            <div style="display:flex;align-items:center;gap:.35rem"><button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('count',-1)">−</button><span id="reward-count" style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--white);min-width:1.2rem;text-align:center">3</span><button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('count',1)">+</button></div>
           </div>
-          <div style="flex:1;min-width:100px">
+          <div style="flex:1">
             <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.25rem">Sorte (0-10)</div>
-            <div style="display:flex;align-items:center;gap:.35rem">
-              <button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('luck',-1)">−</button>
-              <span id="reward-luck" style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--white);min-width:1.2rem;text-align:center">0</span>
-              <button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('luck',1)">+</button>
-            </div>
+            <div style="display:flex;align-items:center;gap:.35rem"><button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('luck',-1)">−</button><span id="reward-luck" style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--white);min-width:1.2rem;text-align:center">0</span><button class="stat-btn" style="width:22px;height:22px" onclick="adjReward('luck',1)">+</button></div>
           </div>
         </div>
-        <!-- Filtro de raridade -->
+        <!-- Filtros por raridade -->
         <div>
-          <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.3rem">Raridade máxima permitida</div>
-          <select id="reward-max-rarity" class="sel-inp" style="font-size:.8rem;padding:.35rem .6rem">
-            <option value="5">Todas (até Lendária)</option>
-            <option value="4">Até Épica</option>
-            <option value="3">Até Rara</option>
-            <option value="2">Até Incomum</option>
-            <option value="1">Apenas Comum</option>
-          </select>
+          <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.3rem">Raridade</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem">
+            <button class="filter-tag rarity-Comum on" data-filter="Comum" onclick="toggleRewardFilter(this)">Comum</button>
+            <button class="filter-tag rarity-Incomum on" data-filter="Incomum" onclick="toggleRewardFilter(this)">Incomum</button>
+            <button class="filter-tag rarity-Raro on" data-filter="Raro" onclick="toggleRewardFilter(this)">Raro</button>
+            <button class="filter-tag rarity-Épico on" data-filter="Épico" onclick="toggleRewardFilter(this)">Épico</button>
+            <button class="filter-tag rarity-Lendário on" data-filter="Lendário" onclick="toggleRewardFilter(this)">Lendário</button>
+          </div>
+        </div>
+        <!-- Filtros por categoria -->
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.3rem">Categoria · Tipo · Custo</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem">
+            <button class="filter-tag on" data-filter="cat:Arma" onclick="toggleRewardFilter(this)">Arma</button>
+            <button class="filter-tag on" data-filter="cat:Magia" onclick="toggleRewardFilter(this)">Magia</button>
+            <button class="filter-tag on" data-filter="cat:Habilidade" onclick="toggleRewardFilter(this)">Habilidade</button>
+            <button class="filter-tag on" data-filter="tipo:ativa" onclick="toggleRewardFilter(this)">Ativa</button>
+            <button class="filter-tag on" data-filter="tipo:passiva" onclick="toggleRewardFilter(this)">Passiva</button>
+            <button class="filter-tag on" data-filter="cost:foco" onclick="toggleRewardFilter(this)">Foco</button>
+            <button class="filter-tag on" data-filter="cost:descanso" onclick="toggleRewardFilter(this)">Descanso</button>
+            <button class="filter-tag on" data-filter="cost:sem" onclick="toggleRewardFilter(this)">Sem custo</button>
+            <button class="filter-tag on" data-filter="cost:pe" onclick="toggleRewardFilter(this)">PE</button>
+          </div>
         </div>
         <!-- Botões de ação -->
         <div style="display:flex;gap:.4rem;flex-wrap:wrap">
-          <button onclick="drawRewardCards(false)" style="flex:1;background:transparent;border:1px solid var(--gold);color:var(--gold2);font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;padding:.5rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(139,115,85,.12)'" onmouseout="this.style.background='transparent'">
-            ⚘ Revelar aos Jogadores
-          </button>
-          <button onclick="drawRewardCards(true)" style="background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .7rem;cursor:pointer;transition:all .2s" title="Apenas o Mestre vê" onmouseover="this.style.borderColor='var(--border)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">
-            👁 Só Mestre
-          </button>
+          <button onclick="drawRewardCards(false)" style="flex:1;background:transparent;border:1px solid var(--gold);color:var(--gold2);font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(139,115,85,.12)'" onmouseout="this.style.background='transparent'">⚘ Revelar Aleatório</button>
+          <button onclick="drawRewardCards(true)" style="background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem .6rem;cursor:pointer;transition:all .2s" title="Só o Mestre vê" onmouseover="this.style.borderColor='var(--border)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">👁 Só Mestre</button>
+          <button onclick="pickerSelected.clear();renderMemPicker();openM('m-mem-picker')" style="background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem .6rem;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--border)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text-dim)'">✎ Manual</button>
         </div>
       </div>
       <!-- CHAT -->
@@ -653,22 +737,64 @@
   <div class="modal" style="max-width:600px">
     <div class="modal-title">⚘ Recompensa — Escolha uma Memória</div>
     <div style="font-size:.88rem;color:var(--text-dim);margin-bottom:1.25rem;font-style:italic">O destino apresenta suas opções. Escolha com sabedoria — apenas uma pode ser sua.</div>
-    <div id="reward-cards" style="display:flex;flex-direction:column;gap:.75rem"></div>
+    <div id="reward-cards" style="display:flex;flex-direction:column;gap:.75rem;max-height:60vh;overflow-y:auto"></div>
     <div style="margin-top:1rem;font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.15em;color:var(--text-muted);text-align:center">A memória escolhida será adicionada à sua ficha como Rasa</div>
   </div>
 </div>
 
-<!-- Cartas do Mestre (só ele vê) -->
+<!-- Cartas do Mestre (só ele vê) — com opção de jogar para jogadores -->
 <div class="modal-overlay" id="m-master-draw">
   <div class="modal" style="max-width:600px">
     <div class="modal-title">👁 Cartas do Mestre — Visualização Privada</div>
-    <div style="font-size:.82rem;color:var(--text-dim);margin-bottom:1rem">Estas cartas são visíveis apenas para você.</div>
-    <div id="master-draw-cards" style="display:flex;flex-direction:column;gap:.75rem"></div>
+    <div style="font-size:.82rem;color:var(--text-dim);margin-bottom:.75rem">Estas cartas são visíveis apenas para você.</div>
+    <div id="master-draw-cards" style="display:flex;flex-direction:column;gap:.75rem;max-height:50vh;overflow-y:auto"></div>
     <div class="modal-actions" style="margin-top:1.25rem">
       <button class="btn-cancel" style="flex:1" onclick="closeM('m-master-draw')">Fechar</button>
+      <button class="btn-primary" style="flex:1" onclick="publishMasterDraw()">⚘ Jogar para Jogadores</button>
     </div>
   </div>
 </div>
+
+<!-- Seletor manual de memória para o chat -->
+<div class="modal-overlay" id="m-mem-picker">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-title">⚘ Adicionar Memória ao Chat</div>
+    <div style="font-size:.88rem;color:var(--text-dim);margin-bottom:.75rem">Selecione memórias para revelar no chat. Jogadores poderão escolher (apenas 1 por ficha).</div>
+    <input type="text" class="lib-search" id="picker-search" placeholder="Buscar..." oninput="renderMemPicker()" style="margin-bottom:.75rem">
+    <div id="picker-selected" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.75rem;min-height:1.5rem"></div>
+    <div id="picker-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:45vh;overflow-y:auto"></div>
+    <div class="modal-actions" style="margin-top:1rem">
+      <button class="btn-cancel" onclick="closeM('m-mem-picker')">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="sendPickerReward()">⚘ Enviar para Jogadores</button>
+    </div>
+  </div>
+</div>
+
+<!-- Library: Nova/Editar memória -->
+<div class="modal-overlay" id="m-lib-edit">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-title" id="lib-edit-title">✛ Nova Memória</div>
+    <div class="modal-form" id="lib-edit-form">
+      <div class="form-group"><label class="form-label">Nome</label><input type="text" class="form-input" id="le-nome" placeholder="Nome da memória"></div>
+      <div style="display:flex;gap:.75rem">
+        <div class="form-group" style="flex:1"><label class="form-label">Raridade</label><select class="sel-inp" id="le-raridade"><option>Comum</option><option>Incomum</option><option>Raro</option><option>Épico</option><option>Lendário</option></select></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Categoria</label><select class="sel-inp" id="le-categoria"><option>Arma</option><option>Magia</option><option>Habilidade</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Nome da Habilidade</label><input type="text" class="form-input" id="le-hab-nome" placeholder="Ex: Golpe Sujo"></div>
+      <div style="display:flex;gap:.75rem">
+        <div class="form-group" style="flex:1"><label class="form-label">Tipo</label><select class="sel-inp" id="le-hab-tipo"><option value="passiva">Passiva</option><option value="ativa">Ativa</option></select></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Custo</label><input type="text" class="form-input" id="le-hab-custo" placeholder="nenhum / 1 Foco..."></div>
+      </div>
+      <div class="form-group"><label class="form-label">Descrição da Habilidade</label><textarea class="ta-inp" id="le-hab-desc" placeholder="O que esta habilidade faz..."></textarea></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeM('m-lib-edit')">Cancelar</button>
+        <button class="btn-primary" style="flex:1" id="le-save-btn" onclick="saveLibEntry()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m-invite">
   <div class="modal">
     <div class="modal-title">🔗 Convidar para Mesa</div>
     <div style="font-size:.9rem;color:var(--text-dim);margin-bottom:1rem">Compartilhe este link. Ao acessá-lo, o jogador escolhe qual ficha levar:</div>
@@ -1809,57 +1935,59 @@ async function drawRewardCards(masterOnly){
   const m = mesasCache[currentMesaId]; if(!m)return;
   if(!MEMORIAS_DB.length){ toast('memorias.json não carregado','error'); return; }
 
-  const maxTier = parseInt(document.getElementById('reward-max-rarity').value)||5;
   const luck = rewardState.luck;
   const count = rewardState.count;
-
-  // Quais fichas recebem
-  const targetFichas = rewardState.selectedPlayers.size > 0
-    ? [...rewardState.selectedPlayers]
-    : m.fichas; // se ninguém selecionado, todos
-
+  const targetFichas = rewardState.selectedPlayers.size > 0 ? [...rewardState.selectedPlayers] : m.fichas;
   if(!targetFichas.length){ toast('Nenhum jogador selecionado','error'); return; }
 
   if(masterOnly){
-    // Só mestre vê — abre modal local sem broadcast
-    const cards = drawNCards(count, luck, maxTier);
+    const cards = drawNCardsFiltered(count, luck);
+    lastMasterDraw = cards;
     document.getElementById('master-draw-cards').innerHTML = cards.map(c=>renderMemoriaCard(c,false,'')).join('');
     openM('m-master-draw');
     return;
   }
 
-  // Broadcast via chat_msgs para todos os jogadores
   pendingRewards = {};
   for(const fid of targetFichas){
-    const cards = drawNCards(count, luck, maxTier);
+    const cards = drawNCardsFiltered(count, luck);
     pendingRewards[fid] = cards;
   }
-
-  // Salva as recompensas no chat como mensagem especial
   const author = currentUser?.user_metadata?.nome || currentUser?.email?.split('@')[0]||'Mestre';
-  const payload = {
-    type:'reward',
-    author,
-    ts: new Date().toISOString(),
-    rewards: pendingRewards, // fichaId → array de mem
-  };
-  await sb.from('chat_msgs').insert({
-    mesa_id: currentMesaId,
-    user_id: currentUser.id,
-    payload
-  });
-  toast('Recompensas enviadas aos jogadores','success');
+  const payload = {type:'reward',author,ts: new Date().toISOString(),rewards: pendingRewards};
+  await sb.from('chat_msgs').insert({mesa_id: currentMesaId,user_id: currentUser.id,payload});
+  toast('Recompensas enviadas!','success');
 }
 
 function renderRewardMsg(msg){
-  // Cada jogador só vê as próprias cartas
   const myFichas = Object.keys(fichasCache);
-  const myRewards = myFichas.flatMap(fid => (msg.rewards[fid]||[]).map(c=>({c,fid})));
-  if(!myRewards.length && !isMesaMestre(currentMesaId)) return '';
-
   const isMestre = isMesaMestre(currentMesaId);
+
+  if(msg.unique){
+    // Modo manual: todos veem todas as cartas, mas cada carta só pode ser pega 1 vez
+    const cards = Object.values(msg.rewards)[0]||[];
+    const taken = msg.taken||{};
+    return `<div style="background:rgba(139,115,85,.06);border:1px solid rgba(139,115,85,.3);padding:1rem;margin:.25rem 0">
+      <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase;margin-bottom:.75rem">⚘ Recompensa — ${esc(msg.author)}</div>
+      ${cards.map(c=>{
+        const isTaken=!!taken[c.id];
+        const takenByMe=myFichas.length>0&&taken[c.id]===currentUser?.id;
+        if(isTaken) return `<div style="opacity:.45;border:1px solid var(--border);padding:.75rem 1rem;margin-bottom:.5rem;position:relative">
+          ${renderMemoriaCard(c,false,'')}
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase">${takenByMe?'✓ Sua escolha':'✕ Escolhida'}</div>
+        </div>`;
+        const myFid=myFichas[0]||'';
+        return renderMemoriaCard(c,!isMestre&&!!myFid,myFid);
+      }).join('')}
+    </div>`;
+  }
+
+  // Modo normal: cada jogador vê apenas suas próprias cartas
+  const myRewards = myFichas.flatMap(fid => (msg.rewards[fid]||[]).map(c=>({c,fid})));
+  if(!myRewards.length && !isMestre) return '';
+
   return `<div style="background:rgba(139,115,85,.06);border:1px solid rgba(139,115,85,.3);padding:1rem;margin:.25rem 0">
-    <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase;margin-bottom:.75rem">⚘ Recompensa de Memória — ${esc(msg.author)}</div>
+    <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase;margin-bottom:.75rem">⚘ Recompensa — ${esc(msg.author)}</div>
     ${isMestre
       ? Object.entries(msg.rewards).map(([fid,cards])=>{
           const fname=(fichasCache[fid]||fichasExtCache[fid])?.nome||fid.slice(0,8);
@@ -1874,28 +2002,47 @@ async function chooseRewardCard(memId, fichaId){
   const fid = fichaId || Object.keys(fichasCache)[0];
   if(!fid){ toast('Ficha não encontrada','error'); return; }
 
-  // Acha a memória no rewards da última mensagem de reward
+  // Acha a memória no rewards da última mensagem de reward que contenha este memId
   const msgs = localChatMsgs[chatMesaId]||[];
-  let memData = null;
+  let memData = null, sourceMsg = null;
   for(const msg of [...msgs].reverse()){
-    if(msg.type==='reward' && msg.rewards[fid]){
-      memData = msg.rewards[fid].find(m=>m.id===memId);
-      if(memData) break;
+    if(msg.type==='reward'){
+      // Para unique:true, qualquer ficha pode ver as cartas
+      const pool = msg.unique
+        ? Object.values(msg.rewards)[0] // mesmas cartas para todos
+        : (msg.rewards[fid]||[]);
+      const found = pool?.find(m=>m.id===memId);
+      if(found){ memData=found; sourceMsg=msg; break; }
     }
   }
   if(!memData){ toast('Memória não encontrada','error'); return; }
 
+  // Verifica se já foi pega por outro jogador (unique mode)
+  if(sourceMsg?.unique && sourceMsg.taken?.[memId]){
+    toast('Esta memória já foi escolhida por outro jogador.','error');
+    return;
+  }
+
   const f = fichasCache[fid];
   if(!f){ toast('Esta não é sua ficha','error'); return; }
-
-  // Verifica limite de permanentes
-  const permLimit = f.permanent_limit||3;
-  const permUsed = (f.memories||[]).filter(m=>m.tipo==='permanente').length;
 
   const newMem = memoriaDbToFicha(memData);
   f.memories = [...(f.memories||[]), newMem];
   await saveFichaToDb(fid);
+
+  // Marca carta como tomada no banco (update da mensagem)
+  if(sourceMsg?.unique && sourceMsg.id){
+    const updatedPayload = {
+      ...sourceMsg,
+      taken: {...(sourceMsg.taken||{}), [memId]: currentUser.id}
+    };
+    await sb.from('chat_msgs').update({payload: updatedPayload}).eq('id', sourceMsg.id);
+    // Atualiza local
+    sourceMsg.taken = updatedPayload.taken;
+  }
+
   renderMems();
+  renderChat();
   closeM('m-reward');
   toast(`"${memData.nome}" adicionada à ficha!`,'success');
 }
@@ -1977,14 +2124,21 @@ async function initChat(mesaId){
       const msg={...payload.new.payload,id:payload.new.id,ts:payload.new.created_at};
       if(!localChatMsgs[chatMesaId].find(m=>m.id===msg.id)){
         localChatMsgs[chatMesaId].push(msg);
-        // Se for reward e for meu jogador, abre modal
         if(msg.type==='reward'){
           const myFichas=Object.keys(fichasCache);
-          const hasMyReward=myFichas.some(fid=>msg.rewards&&msg.rewards[fid]);
+          const hasMyReward=msg.unique
+            ? Object.values(msg.rewards||{}).length>0 && myFichas.length>0
+            : myFichas.some(fid=>msg.rewards&&msg.rewards[fid]);
           if(hasMyReward) openM('m-reward');
         }
         renderChat();
       }
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'chat_msgs',filter:`mesa_id=eq.${mesaId}`},payload=>{
+      // Atualiza mensagem existente (ex: taken cards em modo único)
+      const updated={...payload.new.payload,id:payload.new.id,ts:payload.new.created_at};
+      const idx=localChatMsgs[chatMesaId]?.findIndex(m=>m.id===updated.id);
+      if(idx>=0){localChatMsgs[chatMesaId][idx]=updated;renderChat();}
     })
     .subscribe();
 }
@@ -2028,11 +2182,13 @@ function renderChat(){
   }
   container.innerHTML=msgs.map(m=>{
     const time=new Date(m.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const canDel=isMesaMestre(currentMesaId);
+    const delBtn=canDel?`<button class="chat-msg-del" onclick="deleteChatMsg('${m.id}')" title="Apagar">✕</button>`:'';
     if(m.type==='text') return `<div class="chat-msg system">
-      <div class="chat-msg-header"><span class="chat-msg-author">${esc(m.author)}</span><span class="chat-msg-time">${time}</span></div>
+      <div class="chat-msg-header"><span class="chat-msg-author">${esc(m.author)}</span><span class="chat-msg-time">${time}</span>${delBtn}</div>
       <div class="chat-msg-text">${esc(m.text)}</div>
     </div>`;
-    if(m.type==='reward') return renderRewardMsg(m);
+    if(m.type==='reward') return `<div style="position:relative">${renderRewardMsg(m)}${canDel?`<button class="chat-msg-del" style="position:absolute;top:.5rem;right:.5rem;opacity:1" onclick="deleteChatMsg('${m.id}')">✕</button>`:''}</div>`;
     return '';
   }).join('');
   container.scrollTop=container.scrollHeight;
@@ -2130,6 +2286,275 @@ async function handleMesaFichaInsert(row){
     renderMesa(mesasCache[currentMesaId]);
     toast('Novo penitente entrou na mesa','success');
   }
+}
+
+// ════════════════════════════════════════
+// REWARD FILTERS
+// ════════════════════════════════════════
+const rewardFilters = {
+  rarities: new Set(['Comum','Incomum','Raro','Épico','Lendário']),
+  cats: new Set(['Arma','Magia','Habilidade']),
+  tipos: new Set(['ativa','passiva']),
+  costs: new Set(['foco','descanso','sem','pe']),
+};
+
+function toggleRewardFilter(btn){
+  btn.classList.toggle('on');
+  const f=btn.dataset.filter;
+  if(f.startsWith('cat:')){ const v=f.slice(4); rewardFilters.cats.has(v)?rewardFilters.cats.delete(v):rewardFilters.cats.add(v); }
+  else if(f.startsWith('tipo:')){ const v=f.slice(5); rewardFilters.tipos.has(v)?rewardFilters.tipos.delete(v):rewardFilters.tipos.add(v); }
+  else if(f.startsWith('cost:')){ const v=f.slice(5); rewardFilters.costs.has(v)?rewardFilters.costs.delete(v):rewardFilters.costs.add(v); }
+  else { rewardFilters.rarities.has(f)?rewardFilters.rarities.delete(f):rewardFilters.rarities.add(f); }
+}
+
+function applyRewardFilters(pool){
+  return pool.filter(m=>{
+    if(!rewardFilters.rarities.has(m.raridade)) return false;
+    if(!rewardFilters.cats.has(m.categoria)) return false;
+    const tipo=(m.habilidade?.tipo||'passiva').toLowerCase();
+    if(!rewardFilters.tipos.has(tipo)) return false;
+    const custo=(m.habilidade?.custo||'nenhum').toLowerCase();
+    let costKey='sem';
+    if(custo.includes('foco')) costKey='foco';
+    else if(custo.includes('descanso')) costKey='descanso';
+    else if(custo.includes('pe')||custo.includes('ponto de experiência')) costKey='pe';
+    if(!rewardFilters.costs.has(costKey)) return false;
+    return true;
+  });
+}
+
+// Override drawNCards to use filters
+function drawNCardsFiltered(n, luck){
+  if(!MEMORIAS_DB.length) return [];
+  const maxTier = 5; // filter tags control allowed rarities now
+  const pool = applyRewardFilters(MEMORIAS_DB);
+  const results=[], usedIds=new Set();
+  let attempts=0;
+  while(results.length<n&&attempts<300){
+    attempts++;
+    const available=pool.filter(m=>!usedIds.has(m.id));
+    if(!available.length) break;
+    const card=weightedRandom(available,luck,maxTier);
+    if(card&&!usedIds.has(card.id)){results.push(card);usedIds.add(card.id);}
+  }
+  return results;
+}
+
+// Stored last master draw for "publish" button
+let lastMasterDraw = [];
+
+// ════════════════════════════════════════
+// PUBLISH MASTER DRAW TO PLAYERS
+// ════════════════════════════════════════
+async function publishMasterDraw(){
+  if(!lastMasterDraw.length){toast('Nenhuma carta para publicar','error');return;}
+  closeM('m-master-draw');
+  const m=mesasCache[currentMesaId];if(!m)return;
+  const targetFichas=rewardState.selectedPlayers.size>0?[...rewardState.selectedPlayers]:m.fichas;
+  pendingRewards={};
+  for(const fid of targetFichas) pendingRewards[fid]=lastMasterDraw;
+  const author=currentUser?.user_metadata?.nome||currentUser?.email?.split('@')[0]||'Mestre';
+  const payload={type:'reward',author,ts:new Date().toISOString(),rewards:pendingRewards};
+  await sb.from('chat_msgs').insert({mesa_id:currentMesaId,user_id:currentUser.id,payload});
+  toast('Recompensas publicadas!','success');
+}
+
+// ════════════════════════════════════════
+// MANUAL MEMORY PICKER
+// ════════════════════════════════════════
+let pickerSelected = new Set(); // selected mem ids
+
+function renderMemPicker(){
+  const search=(document.getElementById('picker-search')?.value||'').toLowerCase();
+  const list=document.getElementById('picker-list');
+  if(!list)return;
+  const filtered=MEMORIAS_DB.filter(m=>
+    !search||m.nome.toLowerCase().includes(search)||
+    (m.habilidade?.nome||'').toLowerCase().includes(search)
+  );
+  list.innerHTML=filtered.slice(0,50).map(m=>{
+    const sel=pickerSelected.has(m.id);
+    const rarColors={'Comum':'#888','Incomum':'#7aadcc','Raro':'#a070cc','Épico':'#e07040','Lendário':'#e0c040'};
+    const col=rarColors[m.raridade]||'#888';
+    return `<div style="padding:.6rem .85rem;border:1px solid ${sel?col+'88':'var(--border)'};background:${sel?`${col}11`:'transparent'};cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.75rem;transition:all .15s" onclick="togglePickerMem('${m.id}')">
+      <div>
+        <span style="font-family:'Cinzel',serif;font-size:.82rem;color:var(--white)">${esc(m.nome)}</span>
+        <span style="font-family:'Cinzel',serif;font-size:.48rem;color:${col};border:1px solid ${col}66;padding:.1rem .35rem;margin-left:.4rem">${esc(m.raridade)}</span>
+        ${m.habilidade?`<div style="font-size:.78rem;color:var(--text-dim);font-style:italic;margin-top:.15rem">${esc(m.habilidade.nome)}</div>`:''}
+      </div>
+      <span style="font-size:1rem;color:${sel?col:'var(--text-muted)'}">${sel?'✓':'+'}</span>
+    </div>`;
+  }).join('');
+  // Show selected chips
+  const selDiv=document.getElementById('picker-selected');
+  if(selDiv){
+    selDiv.innerHTML=[...pickerSelected].map(id=>{
+      const m=MEMORIAS_DB.find(x=>x.id===id);if(!m)return '';
+      return `<span style="background:var(--card2);border:1px solid var(--border2);font-family:'Cinzel',serif;font-size:.55rem;padding:.2rem .5rem;color:var(--text-dim);cursor:pointer" onclick="togglePickerMem('${id}')">${esc(m.nome)} ✕</span>`;
+    }).join('');
+  }
+}
+
+function togglePickerMem(id){
+  pickerSelected.has(id)?pickerSelected.delete(id):pickerSelected.add(id);
+  renderMemPicker();
+}
+
+async function sendPickerReward(){
+  if(!pickerSelected.size){toast('Selecione ao menos uma memória','error');return;}
+  const m=mesasCache[currentMesaId];if(!m)return;
+  const cards=MEMORIAS_DB.filter(x=>pickerSelected.has(x.id));
+  const targetFichas=rewardState.selectedPlayers.size>0?[...rewardState.selectedPlayers]:m.fichas;
+  const rewards={};
+  for(const fid of targetFichas) rewards[fid]=cards;
+  const author=currentUser?.user_metadata?.nome||currentUser?.email?.split('@')[0]||'Mestre';
+  const payload={type:'reward',author,ts:new Date().toISOString(),rewards,unique:true}; // unique=true = 1 jogador por card
+  await sb.from('chat_msgs').insert({mesa_id:currentMesaId,user_id:currentUser.id,payload});
+  pickerSelected.clear();
+  closeM('m-mem-picker');
+  toast('Memórias enviadas!','success');
+}
+
+// ════════════════════════════════════════
+// DELETE CHAT MSG (mestre only)
+// ════════════════════════════════════════
+async function deleteChatMsg(msgId){
+  if(!isMesaMestre(currentMesaId)) return;
+  const {error}=await sb.from('chat_msgs').delete().eq('id',msgId);
+  if(error){toast('Erro ao apagar','error');return;}
+  if(localChatMsgs[chatMesaId]){
+    localChatMsgs[chatMesaId]=localChatMsgs[chatMesaId].filter(m=>m.id!==msgId);
+    renderChat();
+  }
+}
+
+// ════════════════════════════════════════
+// LIBRARY SCREEN
+// ════════════════════════════════════════
+const libFilters={rarities:new Set(['Comum','Incomum','Raro','Épico','Lendário']),cats:new Set(['Arma','Magia','Habilidade']),tipos:new Set(['ativa','passiva']),costs:new Set(['foco','descanso','sem','pe'])};
+
+function showLibrary(){
+  if(!MEMORIAS_DB.length) loadMemoriasDB().then(renderLibrary);
+  renderLibrary();
+  showScr('library-screen');
+}
+
+function toggleLibFilter(btn){
+  btn.classList.toggle('on');
+  const f=btn.dataset.filter;
+  if(f.startsWith('r:')){ const v=f.slice(2); libFilters.rarities.has(v)?libFilters.rarities.delete(v):libFilters.rarities.add(v); }
+  else if(f.startsWith('c:')){ const v=f.slice(2); libFilters.cats.has(v)?libFilters.cats.delete(v):libFilters.cats.add(v); }
+  else if(f.startsWith('t:')){ const v=f.slice(2); libFilters.tipos.has(v)?libFilters.tipos.delete(v):libFilters.tipos.add(v); }
+  else if(f.startsWith('cost:')){ const v=f.slice(5); libFilters.costs.has(v)?libFilters.costs.delete(v):libFilters.costs.add(v); }
+  renderLibrary();
+}
+
+function renderLibrary(){
+  const search=(document.getElementById('lib-search')?.value||'').toLowerCase();
+  const grid=document.getElementById('lib-grid');
+  const countEl=document.getElementById('lib-count');
+  if(!grid)return;
+  const filtered=MEMORIAS_DB.filter(m=>{
+    if(!libFilters.rarities.has(m.raridade)) return false;
+    if(!libFilters.cats.has(m.categoria)) return false;
+    const tipo=(m.habilidade?.tipo||'passiva').toLowerCase();
+    if(!libFilters.tipos.has(tipo)) return false;
+    const custo=(m.habilidade?.custo||'nenhum').toLowerCase();
+    let ck='sem';
+    if(custo.includes('foco')) ck='foco';
+    else if(custo.includes('descanso')) ck='descanso';
+    else if(custo.includes('pe')) ck='pe';
+    if(!libFilters.costs.has(ck)) return false;
+    if(search&&!m.nome.toLowerCase().includes(search)&&!(m.habilidade?.nome||'').toLowerCase().includes(search)&&!(m.habilidade?.descricao||'').toLowerCase().includes(search)) return false;
+    return true;
+  });
+  if(countEl) countEl.textContent=`${filtered.length} memória(s) encontrada(s)`;
+  const rarColors={'Comum':'#888','Incomum':'#7aadcc','Raro':'#a070cc','Épico':'#e07040','Lendário':'#e0c040'};
+  grid.innerHTML=filtered.map(m=>{
+    const col=rarColors[m.raridade]||'#888';
+    return `<div class="lib-card" style="border-color:${col}33">
+      <div class="lib-card-actions">
+        <button class="lib-card-btn" onclick="openLibEditModal('${m.id}')">✎</button>
+        <button class="lib-card-btn del" onclick="libDeleteMem('${m.id}')">✕</button>
+      </div>
+      <div style="margin-right:3.5rem">
+        <div style="font-family:'Cinzel',serif;font-size:.88rem;color:var(--white);margin-bottom:.3rem">${esc(m.nome)}</div>
+        <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.5rem">
+          <span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:${col};border:1px solid ${col}66;padding:.12rem .4rem">${esc(m.raridade)}</span>
+          <span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);padding:.12rem .4rem">${esc(m.categoria)}</span>
+          <span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2)">${esc(m.atributo)} +${m.bonus_atributo}</span>
+        </div>
+        ${m.habilidade?`<div style="background:rgba(255,255,255,.02);border-left:2px solid ${col}55;padding:.35rem .6rem">
+          <div style="font-family:'Cinzel',serif;font-size:.75rem;color:var(--white);font-weight:600;margin-bottom:.1rem">${esc(m.habilidade.nome)} <span style="font-size:.45rem;color:var(--text-muted);font-weight:400;text-transform:uppercase;letter-spacing:.1em">${esc(m.habilidade.tipo)}</span></div>
+          <div style="font-size:.82rem;color:var(--text-dim);font-style:italic;line-height:1.5">${esc(m.habilidade.descricao)}</div>
+          ${m.habilidade.custo&&m.habilidade.custo!=='nenhum'?`<div style="font-size:.68rem;color:var(--text-muted);margin-top:.2rem">Custo: ${esc(m.habilidade.custo)}</div>`:''}
+        </div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let libEditId=null;
+function openLibNewModal(){
+  libEditId=null;
+  document.getElementById('lib-edit-title').textContent='✛ Nova Memória';
+  document.getElementById('le-save-btn').textContent='Adicionar';
+  ['le-nome','le-hab-nome','le-hab-custo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('le-hab-desc').value='';
+  document.getElementById('le-raridade').value='Comum';
+  document.getElementById('le-categoria').value='Habilidade';
+  document.getElementById('le-hab-tipo').value='passiva';
+  openM('m-lib-edit');
+}
+function openLibEditModal(id){
+  const m=MEMORIAS_DB.find(x=>x.id===id);if(!m)return;
+  libEditId=id;
+  document.getElementById('lib-edit-title').textContent='✛ Editar Memória';
+  document.getElementById('le-save-btn').textContent='Salvar';
+  document.getElementById('le-nome').value=m.nome||'';
+  document.getElementById('le-raridade').value=m.raridade||'Comum';
+  document.getElementById('le-categoria').value=m.categoria||'Habilidade';
+  document.getElementById('le-hab-nome').value=m.habilidade?.nome||'';
+  document.getElementById('le-hab-tipo').value=m.habilidade?.tipo||'passiva';
+  document.getElementById('le-hab-custo').value=m.habilidade?.custo||'nenhum';
+  document.getElementById('le-hab-desc').value=m.habilidade?.descricao||'';
+  openM('m-lib-edit');
+}
+function saveLibEntry(){
+  const nome=document.getElementById('le-nome').value.trim();if(!nome){toast('Nome obrigatório','error');return;}
+  const entry={
+    id:libEditId||('custom_'+Date.now()),
+    nome,
+    raridade:document.getElementById('le-raridade').value,
+    tipo_memoria:'Rasa',
+    atributo:'',bonus_atributo:0,
+    categoria:document.getElementById('le-categoria').value,
+    habilidade:{
+      nome:document.getElementById('le-hab-nome').value.trim(),
+      tipo:document.getElementById('le-hab-tipo').value,
+      custo:document.getElementById('le-hab-custo').value.trim()||'nenhum',
+      descricao:document.getElementById('le-hab-desc').value.trim(),
+    }
+  };
+  if(libEditId){
+    const idx=MEMORIAS_DB.findIndex(x=>x.id===libEditId);
+    if(idx>=0) MEMORIAS_DB[idx]=entry;
+  } else {
+    MEMORIAS_DB.push(entry);
+  }
+  closeM('m-lib-edit');
+  renderLibrary();
+  toast(libEditId?'Memória atualizada':'Memória adicionada','success');
+  // Note: changes are in-memory only — user must manually update memorias.json
+  // Show note about this
+  setTimeout(()=>toast('Lembre de atualizar memorias.json no repositório!',''),2500);
+}
+function libDeleteMem(id){
+  const m=MEMORIAS_DB.find(x=>x.id===id);if(!m)return;
+  if(!confirm(`Remover "${m.nome}"?\n\nEsta alteração é temporária até você atualizar o memorias.json.`))return;
+  MEMORIAS_DB=MEMORIAS_DB.filter(x=>x.id!==id);
+  renderLibrary();
+  toast('Memória removida (sessão atual)','success');
 }
 
 // ════════════════════════════════════════
