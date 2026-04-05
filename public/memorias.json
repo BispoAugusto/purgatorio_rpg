@@ -1,0 +1,499 @@
+{
+  "memorias": [
+    {
+      "id": "001",
+      "nome": "Adaga Enferrujada do Penitente",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Golpe Sujo",
+        "tipo": "passiva",
+        "descricao": "Seus ataques corpo a corpo causam +1 de dano.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "002",
+      "nome": "Escudo de Ossos Quebrados",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Defesa Frágil",
+        "tipo": "passiva",
+        "descricao": "Você ganha +2 de vida máxima.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "003",
+      "nome": "Flecha do Vento Esquecido",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Agilidade",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Tiro Rápido",
+        "tipo": "ativa",
+        "descricao": "Uma vez por andar, ataque duas vezes com arma à distância.",
+        "custo": "1 uso por descanso"
+      }
+    },
+    {
+      "id": "004",
+      "nome": "Orbe de Foco Fraco",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Chama Pálida",
+        "tipo": "ativa",
+        "descricao": "Causa 3 de dano mágico.",
+        "custo": "1 Foco"
+      }
+    },
+    {
+      "id": "005",
+      "nome": "Anel do Observador",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Pressentimento",
+        "tipo": "passiva",
+        "descricao": "+1 em testes de Percepção.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "006",
+      "nome": "Besta de Precisão Enferrujada",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Tiro Certeiro",
+        "tipo": "passiva",
+        "descricao": "Ignora 1 ponto de defesa em ataques à distância.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "007",
+      "nome": "Pó de Eco Fugaz",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Agilidade",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Desvio Rápido",
+        "tipo": "ativa",
+        "descricao": "Evita completamente um ataque uma vez por Covil.",
+        "custo": "1 uso por descanso"
+      }
+    },
+    {
+      "id": "008",
+      "nome": "Carta do Louco",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Sorte do Louco",
+        "tipo": "passiva",
+        "descricao": "Uma vez por andar, rerole um teste falho.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "009",
+      "nome": "Martelo de Ferro Rachado",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Golpe Pesado",
+        "tipo": "passiva",
+        "descricao": "Seus ataques causam +1 dano contra inimigos grandes.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "010",
+      "nome": "Manto Surrado do Penitente",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Resistência",
+        "tipo": "passiva",
+        "descricao": "Reduz 1 de dano de qualquer fonte.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "011",
+      "nome": "Lâmina do Julgamento",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Julgamento Divino",
+        "tipo": "ativa",
+        "descricao": "Próximo ataque causa dano dobrado.",
+        "custo": "1 uso por descanso"
+      }
+    },
+    {
+      "id": "012",
+      "nome": "Véu da Profecia",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Visão do Destino",
+        "tipo": "passiva",
+        "descricao": "Olhe as 2 primeiras tiles do saco antes de puxar.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "013",
+      "nome": "Orbe do Fogo Sombrio",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 2,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Explosão Sombria",
+        "tipo": "ativa",
+        "descricao": "Causa 6 de dano mágico em área.",
+        "custo": "2 Foco"
+      }
+    },
+    {
+      "id": "014",
+      "nome": "Coroa dos Esquecidos",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Memória de Dor",
+        "tipo": "passiva",
+        "descricao": "Ao perder uma Rasa por morte, recupere 1 Rasa aleatória.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "015",
+      "nome": "Arco do Vento Fantasma",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Agilidade",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Tiro Fantasma",
+        "tipo": "ativa",
+        "descricao": "Ataque à distância ignora cobertura uma vez por andar.",
+        "custo": "1 uso por descanso"
+      }
+    },
+    {
+      "id": "016",
+      "nome": "Sussurro do Traidor",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Traição do Destino",
+        "tipo": "ativa",
+        "descricao": "Em ramificação: +1 Tesouro (50% chance de +1 Covil).",
+        "custo": "1 uso por andar"
+      }
+    },
+    {
+      "id": "017",
+      "nome": "Escudo de Eco Eterno",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Eco Protetor",
+        "tipo": "passiva",
+        "descricao": "Reduz 2 de dano uma vez por Covil.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "018",
+      "nome": "Pistola do Penitente Arrependido",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Tiro de Graça",
+        "tipo": "ativa",
+        "descricao": "Ataque à distância causa +3 dano uma vez por descanso.",
+        "custo": "1 uso por descanso"
+      }
+    },
+    {
+      "id": "019",
+      "nome": "Anel de Foco Reservado",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Reserva de Mana",
+        "tipo": "passiva",
+        "descricao": "Ganhe +1 Foco máximo.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "020",
+      "nome": "Máscara da Mentira",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Engano",
+        "tipo": "passiva",
+        "descricao": "+2 em testes de Enganação ou Intimidação.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "021",
+      "nome": "Olho da Cartomante",
+      "raridade": "Raro",
+      "tipo_memoria": "Rasa",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 2,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Visão Verdadeira",
+        "tipo": "passiva",
+        "descricao": "Sabe se uma tile tem Armadilha antes de entrar.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "022",
+      "nome": "Fúria do Penitente",
+      "raridade": "Raro",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 2,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Fúria Final",
+        "tipo": "ativa",
+        "descricao": "Ao entrar no Boss, +3 dano até o fim.",
+        "custo": "1 uso por andar"
+      }
+    },
+    {
+      "id": "023",
+      "nome": "Cetro do Vazio",
+      "raridade": "Raro",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 2,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Drenar Essência",
+        "tipo": "ativa",
+        "descricao": "8 dano mágico e recupera 2 Foco.",
+        "custo": "3 Foco"
+      }
+    },
+    {
+      "id": "024",
+      "nome": "Lâmina do Juízo Final",
+      "raridade": "Raro",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 2,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Golpe do Juízo",
+        "tipo": "ativa",
+        "descricao": "Próximo ataque é crítico automático.",
+        "custo": "2 usos por descanso"
+      }
+    },
+    {
+      "id": "025",
+      "nome": "Manto das Sombras Eternas",
+      "raridade": "Raro",
+      "tipo_memoria": "Rasa",
+      "atributo": "Agilidade",
+      "bonus_atributo": 2,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Passo das Sombras",
+        "tipo": "ativa",
+        "descricao": "Ignore uma sala inteira uma vez por andar.",
+        "custo": "1 uso por andar"
+      }
+    },
+    {
+      "id": "026",
+      "nome": "Anel da Última Luz",
+      "raridade": "Raro",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 2,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Luz Final",
+        "tipo": "passiva",
+        "descricao": "Ao perder última Permanente, não morre de vez.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "027",
+      "nome": "Núcleo do Destino Gravado",
+      "raridade": "Épico",
+      "tipo_memoria": "Permanente",
+      "atributo": "Todos",
+      "bonus_atributo": 2,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Destino Reescrito",
+        "tipo": "ativa",
+        "descricao": "Uma vez por masmorra, rerole qualquer tile.",
+        "custo": "1 uso por masmorra"
+      }
+    },
+    {
+      "id": "028",
+      "nome": "Carta do Guardião Eterno",
+      "raridade": "Épico",
+      "tipo_memoria": "Permanente",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 3,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Guardião das Cartas",
+        "tipo": "passiva",
+        "descricao": "Todas Rasas equipadas ganham +1 atributo.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "029",
+      "nome": "Cetro do Vazio Absoluto",
+      "raridade": "Épico",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 3,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Vazio Devorador",
+        "tipo": "ativa",
+        "descricao": "12 dano mágico em todos inimigos da sala.",
+        "custo": "4 Foco"
+      }
+    },
+    {
+      "id": "030",
+      "nome": "Lâmina do Purgatório",
+      "raridade": "Épico",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 3,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Purgar o Pecado",
+        "tipo": "ativa",
+        "descricao": "+5 dano e remove 1 Corrupção Leve.",
+        "custo": "2 usos por descanso"
+      }
+    },
+    {
+      "id": "031",
+      "nome": "Máscara do Esquecimento",
+      "raridade": "Épico",
+      "tipo_memoria": "Rasa",
+      "atributo": "Agilidade",
+      "bonus_atributo": 3,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Esquecer a Dor",
+        "tipo": "passiva",
+        "descricao": "Ignore 1 nível de Exaustão.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "032",
+      "nome": "Núcleo da Última Esperança",
+      "raridade": "Lendário",
+      "tipo_memoria": "Núcleo",
+      "atributo": "Todos",
+      "bonus_atributo": 3,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Esperança Eterna",
+        "tipo": "passiva",
+        "descricao": "Ao morrer, reviva com metade da vida sem perder Núcleo.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "033",
+      "nome": "Carta do Fim do Mundo",
+      "raridade": "Lendário",
+      "tipo_memoria": "Rasa",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 4,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Apocalipse Pessoal",
+        "tipo": "ativa",
+        "descricao": "Revele todas tiles restantes e pule uma.",
+        "custo": "3 usos por masmorra"
+      }
+    }
+  ]
+}
