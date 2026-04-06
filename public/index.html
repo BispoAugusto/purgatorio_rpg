@@ -338,10 +338,10 @@
   .combat-p-name{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.08em;color:var(--text-dim);text-transform:uppercase;}
   .combat-p-name.dead{opacity:.3;text-decoration:line-through;}
   .combat-p-name.player{color:var(--gold2);}
-  .combat-p-status{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .6rem;border-radius:3px;border:1px solid var(--border);cursor:pointer;transition:all .12s;user-select:none;}
-  .combat-p-status.acted{border-color:var(--accent2);color:var(--accent2);background:rgba(231,76,60,.12);}
-  .combat-p-status.not-acted{border-color:var(--border);color:var(--text-muted);}
-  .combat-p-status.not-acted:hover{border-color:var(--text-dim);color:var(--text);}
+  .combat-p-status{font-family:'Cinzel',serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.35rem .75rem;border-radius:3px;border:1px solid var(--border);cursor:pointer;transition:all .12s;user-select:none;}
+  .combat-p-status.acted{border-color:#4cae4c;color:#6ae078;background:rgba(104,180,130,.15);box-shadow:0 0 8px rgba(106,224,120,.1);}
+  .combat-p-status.not-acted{border-color:#a05050;color:#e07070;background:rgba(199,57,57,.08);}
+  .combat-p-status.not-acted:hover{border-color:#c07070;color:#f09090;}
   .combat-all-done{margin-top:.45rem;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#6ae078;text-align:center;}
   /* ── ENEMY CARDS (revealed to players) ── */
   .enemy-public{margin-top:.75rem;}
@@ -2251,29 +2251,12 @@ function handleIncomingEncState(msg){
 // Recebe atualização de combate do mestre
 function handleIncomingCombat(msg){
   combatRound=msg.round||combatRound;
-  if(msg.actions){
-    msg.actions.forEach(a=>{
-      if(combatActions[a.id]){
-        combatActions[a.id].acted=a.acted;
-      }
-    });
-  }
-  // Show combat panel for all when encounter is revealed
   document.getElementById('combat-panel').style.display='block';
-  // Rebuild participants (enemies only, keep player states)
-  const currentPlayers={};
-  Object.entries(combatActions).forEach(([id,a])=>{if(a.type==='player')currentPlayers[id]={...a};});
-  combatActions={};
-  // Add living enemies
-  encCards.filter(c=>c.vida>0).forEach(c=>{
-    combatActions['e-'+c.cid]={name:c.ini.nome,type:'enemy',acted:false,alive:true};
-  });
-  // Merge player back with their acted states
-  Object.entries(currentPlayers).forEach(([id,a])=>{combatActions[id]=a;});
-  const currentEnm=encCards.filter(c=>c.vida>0).map(c=>'e-'+c.cid);
+  // Accept master's state as source of truth
   if(msg.actions){
-    msg.actions.filter(a=>currentEnm.includes(a.id)).forEach(a=>{
-      if(combatActions[a.id])combatActions[a.id].acted=a.acted;
+    combatActions={};
+    msg.actions.forEach(a=>{
+      combatActions[a.id]={name:a.name,type:a.type,acted:a.acted,alive:a.alive};
     });
   }
   renderCombat();
@@ -2314,13 +2297,19 @@ function toggleCombatAction(id){
   if(!a||!a.alive)return;
   a.acted=!a.acted;
   renderCombat();
-  buildCombatParticipants();
   broadcastCombat();
 }
 
 function nextCombatRound(){
   const allActed=Object.values(combatActions).filter(a=>a.alive).every(a=>a.acted);
   if(!allActed)return;
+  combatRound++;
+  Object.values(combatActions).forEach(a=>a.acted=false);
+  renderCombat();
+  broadcastCombat();
+}
+
+function forceNextRound(){
   combatRound++;
   Object.values(combatActions).forEach(a=>a.acted=false);
   renderCombat();
@@ -2340,14 +2329,21 @@ function renderCombat(){
     const cls=a.type==='player'?'player':'';
     const deadCls=!a.alive?'dead':'';
     const actedCls=a.acted?'acted':'not-acted';
-    const label=a.acted?'Ag ✓':'—';
+    const label=a.acted?'✓ Agiu':'✗ Falta';
+    const isM=currentMesaId&&isMesaMestre(currentMesaId);
+    const canClick=isM?'style="cursor:pointer"':'style="cursor:default"';
+    const click=isM?`onclick="toggleCombatAction('${id}')"`:'';
+    const dotColor=a.acted?'#6ae078':'#e07070';
     return `<div class="combat-participant">
-      <span class="combat-p-name ${cls} ${deadCls}">${esc(a.name)}</span>
-      <span class="combat-p-status ${actedCls}" onclick="toggleCombatAction('${id}')">${label}</span>
+      <span class="combat-p-name ${cls} ${deadCls}"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${dotColor};margin-right:5px;vertical-align:middle"></span>${esc(a.name)}</span>
+      <span class="combat-p-status ${actedCls}" ${click} ${canClick}>${label}</span>
     </div>`;
   }).join('');
   if(notActed.length===0&&alive.length>0){
     body.innerHTML+=`<div class="combat-all-done">✓ Todos agiram — Próxima rodada disponível</div>`;
+  }
+  if(notActed.length>0&&notActed.length<alive.length&&alive.length>0){
+    body.innerHTML+=`<button class="enc-btn-main" style="margin-top:.5rem" onclick="forceNextRound()">Forçar Próxima Rodada (${notActed.length} falto)</button>`;
   }
 }
 
@@ -2822,6 +2818,16 @@ async function initChat(mesaId){
     localChatMsgs[mesaId]=data.map(r=>({...r.payload,id:r.id,ts:r.created_at}));
   }
   renderChat();
+
+  // Restore encounter and combat state from history (survives F5)
+  let lastEnc={}, lastCombatMsg=null;
+  const msgs=localChatMsgs[mesaId]||[];
+  for(const m of msgs){
+    if(m.type==='enc-state') lastEnc=m;
+    if(m.type==='combat-state') lastCombatMsg=m;
+  }
+  if(lastEnc){ handleIncomingEncState(lastEnc); }
+  if(lastCombatMsg){ handleIncomingCombat(lastCombatMsg); }
   if(chatChannel){sb.removeChannel(chatChannel);}
   chatChannel=sb.channel(`chat-${mesaId}`)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_msgs',filter:`mesa_id=eq.${mesaId}`},payload=>{
