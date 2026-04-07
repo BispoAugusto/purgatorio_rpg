@@ -2,67 +2,262 @@
   "memorias": [
     {
       "id": "001",
-      "nome": "Adaga Enferrujada do Penitente",
+      "nome": "Espinhos Vermelhos",
       "raridade": "Comum",
       "tipo_memoria": "Rasa",
       "atributo": "Potência",
       "bonus_atributo": 1,
       "categoria": "Arma",
       "habilidade": {
-        "nome": "Golpe Sujo",
-        "tipo": "passiva",
-        "descricao": "Seus ataques corpo a corpo causam +1 de dano.",
-        "custo": "nenhum"
+        "nome": "Marca do Abismo",
+        "tipo": "ativa",
+        "descricao": "Aplica Marca em um alvo (Curta ou Média).",
+        "custo": "1 PE"
       }
     },
     {
       "id": "002",
-      "nome": "Escudo de Ossos Quebrados",
+      "nome": "Lâmina Enferrujada",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Ferida Profunda",
+        "tipo": "ativa",
+        "descricao": "Aplica Ferida em um alvo que você acertar com ataque físico (Curta).",
+        "custo": "1 PE"
+      }
+    },
+    {
+      "id": "003",
+      "nome": "Garra Vampírica",
       "raridade": "Comum",
       "tipo_memoria": "Rasa",
       "atributo": "Resiliência",
       "bonus_atributo": 1,
       "categoria": "Arma",
       "habilidade": {
-        "nome": "Defesa Frágil",
-        "tipo": "passiva",
-        "descricao": "Você ganha +2 de vida máxima.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "003",
-      "nome": "Flecha do Vento Esquecido",
-      "raridade": "Comum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Agilidade",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Tiro Rápido",
+        "nome": "Vampirismo",
         "tipo": "ativa",
-        "descricao": "Uma vez por andar, ataque duas vezes com arma à distância.",
-        "custo": "1 uso por descanso"
+        "descricao": "Ataque físico (Curta). Se acertar, recupera 3 de vida.",
+        "custo": "1 PE"
       }
     },
     {
       "id": "004",
-      "nome": "Orbe de Foco Fraco",
+      "nome": "Investida Brutal",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Investida",
+        "tipo": "ativa",
+        "descricao": "Mova-se até o alvo (máx Média), ataque. Se acertar, aplica Imobilizado.",
+        "custo": "1 uso por Combate"
+      }
+    },
+    {
+      "id": "005",
+      "nome": "Arma Cruel",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Crueldade",
+        "tipo": "passiva",
+        "descricao": "Seus ataques em Curta causam +1 de dano fixo.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "006",
+      "nome": "Corrente Sombria",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Corrente do Abismo",
+        "tipo": "ativa",
+        "descricao": "Puxa um alvo 1 nível de distância e aplica Marca (Longa).",
+        "custo": "1 uso por Combate"
+      }
+    },
+    {
+      "id": "007",
+      "nome": "Disparo Vigia",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Iluminação",
+        "tipo": "ativa",
+        "descricao": "Aplica Iluminado em um alvo (Longa).",
+        "custo": "1 PE"
+      }
+    },
+    {
+      "id": "008",
+      "nome": "Arco do Guardião",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Precisão",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Tiro Preciso",
+        "tipo": "ativa",
+        "descricao": "Ataque à distância (Média ou Longa).",
+        "custo": "1 PE"
+      }
+    },
+    {
+      "id": "009",
+      "nome": "Míssil Mágico",
       "raridade": "Comum",
       "tipo_memoria": "Rasa",
       "atributo": "Inteligência",
       "bonus_atributo": 1,
       "categoria": "Magia",
       "habilidade": {
-        "nome": "Chama Pálida",
+        "nome": "Míssil",
         "tipo": "ativa",
         "descricao": "Causa 3 de dano mágico em um alvo (Longa).",
         "custo": "1 Foco"
       }
     },
     {
-      "id": "005",
-      "nome": "Anel do Observador",
+      "id": "010",
+      "nome": "Toque Congelante",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Congelamento",
+        "tipo": "ativa",
+        "descricao": "Causa 2 dano e aplica Imobilizado (Curta).",
+        "custo": "2 Foco"
+      }
+    },
+    {
+      "id": "011",
+      "nome": "Bola de Fogo",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Explosão Flamejante",
+        "tipo": "ativa",
+        "descricao": "Causa 3 dano em área Curta (alvos na Média).",
+        "custo": "2 Foco"
+      }
+    },
+    {
+      "id": "012",
+      "nome": "Sussurro do Esquecimento",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Medo",
+        "tipo": "ativa",
+        "descricao": "Aplica Medo em um alvo (Média).",
+        "custo": "1 Foco"
+      }
+    },
+    {
+      "id": "013",
+      "nome": "Purificar",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Purificação",
+        "tipo": "ativa",
+        "descricao": "Remove 1 debuff de um aliado (Média).",
+        "custo": "1 Foco"
+      }
+    },
+    {
+      "id": "014",
+      "nome": "Seta de Luz",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Iluminação Divina",
+        "tipo": "ativa",
+        "descricao": "Aplica Iluminado em um alvo (Longa).",
+        "custo": "1 Foco"
+      }
+    },
+    {
+      "id": "015",
+      "nome": "Escudo Protetor",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Proteção",
+        "tipo": "ativa",
+        "descricao": "Dá 4 Proteção (vida temporária) a si ou a um aliado (Média).",
+        "custo": "1 PE"
+      }
+    },
+    {
+      "id": "016",
+      "nome": "Toque Gentil",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Sabedoria",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Cura Leve",
+        "tipo": "ativa",
+        "descricao": "Cura 3 de vida e remove 1 PE de si ou de um aliado (toque).",
+        "custo": "1 uso por Descanso"
+      }
+    },
+    {
+      "id": "017",
+      "nome": "Mata-Gigantes",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Mata Gigantes",
+        "tipo": "passiva",
+        "descricao": "Seus ataques causam +1 dano contra chefes ou inimigos grandes.",
+        "custo": "nenhum"
+      }
+    },
+    {
+      "id": "018",
+      "nome": "Orbe do Agouro",
       "raridade": "Comum",
       "tipo_memoria": "Rasa",
       "atributo": "Sabedoria",
@@ -70,234 +265,265 @@
       "categoria": "Habilidade",
       "habilidade": {
         "nome": "Pressentimento",
-        "tipo": "passiva",
-        "descricao": "+1 em testes de Percepção.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "006",
-      "nome": "Besta de Precisão Enferrujada",
-      "raridade": "Comum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Precisão",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Tiro Certeiro",
-        "tipo": "passiva",
-        "descricao": "Ignora 1 ponto de defesa em ataques à distância.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "007",
-      "nome": "Pó de Eco Fugaz",
-      "raridade": "Comum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Agilidade",
-      "bonus_atributo": 1,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Desvio Rápido",
         "tipo": "ativa",
-        "descricao": "Evita completamente um ataque uma vez por Covil.",
-        "custo": "1 uso por descanso"
-      }
-    },
-    {
-      "id": "008",
-      "nome": "Carta do Louco",
-      "raridade": "Comum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Inteligência",
-      "bonus_atributo": 1,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Sorte do Louco",
-        "tipo": "passiva",
-        "descricao": "Uma vez por andar, rerole um teste falho.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "009",
-      "nome": "Martelo de Ferro Rachado",
-      "raridade": "Comum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Potência",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Golpe Pesado",
-        "tipo": "passiva",
-        "descricao": "Seus ataques causam +1 dano contra inimigos grandes ou chefes.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "010",
-      "nome": "Manto Surrado do Penitente",
-      "raridade": "Comum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Resiliência",
-      "bonus_atributo": 1,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Resistência",
-        "tipo": "passiva",
-        "descricao": "Reduz 1 de dano de qualquer fonte.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "011",
-      "nome": "Lâmina do Julgamento",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Potência",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Julgamento Divino",
-        "tipo": "ativa",
-        "descricao": "Próximo ataque causa dano dobrado.",
-        "custo": "1 uso por descanso"
-      }
-    },
-    {
-      "id": "012",
-      "nome": "Véu da Profecia",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Sabedoria",
-      "bonus_atributo": 1,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Visão do Destino",
-        "tipo": "passiva",
-        "descricao": "Olhe as 2 primeiras tiles do saco antes de puxar.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "013",
-      "nome": "Orbe do Fogo Sombrio",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Inteligência",
-      "bonus_atributo": 2,
-      "categoria": "Magia",
-      "habilidade": {
-        "nome": "Explosão Sombria",
-        "tipo": "ativa",
-        "descricao": "Causa 6 de dano mágico em área (alvos na Média).",
-        "custo": "2 Foco"
-      }
-    },
-    {
-      "id": "014",
-      "nome": "Coroa dos Esquecidos",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Resiliência",
-      "bonus_atributo": 1,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Memória de Dor",
-        "tipo": "passiva",
-        "descricao": "Ao perder uma memória rasa por morte, recupere 1 memória rasa aleatória da pool descartada.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "015",
-      "nome": "Arco do Vento Fantasma",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Agilidade",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Tiro Fantasma",
-        "tipo": "ativa",
-        "descricao": "Ataque à distância ignora cobertura e DT uma vez por andar.",
-        "custo": "1 uso por descanso"
-      }
-    },
-    {
-      "id": "016",
-      "nome": "Sussurro do Traidor",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Precisão",
-      "bonus_atributo": 1,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Traição do Destino",
-        "tipo": "ativa",
-        "descricao": "Em ramificação: +1 Tesouro (50% chance de +1 Covil).",
-        "custo": "1 uso por andar"
-      }
-    },
-    {
-      "id": "017",
-      "nome": "Escudo de Eco Eterno",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Resiliência",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Eco Protetor",
-        "tipo": "passiva",
-        "descricao": "Reduz 2 de dano uma vez por Covil (reação).",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "018",
-      "nome": "Pistola do Penitente Arrependido",
-      "raridade": "Incomum",
-      "tipo_memoria": "Rasa",
-      "atributo": "Precisão",
-      "bonus_atributo": 1,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Tiro de Graça",
-        "tipo": "ativa",
-        "descricao": "Ataque à distância causa +3 dano uma vez por descanso.",
-        "custo": "1 uso por descanso"
+        "descricao": "Revela uma armadilha ou sala secreta no mapa.",
+        "custo": "1 uso por Andar"
       }
     },
     {
       "id": "019",
-      "nome": "Anel de Foco Reservado",
-      "raridade": "Incomum",
+      "nome": "Corpo Calejado",
+      "raridade": "Comum",
       "tipo_memoria": "Rasa",
-      "atributo": "Inteligência",
+      "atributo": "Resiliência",
       "bonus_atributo": 1,
-      "categoria": "Magia",
+      "categoria": "Habilidade",
       "habilidade": {
-        "nome": "Reserva de Mana",
+        "nome": "Duro",
         "tipo": "passiva",
-        "descricao": "Ganhe +1 Foco máximo.",
+        "descricao": "Reduz 1 de dano de todas as fontes.",
         "custo": "nenhum"
       }
     },
     {
       "id": "020",
-      "nome": "Máscara da Mentira",
+      "nome": "Manto das Sombras",
+      "raridade": "Comum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Agilidade",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Desvio Sombrio",
+        "tipo": "passiva",
+        "descricao": "Ganha +1 em todas as rolagens de esquiva.",
+        "custo": "nenhum"
+      }
+    },
+
+    {
+      "id": "021",
+      "nome": "Calejar",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Calejar",
+        "tipo": "ativa",
+        "descricao": "Ataque físico. Aplica Ferida e causa +2 dano para cada Ferida já no alvo.",
+        "custo": "1 uso por Combate"
+      }
+    },
+    {
+      "id": "022",
+      "nome": "Lamento da Memória Roubada",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Lamento",
+        "tipo": "ativa",
+        "descricao": "Aplica Medo e Ferida em todos os inimigos na Média distância.",
+        "custo": "1 uso por Andar"
+      }
+    },
+    {
+      "id": "023",
+      "nome": "Chama Purificadora",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Purificação em Área",
+        "tipo": "ativa",
+        "descricao": "Remove todos os debuffs dos aliados na Média ou causa 5 dano em área contra alvos Iluminados.",
+        "custo": "2 Foco"
+      }
+    },
+    {
+      "id": "024",
+      "nome": "Tempestade de Mísseis",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Tempestade",
+        "tipo": "ativa",
+        "descricao": "Causa 4 dano em um alvo (Longa) + 2 dano em todos os outros inimigos na Média.",
+        "custo": "3 Foco"
+      }
+    },
+    {
+      "id": "025",
+      "nome": "Prisão de Sombras",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Prisão",
+        "tipo": "ativa",
+        "descricao": "Aplica Imobilizado em até dois alvos (Média).",
+        "custo": "2 Foco"
+      }
+    },
+    {
+      "id": "026",
+      "nome": "Toque da Pira Sagrada",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Pira Sagrada",
+        "tipo": "ativa",
+        "descricao": "Remove 1 debuff de um aliado e recupera 4 de vida para ele.",
+        "custo": "2 Foco"
+      }
+    },
+    {
+      "id": "027",
+      "nome": "Fúria Marcada",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Potência",
+      "bonus_atributo": 1,
+      "categoria": "Arma",
+      "habilidade": {
+        "nome": "Fúria Marcada",
+        "tipo": "ativa",
+        "descricao": "Aplica Marca. Se o alvo já estiver Marcado, causa +4 dano extra.",
+        "custo": "1 PE"
+      }
+    },
+    {
+      "id": "028",
+      "nome": "Instinto de Sobrevivência",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Instinto",
+        "tipo": "ativa",
+        "descricao": "Reação: Ao cair a 0 vida, fica com 1 vida, ganha 1 exaustão e 5 Proteção.",
+        "custo": "1 uso por Andar"
+      }
+    },
+    {
+      "id": "029",
+      "nome": "Proteção Divina",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Proteção Divina",
+        "tipo": "ativa",
+        "descricao": "Reação: Dá 6 Proteção a um aliado e remove 1 debuff dele.",
+        "custo": "1 uso por Descanso"
+      }
+    },
+    {
+      "id": "030",
+      "nome": "Segundo Vento",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Segundo Vento",
+        "tipo": "ativa",
+        "descricao": "Recupera 5 de vida e ganha 4 Proteção.",
+        "custo": "1 uso por Descanso"
+      }
+    },
+    {
+      "id": "031",
+      "nome": "Véu Vampírico",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Véu Vampírico",
+        "tipo": "ativa",
+        "descricao": "Absorve o próximo dano contra você ou aliado (Média) e recupera vida igual ao dano absorvido.",
+        "custo": "2 PE"
+      }
+    },
+    {
+      "id": "032",
+      "nome": "Deja Vu",
       "raridade": "Incomum",
       "tipo_memoria": "Rasa",
       "atributo": "Sabedoria",
       "bonus_atributo": 1,
       "categoria": "Habilidade",
       "habilidade": {
-        "nome": "Engano",
+        "nome": "Deja Vu",
+        "tipo": "ativa",
+        "descricao": "Repete uma ação ativa que você fez neste turno.",
+        "custo": "1 uso por Descanso"
+      }
+    },
+    {
+      "id": "033",
+      "nome": "Luz Divina",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Inteligência",
+      "bonus_atributo": 1,
+      "categoria": "Magia",
+      "habilidade": {
+        "nome": "Luz Divina",
+        "tipo": "ativa",
+        "descricao": "Aplica Iluminado em dois alvos e aumenta em 5 minutos a duração da tocha.",
+        "custo": "1 uso por Combate"
+      }
+    },
+    {
+      "id": "034",
+      "nome": "Corpo Calejado",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Corpo Calejado",
         "tipo": "passiva",
-        "descricao": "+2 em testes de Enganação ou Intimidação.",
+        "descricao": "Reduz 1 de dano de todas as fontes.",
         "custo": "nenhum"
+      }
+    },
+    {
+      "id": "035",
+      "nome": "Resistir",
+      "raridade": "Incomum",
+      "tipo_memoria": "Rasa",
+      "atributo": "Resiliência",
+      "bonus_atributo": 1,
+      "categoria": "Habilidade",
+      "habilidade": {
+        "nome": "Resistir",
+        "tipo": "ativa",
+        "descricao": "Reação: Reduz o dano de um ataque em um valor igual à sua Resiliência (mínimo 2).",
+        "custo": "1 PE"
       }
     }
   ]
