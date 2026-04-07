@@ -56,7 +56,7 @@
       "habilidade": {
         "nome": "Chama Pálida",
         "tipo": "ativa",
-        "descricao": "Causa 3 de dano mágico.",
+        "descricao": "Causa 3 de dano mágico em um alvo (Longa).",
         "custo": "1 Foco"
       }
     },
@@ -131,7 +131,7 @@
       "habilidade": {
         "nome": "Golpe Pesado",
         "tipo": "passiva",
-        "descricao": "Seus ataques causam +1 dano contra inimigos grandes.",
+        "descricao": "Seus ataques causam +1 dano contra inimigos grandes ou chefes.",
         "custo": "nenhum"
       }
     },
@@ -191,7 +191,7 @@
       "habilidade": {
         "nome": "Explosão Sombria",
         "tipo": "ativa",
-        "descricao": "Causa 6 de dano mágico em área.",
+        "descricao": "Causa 6 de dano mágico em área (alvos na Média).",
         "custo": "2 Foco"
       }
     },
@@ -206,7 +206,7 @@
       "habilidade": {
         "nome": "Memória de Dor",
         "tipo": "passiva",
-        "descricao": "Ao perder uma Rasa por morte, recupere 1 Rasa aleatória.",
+        "descricao": "Ao perder uma memória rasa por morte, recupere 1 memória rasa aleatória da pool descartada.",
         "custo": "nenhum"
       }
     },
@@ -221,7 +221,7 @@
       "habilidade": {
         "nome": "Tiro Fantasma",
         "tipo": "ativa",
-        "descricao": "Ataque à distância ignora cobertura uma vez por andar.",
+        "descricao": "Ataque à distância ignora cobertura e DT uma vez por andar.",
         "custo": "1 uso por descanso"
       }
     },
@@ -251,7 +251,7 @@
       "habilidade": {
         "nome": "Eco Protetor",
         "tipo": "passiva",
-        "descricao": "Reduz 2 de dano uma vez por Covil.",
+        "descricao": "Reduz 2 de dano uma vez por Covil (reação).",
         "custo": "nenhum"
       }
     },
@@ -298,201 +298,6 @@
         "tipo": "passiva",
         "descricao": "+2 em testes de Enganação ou Intimidação.",
         "custo": "nenhum"
-      }
-    },
-    {
-      "id": "021",
-      "nome": "Olho da Cartomante",
-      "raridade": "Raro",
-      "tipo_memoria": "Rasa",
-      "atributo": "Sabedoria",
-      "bonus_atributo": 2,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Visão Verdadeira",
-        "tipo": "passiva",
-        "descricao": "Sabe se uma tile tem Armadilha antes de entrar.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "022",
-      "nome": "Fúria do Penitente",
-      "raridade": "Raro",
-      "tipo_memoria": "Rasa",
-      "atributo": "Potência",
-      "bonus_atributo": 2,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Fúria Final",
-        "tipo": "ativa",
-        "descricao": "Ao entrar no Boss, +3 dano até o fim.",
-        "custo": "1 uso por andar"
-      }
-    },
-    {
-      "id": "023",
-      "nome": "Cetro do Vazio",
-      "raridade": "Raro",
-      "tipo_memoria": "Rasa",
-      "atributo": "Inteligência",
-      "bonus_atributo": 2,
-      "categoria": "Magia",
-      "habilidade": {
-        "nome": "Drenar Essência",
-        "tipo": "ativa",
-        "descricao": "8 dano mágico e recupera 2 Foco.",
-        "custo": "3 Foco"
-      }
-    },
-    {
-      "id": "024",
-      "nome": "Lâmina do Juízo Final",
-      "raridade": "Raro",
-      "tipo_memoria": "Rasa",
-      "atributo": "Precisão",
-      "bonus_atributo": 2,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Golpe do Juízo",
-        "tipo": "ativa",
-        "descricao": "Próximo ataque é crítico automático.",
-        "custo": "2 usos por descanso"
-      }
-    },
-    {
-      "id": "025",
-      "nome": "Manto das Sombras Eternas",
-      "raridade": "Raro",
-      "tipo_memoria": "Rasa",
-      "atributo": "Agilidade",
-      "bonus_atributo": 2,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Passo das Sombras",
-        "tipo": "ativa",
-        "descricao": "Ignore uma sala inteira uma vez por andar.",
-        "custo": "1 uso por andar"
-      }
-    },
-    {
-      "id": "026",
-      "nome": "Anel da Última Luz",
-      "raridade": "Raro",
-      "tipo_memoria": "Rasa",
-      "atributo": "Resiliência",
-      "bonus_atributo": 2,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Luz Final",
-        "tipo": "passiva",
-        "descricao": "Ao perder última Permanente, não morre de vez.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "027",
-      "nome": "Núcleo do Destino Gravado",
-      "raridade": "Épico",
-      "tipo_memoria": "Permanente",
-      "atributo": "Todos",
-      "bonus_atributo": 2,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Destino Reescrito",
-        "tipo": "ativa",
-        "descricao": "Uma vez por masmorra, rerole qualquer tile.",
-        "custo": "1 uso por masmorra"
-      }
-    },
-    {
-      "id": "028",
-      "nome": "Carta do Guardião Eterno",
-      "raridade": "Épico",
-      "tipo_memoria": "Permanente",
-      "atributo": "Sabedoria",
-      "bonus_atributo": 3,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Guardião das Cartas",
-        "tipo": "passiva",
-        "descricao": "Todas Rasas equipadas ganham +1 atributo.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "029",
-      "nome": "Cetro do Vazio Absoluto",
-      "raridade": "Épico",
-      "tipo_memoria": "Rasa",
-      "atributo": "Inteligência",
-      "bonus_atributo": 3,
-      "categoria": "Magia",
-      "habilidade": {
-        "nome": "Vazio Devorador",
-        "tipo": "ativa",
-        "descricao": "12 dano mágico em todos inimigos da sala.",
-        "custo": "4 Foco"
-      }
-    },
-    {
-      "id": "030",
-      "nome": "Lâmina do Purgatório",
-      "raridade": "Épico",
-      "tipo_memoria": "Rasa",
-      "atributo": "Potência",
-      "bonus_atributo": 3,
-      "categoria": "Arma",
-      "habilidade": {
-        "nome": "Purgar o Pecado",
-        "tipo": "ativa",
-        "descricao": "+5 dano e remove 1 Corrupção Leve.",
-        "custo": "2 usos por descanso"
-      }
-    },
-    {
-      "id": "031",
-      "nome": "Máscara do Esquecimento",
-      "raridade": "Épico",
-      "tipo_memoria": "Rasa",
-      "atributo": "Agilidade",
-      "bonus_atributo": 3,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Esquecer a Dor",
-        "tipo": "passiva",
-        "descricao": "Ignore 1 nível de Exaustão.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "032",
-      "nome": "Núcleo da Última Esperança",
-      "raridade": "Lendário",
-      "tipo_memoria": "Núcleo",
-      "atributo": "Todos",
-      "bonus_atributo": 3,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Esperança Eterna",
-        "tipo": "passiva",
-        "descricao": "Ao morrer, reviva com metade da vida sem perder Núcleo.",
-        "custo": "nenhum"
-      }
-    },
-    {
-      "id": "033",
-      "nome": "Carta do Fim do Mundo",
-      "raridade": "Lendário",
-      "tipo_memoria": "Rasa",
-      "atributo": "Sabedoria",
-      "bonus_atributo": 4,
-      "categoria": "Habilidade",
-      "habilidade": {
-        "nome": "Apocalipse Pessoal",
-        "tipo": "ativa",
-        "descricao": "Revele todas tiles restantes e pule uma.",
-        "custo": "3 usos por masmorra"
       }
     }
   ]
