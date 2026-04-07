@@ -572,6 +572,10 @@
         <button class="filter-tag rarity-Raro on" data-filter="r:Raro" onclick="toggleLibFilter(this)">Raro</button>
         <button class="filter-tag rarity-Épico on" data-filter="r:Épico" onclick="toggleLibFilter(this)">Épico</button>
         <button class="filter-tag rarity-Lendário on" data-filter="r:Lendário" onclick="toggleLibFilter(this)">Lendário</button>
+        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-left:.5rem;margin-right:.25rem">Categoria:</span>
+        <button class="filter-tag on" data-filter="c:Arma" onclick="toggleLibFilter(this)">Arma</button>
+        <button class="filter-tag on" data-filter="c:Magia" onclick="toggleLibFilter(this)">Magia</button>
+        <button class="filter-tag on" data-filter="c:Habilidade" onclick="toggleLibFilter(this)">Habilidade</button>
         <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-left:.5rem;margin-right:.25rem">Tipo:</span>
         <button class="filter-tag on" data-filter="t:ativa" onclick="toggleLibFilter(this)">Ativa</button>
         <button class="filter-tag on" data-filter="t:passiva" onclick="toggleLibFilter(this)">Passiva</button>
@@ -580,9 +584,6 @@
         <button class="filter-tag on" data-filter="cost:descanso" onclick="toggleLibFilter(this)">Descanso</button>
         <button class="filter-tag on" data-filter="cost:sem" onclick="toggleLibFilter(this)">Sem custo</button>
         <button class="filter-tag on" data-filter="cost:pe" onclick="toggleLibFilter(this)">PE</button>
-      </div>
-      <div class="lib-filters" id="lib-tags-filters" style="padding:.5rem .75rem">
-        <span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-right:.25rem">Tags:</span>
       </div>
       <div style="font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase" id="lib-count"></div>
     </div>
@@ -832,10 +833,13 @@
             <button class="filter-tag rarity-Lendário on" data-filter="Lendário" onclick="toggleRewardFilter(this)">Lendário</button>
           </div>
         </div>
-        <!-- Filtros por tags -->
+        <!-- Filtros por categoria -->
         <div>
-          <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.3rem">Tags · Tipo · Custo</div>
-          <div style="display:flex;flex-wrap:wrap;gap:.3rem" id="reward-tags-area">
+          <div style="font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:.3rem">Categoria · Tipo · Custo</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem">
+            <button class="filter-tag on" data-filter="cat:Arma" onclick="toggleRewardFilter(this)">Arma</button>
+            <button class="filter-tag on" data-filter="cat:Magia" onclick="toggleRewardFilter(this)">Magia</button>
+            <button class="filter-tag on" data-filter="cat:Habilidade" onclick="toggleRewardFilter(this)">Habilidade</button>
             <button class="filter-tag on" data-filter="tipo:ativa" onclick="toggleRewardFilter(this)">Ativa</button>
             <button class="filter-tag on" data-filter="tipo:passiva" onclick="toggleRewardFilter(this)">Passiva</button>
             <button class="filter-tag on" data-filter="cost:foco" onclick="toggleRewardFilter(this)">Foco</button>
@@ -843,7 +847,6 @@
             <button class="filter-tag on" data-filter="cost:sem" onclick="toggleRewardFilter(this)">Sem custo</button>
             <button class="filter-tag on" data-filter="cost:pe" onclick="toggleRewardFilter(this)">PE</button>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem" id="reward-dyn-tags"></div>
         </div>
         <!-- Botões de ação -->
         <div style="display:flex;gap:.4rem;flex-wrap:wrap">
@@ -956,12 +959,10 @@
     <div class="modal-title" id="lib-edit-title">✛ Nova Memória</div>
     <div class="modal-form" id="lib-edit-form">
       <div class="form-group"><label class="form-label">Nome</label><input type="text" class="form-input" id="le-nome" placeholder="Nome da memória"></div>
-      <div class="form-group"><label class="form-label">Raridade</label><select class="sel-inp" id="le-raridade"><option>Comum</option><option>Incomum</option><option>Raro</option><option>Épico</option><option>Lendário</option></select></div>
       <div style="display:flex;gap:.75rem">
-        <div class="form-group" style="flex:1"><label class="form-label">Atributo</label><select class="sel-inp" id="le-atributo"><option value="">Nenhum</option><option>Potência</option><option>Agilidade</option><option>Resiliência</option><option>Precisão</option><option>Inteligência</option><option>Sabedoria</option></select></div>
-        <div class="form-group" style="flex:0 0 80px"><label class="form-label">Bônus</label><input type="number" class="sel-inp" id="le-bonus" value="1" min="0" style="text-align:center"></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Raridade</label><select class="sel-inp" id="le-raridade"><option>Comum</option><option>Incomum</option><option>Raro</option><option>Épico</option><option>Lendário</option></select></div>
+        <div class="form-group" style="flex:1"><label class="form-label">Categoria</label><select class="sel-inp" id="le-categoria"><option>Arma</option><option>Magia</option><option>Habilidade</option></select></div>
       </div>
-      <div class="form-group"><label class="form-label">Tags</label><div id="le-tags-list" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.4rem"></div><input type="text" class="form-input" id="le-tags-inp" placeholder="Digite e pressione Enter para adicionar" onkeydown="libTagInputKeydown(event)" onblur="libTagInputBlur(event)"><div id="le-tag-suggestions" style="display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.4rem"></div></div>
       <div class="form-group"><label class="form-label">Nome da Habilidade</label><input type="text" class="form-input" id="le-hab-nome" placeholder="Ex: Golpe Sujo"></div>
       <div style="display:flex;gap:.75rem">
         <div class="form-group" style="flex:1"><label class="form-label">Tipo</label><select class="sel-inp" id="le-hab-tipo"><option value="passiva">Passiva</option><option value="ativa">Ativa</option></select></div>
@@ -2493,28 +2494,16 @@ function joinNewFicha(){closeM('m-join');openNewFichaModal();}
 // MEMORIA DATABASE — carrega memorias.json
 // ════════════════════════════════════════
 let MEMORIAS_DB = [];
-const MEMORIAS_LOCAL_KEY = 'purgatorio_memorias_db';
 
 async function loadMemoriasDB(){
-  // Tenta carregar do localStorage primeiro (persiste entre sessões)
-  const cached = localStorage.getItem(MEMORIAS_LOCAL_KEY);
-  if(cached){
-    try{ MEMORIAS_DB = JSON.parse(cached); return; }
-    catch(e){ console.warn('localStorage corrompido, recarregando do JSON'); }
-  }
   try{
     const r=await fetch('./memorias.json');
     const data=await r.json();
     MEMORIAS_DB=data.memorias||[];
-    localStorage.setItem(MEMORIAS_LOCAL_KEY, JSON.stringify(MEMORIAS_DB));
   }catch(e){
     console.warn('memorias.json não encontrado — usando banco vazio');
     MEMORIAS_DB=[];
   }
-}
-
-function saveMemoriasDB(){
-  localStorage.setItem(MEMORIAS_LOCAL_KEY, JSON.stringify(MEMORIAS_DB));
 }
 
 // ════════════════════════════════════════
@@ -2627,15 +2616,11 @@ function memoriaDbToFicha(mem){
     title: mem.habilidade.nome||'',
     desc: [mem.habilidade.descricao, mem.habilidade.custo&&mem.habilidade.custo!=='nenhum'?`Custo: ${mem.habilidade.custo}`:''].filter(Boolean).join(' · ')
   }] : [];
-  const allTags = [...(mem.tags||[])];
-  allTags.push(mem.raridade);
-  allTags.push(mem.tipo_memoria||'Rasa');
-  if(attrKey) allTags.push(ATTR_LABELS[attrKey]);
   return {
     id: Date.now().toString()+Math.random().toString(36).slice(2),
     nome: mem.nome,
-    tipo: 'rasa',
-    desc: allTags.join(' / '),
+    tipo: 'rasa', // sempre começa como rasa
+    desc: `${mem.categoria||''} · ${mem.raridade||''}`.trim().replace(/^·\s*/,''),
     attr: attrKey,
     corrompida: false,
     corrupcao: '',
@@ -2783,19 +2768,6 @@ function renderRewardPanel(){
       <input type="checkbox" ${checked?'checked':''} onchange="toggleRewardPlayer('${fid}',this.checked)" style="accent-color:var(--gold);width:13px;height:13px">
       <span style="font-family:'Cinzel',serif;font-size:.72rem;color:var(--text)">${esc(f.nome)}</span>
     </label>`;
-  }).join('');
-  // Popula tags dinâmicas de recompensa
-  renderRewardDynTags();
-}
-
-function renderRewardDynTags(){
-  const container = document.getElementById('reward-dyn-tags');
-  if(!container) return;
-  const allTags = getAllLibTags();
-  if(!allTags.length){ container.innerHTML=''; return; }
-  container.innerHTML = allTags.map(t=>{
-    const on = rewardFilters.tags.has(t);
-    return `<button class="filter-tag${on?' on':''}" data-filter="tag:${t}" onclick="toggleRewardFilter(this)">${esc(t)}</button>`;
   }).join('');
 }
 
@@ -3038,7 +3010,7 @@ async function handleMesaFichaInsert(row){
 // ════════════════════════════════════════
 const rewardFilters = {
   rarities: new Set(['Comum','Incomum','Raro','Épico','Lendário']),
-  tags: new Set(),
+  cats: new Set(['Arma','Magia','Habilidade']),
   tipos: new Set(['ativa','passiva']),
   costs: new Set(['foco','descanso','sem','pe']),
 };
@@ -3046,7 +3018,7 @@ const rewardFilters = {
 function toggleRewardFilter(btn){
   btn.classList.toggle('on');
   const f=btn.dataset.filter;
-  if(f.startsWith('tag:')){ const v=f.slice(4); rewardFilters.tags.has(v)?rewardFilters.tags.delete(v):rewardFilters.tags.add(v); }
+  if(f.startsWith('cat:')){ const v=f.slice(4); rewardFilters.cats.has(v)?rewardFilters.cats.delete(v):rewardFilters.cats.add(v); }
   else if(f.startsWith('tipo:')){ const v=f.slice(5); rewardFilters.tipos.has(v)?rewardFilters.tipos.delete(v):rewardFilters.tipos.add(v); }
   else if(f.startsWith('cost:')){ const v=f.slice(5); rewardFilters.costs.has(v)?rewardFilters.costs.delete(v):rewardFilters.costs.add(v); }
   else { rewardFilters.rarities.has(f)?rewardFilters.rarities.delete(f):rewardFilters.rarities.add(f); }
@@ -3055,14 +3027,7 @@ function toggleRewardFilter(btn){
 function applyRewardFilters(pool){
   return pool.filter(m=>{
     if(!rewardFilters.rarities.has(m.raridade)) return false;
-    if(rewardFilters.tags.size>0){
-      const mtags=new Set((m.tags||[]).map(t=>t.toLowerCase()));
-      let match=false;
-      for(const tag of rewardFilters.tags){
-        if(mtags.has(tag.toLowerCase())){match=true;break;}
-      }
-      if(!match) return false;
-    }
+    if(!rewardFilters.cats.has(m.categoria)) return false;
     const tipo=(m.habilidade?.tipo||'passiva').toLowerCase();
     if(!rewardFilters.tipos.has(tipo)) return false;
     const custo=(m.habilidade?.custo||'nenhum').toLowerCase();
@@ -3183,17 +3148,11 @@ async function deleteChatMsg(msgId){
 // ════════════════════════════════════════
 // LIBRARY SCREEN
 // ════════════════════════════════════════
-const libFilters={rarities:new Set(['Comum','Incomum','Raro','Épico','Lendário']),tipos:new Set(['ativa','passiva']),costs:new Set(['foco','descanso','sem','pe']),tags:new Set()};
-
-function getAllLibTags(){
-  const all = new Set();
-  MEMORIAS_DB.forEach(m => (m.tags||[]).forEach(t => all.add(t)));
-  return [...all].sort();
-}
+const libFilters={rarities:new Set(['Comum','Incomum','Raro','Épico','Lendário']),cats:new Set(['Arma','Magia','Habilidade']),tipos:new Set(['ativa','passiva']),costs:new Set(['foco','descanso','sem','pe'])};
 
 function showLibrary(){
   if(!MEMORIAS_DB.length) loadMemoriasDB().then(renderLibrary);
-  else renderLibrary();
+  renderLibrary();
   showScr('library-screen');
 }
 
@@ -3201,9 +3160,9 @@ function toggleLibFilter(btn){
   btn.classList.toggle('on');
   const f=btn.dataset.filter;
   if(f.startsWith('r:')){ const v=f.slice(2); libFilters.rarities.has(v)?libFilters.rarities.delete(v):libFilters.rarities.add(v); }
+  else if(f.startsWith('c:')){ const v=f.slice(2); libFilters.cats.has(v)?libFilters.cats.delete(v):libFilters.cats.add(v); }
   else if(f.startsWith('t:')){ const v=f.slice(2); libFilters.tipos.has(v)?libFilters.tipos.delete(v):libFilters.tipos.add(v); }
   else if(f.startsWith('cost:')){ const v=f.slice(5); libFilters.costs.has(v)?libFilters.costs.delete(v):libFilters.costs.add(v); }
-  else if(f.startsWith('tag:')){ const v=f.slice(4); libFilters.tags.has(v)?libFilters.tags.delete(v):libFilters.tags.add(v); }
   renderLibrary();
 }
 
@@ -3214,6 +3173,7 @@ function renderLibrary(){
   if(!grid)return;
   const filtered=MEMORIAS_DB.filter(m=>{
     if(!libFilters.rarities.has(m.raridade)) return false;
+    if(!libFilters.cats.has(m.categoria)) return false;
     const tipo=(m.habilidade?.tipo||'passiva').toLowerCase();
     if(!libFilters.tipos.has(tipo)) return false;
     const custo=(m.habilidade?.custo||'nenhum').toLowerCase();
@@ -3222,23 +3182,13 @@ function renderLibrary(){
     else if(custo.includes('descanso')) ck='descanso';
     else if(custo.includes('pe')) ck='pe';
     if(!libFilters.costs.has(ck)) return false;
-    if(libFilters.tags.size>0){
-      const mtags=new Set((m.tags||[]).map(t=>t.toLowerCase()));
-      for(const tag of libFilters.tags){
-        if(!mtags.has(tag.toLowerCase())) return false;
-      }
-    }
-    const tagStr=(m.tags||[]).map(t=>t.toLowerCase()).join(' ');
-    if(search&&!m.nome.toLowerCase().includes(search)&&!(m.habilidade?.nome||'').toLowerCase().includes(search)&&!(m.habilidade?.descricao||'').toLowerCase().includes(search)&&!tagStr.includes(search)) return false;
+    if(search&&!m.nome.toLowerCase().includes(search)&&!(m.habilidade?.nome||'').toLowerCase().includes(search)&&!(m.habilidade?.descricao||'').toLowerCase().includes(search)) return false;
     return true;
   });
   if(countEl) countEl.textContent=`${filtered.length} memória(s) encontrada(s)`;
-  renderLibTagsFilters();
   const rarColors={'Comum':'#888','Incomum':'#7aadcc','Raro':'#a070cc','Épico':'#e07040','Lendário':'#e0c040'};
   grid.innerHTML=filtered.map(m=>{
     const col=rarColors[m.raridade]||'#888';
-    const attrLabel = m.atributo && m.bonus_atributo ? `+${m.bonus_atributo} ${m.atributo}` : '';
-    const tags=(m.tags||[]).map(t=>`<span style="font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold2);border:1px solid rgba(139,115,85,.3);padding:.1rem .3rem">${esc(t)}</span>`).join('');
     return `<div class="lib-card" style="border-color:${col}33">
       <div class="lib-card-actions">
         <button class="lib-card-btn" onclick="openLibEditModal('${m.id}')">✎</button>
@@ -3248,8 +3198,8 @@ function renderLibrary(){
         <div style="font-family:'Cinzel',serif;font-size:.88rem;color:var(--white);margin-bottom:.3rem">${esc(m.nome)}</div>
         <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.5rem">
           <span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:${col};border:1px solid ${col}66;padding:.12rem .4rem">${esc(m.raridade)}</span>
-          ${attrLabel?`<span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);border:1px solid rgba(139,115,85,.4);padding:.12rem .4rem">${esc(attrLabel)}</span>`:''}
-          ${tags}
+          <span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);padding:.12rem .4rem">${esc(m.categoria)}</span>
+          <span style="font-family:'Cinzel',serif;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2)">${esc(m.atributo)} +${m.bonus_atributo}</span>
         </div>
         ${m.habilidade?`<div style="background:rgba(255,255,255,.02);border-left:2px solid ${col}55;padding:.35rem .6rem">
           <div style="font-family:'Cinzel',serif;font-size:.75rem;color:var(--white);font-weight:600;margin-bottom:.1rem">${esc(m.habilidade.nome)} <span style="font-size:.45rem;color:var(--text-muted);font-weight:400;text-transform:uppercase;letter-spacing:.1em">${esc(m.habilidade.tipo)}</span></div>
@@ -3261,17 +3211,6 @@ function renderLibrary(){
   }).join('');
 }
 
-function renderLibTagsFilters(){
-  const container = document.getElementById('lib-tags-filters');
-  if(!container) return;
-  const allTags = getAllLibTags();
-  if(!allTags.length){ container.innerHTML='<span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase">Nenhuma tag encontrada</span>'; return; }
-  container.innerHTML = '<span style="font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;align-self:center;margin-right:.25rem">Tags:</span>' + allTags.map(t=>{
-    const on = libFilters.tags.has(t);
-    return `<button class="filter-tag${on?' on':''}" data-filter="tag:${t}" onclick="toggleLibFilter(this)">${esc(t)}</button>`;
-  }).join('');
-}
-
 let libEditId=null;
 function openLibNewModal(){
   libEditId=null;
@@ -3280,10 +3219,8 @@ function openLibNewModal(){
   ['le-nome','le-hab-nome','le-hab-custo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('le-hab-desc').value='';
   document.getElementById('le-raridade').value='Comum';
+  document.getElementById('le-categoria').value='Habilidade';
   document.getElementById('le-hab-tipo').value='passiva';
-  document.getElementById('le-atributo').value='';
-  document.getElementById('le-bonus').value='1';
-  clearLibTags();
   openM('m-lib-edit');
 }
 function openLibEditModal(id){
@@ -3293,15 +3230,11 @@ function openLibEditModal(id){
   document.getElementById('le-save-btn').textContent='Salvar';
   document.getElementById('le-nome').value=m.nome||'';
   document.getElementById('le-raridade').value=m.raridade||'Comum';
+  document.getElementById('le-categoria').value=m.categoria||'Habilidade';
   document.getElementById('le-hab-nome').value=m.habilidade?.nome||'';
   document.getElementById('le-hab-tipo').value=m.habilidade?.tipo||'passiva';
   document.getElementById('le-hab-custo').value=m.habilidade?.custo||'nenhum';
   document.getElementById('le-hab-desc').value=m.habilidade?.descricao||'';
-  document.getElementById('le-atributo').value=m.atributo||'';
-  document.getElementById('le-bonus').value=m.bonus_atributo??1;
-  const tags=m.tags||[];
-  clearLibTags();
-  tags.forEach(t=>addLibTag(t));
   openM('m-lib-edit');
 }
 function saveLibEntry(){
@@ -3311,9 +3244,8 @@ function saveLibEntry(){
     nome,
     raridade:document.getElementById('le-raridade').value,
     tipo_memoria:'Rasa',
-    atributo:document.getElementById('le-atributo').value,
-    bonus_atributo:parseInt(document.getElementById('le-bonus').value)||1,
-    tags:collectLibTags(),
+    atributo:'',bonus_atributo:0,
+    categoria:document.getElementById('le-categoria').value,
     habilidade:{
       nome:document.getElementById('le-hab-nome').value.trim(),
       tipo:document.getElementById('le-hab-tipo').value,
@@ -3327,91 +3259,19 @@ function saveLibEntry(){
   } else {
     MEMORIAS_DB.push(entry);
   }
-  saveMemoriasDB();
   closeM('m-lib-edit');
   renderLibrary();
   toast(libEditId?'Memória atualizada':'Memória adicionada','success');
+  // Note: changes are in-memory only — user must manually update memorias.json
+  // Show note about this
+  setTimeout(()=>toast('Lembre de atualizar memorias.json no repositório!',''),2500);
 }
 function libDeleteMem(id){
   const m=MEMORIAS_DB.find(x=>x.id===id);if(!m)return;
-  if(!confirm(`Remover "${m.nome}"?`))return;
+  if(!confirm(`Remover "${m.nome}"?\n\nEsta alteração é temporária até você atualizar o memorias.json.`))return;
   MEMORIAS_DB=MEMORIAS_DB.filter(x=>x.id!==id);
-  saveMemoriasDB();
   renderLibrary();
-  toast('Memória removida','success');
-}
-
-// ── TAGS SYSTEM ──
-let libTags = [];
-let libTagsId = 0;
-
-function clearLibTags(){
-  libTags = [];
-  libTagsId = 0;
-  renderLibTags();
-  renderTagSuggestions();
-}
-
-function addLibTag(text){
-  text = text.trim();
-  if(!text || libTags.includes(text)) return;
-  libTags.push(text);
-  renderLibTags();
-  renderTagSuggestions();
-}
-
-function removeLibTag(text){
-  libTags = libTags.filter(t => t !== text);
-  renderLibTags();
-  renderTagSuggestions();
-}
-
-function collectLibTags(){
-  // Also collect from suggestion tags that were typed in the input
-  const input = document.getElementById('le-tags-inp');
-  const raw = input ? input.value.trim() : '';
-  if(raw){
-    raw.split(',').forEach(t => addLibTag(t.trim()));
-    input.value = '';
-  }
-  return [...libTags];
-}
-
-function renderLibTags(){
-  const container = document.getElementById('le-tags-list');
-  if(!container) return;
-  container.innerHTML = libTags.map(t =>
-    `<span style="background:var(--card2);border:1px solid var(--border2);font-family:'Cinzel',serif;font-size:.55rem;padding:.2rem .5rem;color:var(--gold2);display:inline-flex;align-items:center;gap:.35rem">${esc(t)}<span style="cursor:pointer;color:var(--text-muted)" onclick="removeLibTag('${esc(t)}')">✕</span></span>`
-  ).join('');
-  if(!libTags.length) container.innerHTML = '<span style="font-size:.82rem;color:var(--text-muted);font-style:italic">Nenhuma tag ainda</span>';
-}
-
-function renderTagSuggestions(){
-  const container = document.getElementById('le-tag-suggestions');
-  if(!container) return;
-  // Collect all unique tags from MEMORIAS_DB
-  const allTags = new Set();
-  MEMORIAS_DB.forEach(m => (m.tags||[]).forEach(t => allTags.add(t)));
-  // Remove tags already added
-  const available = [...allTags].filter(t => !libTags.includes(t));
-  if(!available.length){ container.innerHTML = ''; return; }
-  container.innerHTML = available.map(t =>
-    `<span style="background:transparent;border:1px solid var(--border);font-family:'Cinzel',serif;font-size:.52rem;padding:.2rem .5rem;color:var(--text-dim);cursor:pointer" onclick="addLibTag('${esc(t)}')">${esc(t)}</span>`
-  ).join('');
-}
-
-function libTagInputKeydown(e){
-  if(e.key === 'Enter' || e.key === ','){
-    e.preventDefault();
-    const inp = e.target;
-    inp.value.split(',').forEach(t => addLibTag(t.trim()));
-    inp.value = '';
-  }
-}
-
-function libTagInputBlur(e){
-  e.target.value.split(',').forEach(t => addLibTag(t.trim()));
-  e.target.value = '';
+  toast('Memória removida (sessão atual)','success');
 }
 
 // ════════════════════════════════════════
